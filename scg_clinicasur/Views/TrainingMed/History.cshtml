@@ -1,0 +1,38 @@
+﻿@{
+    ViewData["Title"] = "Historial de Capacitaciones";
+}
+
+<h2>@ViewData["Title"]</h2>
+
+<!-- Simulación del historial de capacitaciones -->
+<table class="table">
+    <thead>
+        <tr>
+            <th>Fecha</th>
+            <th>Capacitación</th>
+            <th>Resultado</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>01/05/2024</td>
+            <td>Capacitación A</td>
+            <td>Completada</td>
+        </tr>
+        <!-- Más filas según sea necesario -->
+    </tbody>
+</table>
+
+<!-- Filtro por fecha -->
+<form method="get" action="@Url.Action("History", "TrainingMed")">
+    <div class="form-group">
+        <label for="startDate">Desde:</label>
+        <input type="date" class="form-control" id="startDate" name="startDate">
+    </div>
+    <div class="form-group">
+        <label for="endDate">Hasta:</label>
+        <input type="date" class="form-control" id="endDate" name="endDate">
+    </div>
+    <button type="submit" class="btn btn-primary">Filtrar</button>
+</form>
+

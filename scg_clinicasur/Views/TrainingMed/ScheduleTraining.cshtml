@@ -1,0 +1,22 @@
+﻿@{
+    ViewData["Title"] = "Agendar Capacitación";
+}
+
+<h2>@ViewData["Title"]</h2>
+
+<!-- Simulación del agendamiento de capacitaciones -->
+<form method="post" action="@Url.Action("ScheduleTraining", "TrainingMed")">
+    <div class="form-group">
+        <label for="training">Selecciona Capacitación:</label>
+        <select class="form-control" id="training" name="training">
+            <option>Capacitación 1</option>
+            <option>Capacitación 2</option>
+            <!-- Más opciones según sea necesario -->
+        </select>
+    </div>
+    <div class="form-group">
+        <label for="date">Fecha:</label>
+        <input type="date" class="form-control" id="date" name="date">
+    </div>
+    <button type="submit" class="btn btn-primary">Agendar</button>
+</form>

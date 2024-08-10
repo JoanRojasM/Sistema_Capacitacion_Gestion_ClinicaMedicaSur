@@ -15,9 +15,17 @@ namespace scg_clinicasur.Controllers
         [HttpPost]
         public ActionResult Login(string username, string password)
         {
-            if (username == "Samuel" && password == "123")
+            if (username == "admin" && password == "123")
             {
-                return RedirectToAction("Index", "Home");
+                return RedirectToAction("Index", "Admin");
+            }
+            else if (username == "med" && password == "123")
+            {
+                return RedirectToAction("Index", "AsistenteMedico");
+            }
+            else if (username == "limpieza" && password == "123")
+            {
+                return RedirectToAction("Index", "AsistenteLimpieza");
             }
             else
             {
