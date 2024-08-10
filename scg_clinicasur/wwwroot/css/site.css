@@ -1,22 +1,136 @@
-html {
-  font-size: 14px;
-}
-
-@media (min-width: 768px) {
-  html {
-    font-size: 16px;
-  }
-}
-
-.btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
-  box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
-}
-
-html {
-  position: relative;
-  min-height: 100%;
-}
-
 body {
-  margin-bottom: 60px;
+    font-family: Arial, sans-serif;
+    background-color: #fafafa;
+    color: #1f1f1f;
+    margin: 0;
+    padding: 0;
 }
+
+header {
+    background-color: #054DC5;
+    color: #fafafa;
+    padding: 10px 0;
+    text-align: center;
+}
+
+nav {
+    margin-bottom: 20px;
+}
+
+a.button {
+    display: inline-block;
+    padding: 10px 20px;
+    margin: 5px;
+    text-decoration: none;
+    color: #fafafa;
+    background-color: #00B2B6;
+    border-radius: 5px;
+    font-weight: bold;
+}
+
+    a.button:hover {
+        background-color: #ff9934;
+    }
+
+form {
+    background-color: #ffffff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+label {
+    display: block;
+    margin-bottom: 5px;
+}
+
+input[type="text"],
+input[type="password"],
+input[type="email"],
+select {
+    width: 100%;
+    padding: 8px;
+    margin-bottom: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+}
+
+button {
+    padding: 10px 20px;
+    border: none;
+    background-color: #00B2B6;
+    color: #fafafa;
+    border-radius: 5px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+    button:hover {
+        background-color: #ff9934;
+    }
+
+.header-buttons {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+    margin-bottom: 20px;
+}
+
+.dropdown {
+    position: relative;
+}
+
+.btn-secondary {
+    background-color: #ff9934;
+    border-color: #ff9934;
+}
+
+    .btn-secondary:hover {
+        background-color: #e68a2c;
+        border-color: #e68a2c;
+    }
+
+.dropdown-menu {
+    min-width: 250px;
+}
+
+.btn-primary {
+    background-color: #00B2B6;
+    border-color: #00B2B6;
+}
+
+    .btn-primary:hover {
+        background-color: #ff9934;
+        border-color: #ff9934;
+    }
+
+/* Estilo para la tabla de usuarios */
+table {
+    width: 100%;
+    border-collapse: collapse; /* Asegura que no haya espacios entre las celdas */
+    margin-bottom: 20px; /* Espacio debajo de la tabla */
+}
+
+    table th, table td {
+        padding: 12px 15px; /* Aumenta el padding dentro de las celdas */
+        text-align: left; /* Alinea el texto a la izquierda */
+    }
+
+    table thead th {
+        background-color: #054DC5; /* Color de fondo para el encabezado */
+        color: #fafafa; /* Color del texto del encabezado */
+        font-weight: bold; /* Negrita para el texto del encabezado */
+    }
+
+    table tbody tr:nth-child(odd) {
+        background-color: #fafafa; /* Color de fondo para filas impares */
+    }
+
+    table tbody tr:nth-child(even) {
+        background-color: #ffffff; /* Color de fondo para filas pares */
+    }
+
+    table tbody tr:hover {
+        background-color: #f1f1f1; /* Color de fondo para fila al pasar el ratón */
+    }

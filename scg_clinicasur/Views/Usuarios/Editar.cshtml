@@ -1,0 +1,44 @@
+﻿@{
+    ViewData["Title"] = "Editar Usuario";
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="stylesheet" href="~/css/site.css">
+    <title>@ViewData["Title"]</title>
+</head>
+<body>
+    <header>
+        <h1>@ViewData["Title"]</h1>
+        <nav>
+            <a asp-action="Index" class="button">Volver al Listado</a>
+        </nav>
+    </header>
+    <main>
+        <form method="post" asp-action="Editar">
+            <label for="nombre">Nombre:</label>
+            <input type="text" id="nombre" name="nombre" value="Álvaro Sanabria" required>
+
+            <label for="username">Username:</label>
+            <input type="text" id="username" name="username" value="alvasan" required>
+
+            <label for="password">Password:</label>
+            <input type="password" id="password" name="password" placeholder="clinica423">
+
+            <label for="rol">Rol:</label>
+            <select id="rol" name="rol">
+                <option value="doctor" selected>Doctor</option>
+                <option value="asistente_medico">Asistente Médico</option>
+                <option value="asistente_limpieza">Asistente de Limpieza</option>
+                <option value="paciente">Paciente</option>
+            </select>
+
+            <label for="email">Email:</label>
+            <input type="email" id="email" name="email" value="alvaro.sanabria@gmail.com" required>
+
+            <button type="submit" class="button">Actualizar</button>
+        </form>
+    </main>
+</body>
+</html>
