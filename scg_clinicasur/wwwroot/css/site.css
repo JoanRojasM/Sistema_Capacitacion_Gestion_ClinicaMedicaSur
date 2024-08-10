@@ -7,8 +7,7 @@ body {
 }
 
 header {
-    background-color: #054DC5;
-    color: #fafafa;
+    color: #054DC5;
     padding: 10px 0;
     text-align: center;
 }
@@ -16,6 +15,39 @@ header {
 nav {
     margin-bottom: 20px;
 }
+
+.navbar {
+    background-color: #054DC5;
+    border-bottom: 2px solid #003366;
+}
+
+    .navbar .navbar-brand {
+        color: #ffffff;
+    }
+
+    .navbar .navbar-toggler {
+        border-color: #ffffff;
+    }
+
+    .navbar .navbar-nav .nav-link {
+        color: #ffffff;
+        padding: 10px 15px;
+    }
+
+        .navbar .navbar-nav .nav-link:hover {
+            background-color: #003366;
+            color: #ffffff;
+        }
+
+.navbar-expand-lg .navbar-nav {
+    margin-left: auto;
+    display: flex;
+    flex-direction: row;
+}
+
+    .navbar-expand-lg .navbar-nav .nav-item {
+        margin-left: 15px;
+    }
 
 a.button {
     display: inline-block;
@@ -105,32 +137,51 @@ button {
         border-color: #ff9934;
     }
 
-/* Estilo para la tabla de usuarios */
 table {
     width: 100%;
-    border-collapse: collapse; /* Asegura que no haya espacios entre las celdas */
-    margin-bottom: 20px; /* Espacio debajo de la tabla */
+    border-collapse: collapse;
+    margin-bottom: 20px;
 }
 
-    table th, table td {
-        padding: 12px 15px; /* Aumenta el padding dentro de las celdas */
-        text-align: left; /* Alinea el texto a la izquierda */
+table, th, td {
+    border: 1px solid #ddd;
+}
+
+th, td {
+    padding: 10px;
+    text-align: left;
+}
+
+thead {
+    background-color: #054DC5;
+    color: #fafafa;
+}
+
+tbody tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+tbody tr:hover {
+    background-color: #f1f1f1;
+}
+
+.notification-list {
+    margin-bottom: 20px;
+}
+
+.notification-item {
+    background-color: #ffffff;
+    padding: 15px;
+    border-radius: 8px;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+    margin-bottom: 10px;
+}
+
+    .notification-item h4 {
+        margin-top: 0;
     }
 
-    table thead th {
-        background-color: #054DC5; /* Color de fondo para el encabezado */
-        color: #fafafa; /* Color del texto del encabezado */
-        font-weight: bold; /* Negrita para el texto del encabezado */
+    .notification-item p {
+        margin-bottom: 0;
     }
 
-    table tbody tr:nth-child(odd) {
-        background-color: #fafafa; /* Color de fondo para filas impares */
-    }
-
-    table tbody tr:nth-child(even) {
-        background-color: #ffffff; /* Color de fondo para filas pares */
-    }
-
-    table tbody tr:hover {
-        background-color: #f1f1f1; /* Color de fondo para fila al pasar el ratón */
-    }

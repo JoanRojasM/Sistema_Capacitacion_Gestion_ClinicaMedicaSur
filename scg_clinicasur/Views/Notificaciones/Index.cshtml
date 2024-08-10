@@ -1,0 +1,43 @@
+﻿@{
+    ViewData["Title"] = "Listado de Notificaciones";
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="stylesheet" href="~/css/site.css">
+    <title>@ViewData["Title"]</title>
+</head>
+<body>
+    <header>
+        <h1>@ViewData["Title"]</h1>
+    </header>
+    <main>
+        <div class="header-buttons">
+            <a href="/Notificaciones/Configuracion" class="button">Configuración de Notificaciones</a>
+        </div>
+        <table>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Tipo</th>
+                    <th>Mensaje</th>
+                    <th>Fecha</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>NOT-1</td>
+                    <td>Recordatorio</td>
+                    <td>Consulta programada para mañana.</td>
+                    <td>2024-08-10</td>
+                    <td>
+                        <a href="/Notificaciones/Detalles" class="button">Detalles</a>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </main>
+</body>
+</html>
