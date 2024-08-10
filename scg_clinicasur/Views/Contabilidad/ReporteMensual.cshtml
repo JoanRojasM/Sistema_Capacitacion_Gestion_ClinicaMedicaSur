@@ -1,0 +1,39 @@
+﻿@{
+    ViewData["Title"] = "Reporte Mensual";
+}
+
+<h1>@ViewData["Title"]</h1>
+
+<form>
+    <div class="mb-3">
+        <label for="mes" class="form-label">Mes</label>
+        <input type="month" class="form-control" id="mes" />
+    </div>
+    <button type="submit" class="btn btn-primary">Generar Reporte</button>
+</form>
+
+<h2>Reporte para el mes: YYYY-MM</h2>
+<table class="table">
+    <thead>
+        <tr>
+            <th>Tipo</th>
+            <th>Descripción</th>
+            <th>Monto</th>
+            <th>Fecha</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>Ingreso</td>
+            <td>Venta de producto</td>
+            <td>1000</td>
+            <td>2024-08-01</td>
+        </tr>
+        <tr>
+            <td>Gasto</td>
+            <td>Compra de suministros</td>
+            <td>500</td>
+            <td>2024-08-02</td>
+        </tr>
+    </tbody>
+</table>

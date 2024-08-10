@@ -1,0 +1,37 @@
+﻿@{
+    ViewData["Title"] = "Historial de Ingresos y Gastos";
+}
+
+<h1>@ViewData["Title"]</h1>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Tipo</th>
+            <th>Descripción</th>
+            <th>Monto</th>
+            <th>Fecha</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>CON-1</td>
+            <td>Ingreso</td>
+            <td>Venta de producto</td>
+            <td>1000</td>
+            <td>2024-08-01</td>
+        </tr>
+        <tr>
+            <td>CON-2</td>
+            <td>Gasto</td>
+            <td>Compra de suministros</td>
+            <td>500</td>
+            <td>2024-08-02</td>
+        </tr>
+    </tbody>
+</table>
+
+<a class="btn btn-primary" href="@Url.Action("AgregarEntrada")">Agregar Ingreso</a>
+<a class="btn btn-primary" href="@Url.Action("RegistrarSalida")">Registrar Gasto</a>
+<a class="btn btn-primary" href="@Url.Action("ReporteMensual")">Generar Reporte Mensual</a>
