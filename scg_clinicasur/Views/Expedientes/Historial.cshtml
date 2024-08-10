@@ -1,0 +1,32 @@
+﻿@{
+    ViewData["Title"] = "Historial Clínico Completo";
+}
+
+<h1>@ViewData["Title"]</h1>
+
+<h2>Historial Clínico de Juan Domínguez</h2>
+<table class="table">
+    <thead>
+        <tr>
+            <th>Fecha</th>
+            <th>Descripción</th>
+            <th>Diagnóstico</th>
+            <th>Tratamiento</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>2024-07-20</td>
+            <td>Consulta general</td>
+            <td>Hipertensión</td>
+            <td>Medicamento A</td>
+        </tr>
+        <tr>
+            <td>2023-12-15</td>
+            <td>Chequeo rutinario</td>
+            <td>Todo normal</td>
+            <td>Sin tratamiento</td>
+        </tr>
+    </tbody>
+</table>
+<a href="@Url.Action("Index", "Expedientes")" class="btn btn-secondary">Volver al Listado</a>

@@ -1,0 +1,29 @@
+﻿@{
+    ViewData["Title"] = "Listado de Expedientes Médicos";
+}
+
+<h1>@ViewData["Title"]</h1>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Nombre del Paciente</th>
+            <th>Fecha de Nacimiento</th>
+            <th>Última Consulta</th>
+            <th>Acciones</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>001</td>
+            <td>Juan Domínguez</td>
+            <td>1980-05-15</td>
+            <td>2024-07-20</td>
+            <td>
+                <a href="@Url.Action("DetallesConsulta", "Expedientes", new { id = 001 })" class="btn btn-primary">Ver Detalles</a>
+            </td>
+        </tr>
+    </tbody>
+</table>
+<a href="@Url.Action("BusquedaExpedientes", "Expedientes")" class="btn btn-secondary">Buscar Expediente</a>
