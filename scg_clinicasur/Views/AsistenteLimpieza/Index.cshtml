@@ -3,27 +3,70 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 <header>
-    <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
+    <nav class="navbar navbar-expand-lg bg-body-tertiary">
         <div class="container-fluid">
-            <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                <ul class="navbar-nav flex-grow-1">
-                    <li class="nav-item">
-                        <a class="nav-link text-dark" asp-area="" asp-controller="TrainingLimpieza" asp-action="Schedule">Programacion de Capacitaciones</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link text-dark" asp-area="" asp-controller="TrainingLimpieza" asp-action="ScheduleTraining">Agendar Capacitaciones</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link text-dark" asp-area="" asp-controller="TrainingLimpieza" asp-action="ManageSchedule">Gestionar Capacitaciones</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link text-dark" asp-area="" asp-controller="TrainingLimpieza" asp-action="History">Historial de Capacitaciones</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link text-dark" asp-area="" asp-controller="TrainingLimpieza" asp-action="Resources">Recursos de Capacitacion</a>
-                    </li>
-                </ul>
+            <a class="navbar-brand" href="#">Menú  </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse justify-content-center" id="navbarNavAltMarkup">
+                <div class="navbar-nav">
+                    <ul class="navbar-nav flex-grow-1">
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="TrainingLimpieza" asp-action="Schedule">Programacion de Capacitaciones</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="TrainingLimpieza" asp-action="ScheduleTraining">Agendar Capacitaciones</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="TrainingLimpieza" asp-action="ManageSchedule">Gestionar Capacitaciones</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="TrainingLimpieza" asp-action="History">Historial de Capacitaciones</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="TrainingLimpieza" asp-action="Resources">Recursos de Capacitacion</a>
+                        </li>
+                    </ul>
+                </div>
             </div>
         </div>
     </nav>
 </header>
+<body>
+    <div class="col-12 text-center">
+        <h1 class="display-5 mt-4">Bienvenido, Asistente de Limpieza</h1>
+        <p class="lead">Gestión de Capacitaciones</p>
+
+        <div class="row mt-5">
+            <div class="col-md-4">
+                <div class="card text-center">
+                    <div class="card-body">
+                        <h5 class="card-title">Capacitaciones Disponibles</h5>
+                        <p class="card-text">Explora las capacitaciones para mejorar tus habilidades en el mantenimiento y limpieza de las instalaciones.</p>
+                        <a asp-controller="TrainingLimpieza" asp-action="Schedule" class="btn btn-success">Ver Capacitaciones</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card text-center">
+                    <div class="card-body">
+                        <h5 class="card-title">Historial de Capacitaciones</h5>
+                        <p class="card-text">Consulta tu historial de capacitaciones completadas para hacer seguimiento de tu progreso y mejora de habilidades.</p>
+                        <a asp-controller="TrainingLimpieza" asp-action="History" class="btn btn-primary">Ver Historial</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card text-center">
+                    <div class="card-body">
+                        <h5 class="card-title">Próximas Capacitaciones</h5>
+                        <p class="card-text">Mantente al tanto de las próximas capacitaciones para estar siempre preparado para cualquier evaluacion.</p>
+                        <a asp-controller="TrainingLimpieza" asp-action="ManageSchedule" class="btn btn-warning">Ver Próximas</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</body>

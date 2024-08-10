@@ -2,7 +2,10 @@
     ViewData["Title"] = "Historial de Capacitaciones";
 }
 
-<h2>@ViewData["Title"]</h2>
+<div class="col-12 text-center">
+    <h1 class="display-5 mt-4">Historial de Capacitaciones</h1>
+</div>
+<br />
 
 <!-- Simulación del historial de capacitaciones -->
 <table class="table">
@@ -19,20 +22,44 @@
             <td>Capacitación A</td>
             <td>Completada</td>
         </tr>
+        <tr>
+            <td>04/05/2024</td>
+            <td>Capacitación B</td>
+            <td>Completada</td>
+        </tr>
+        <tr>
+            <td>22/03/2024</td>
+            <td>Capacitación C</td>
+            <td>Incompleta</td>
+        </tr>
+        <tr>
+            <td>09/02/2024</td>
+            <td>Capacitación D</td>
+            <td>Completada</td>
+        </tr>
+        <tr>
+            <td>28/07/2024</td>
+            <td>Capacitación E</td>
+            <td>Incompleta</td>
+        </tr>
         <!-- Más filas según sea necesario -->
     </tbody>
 </table>
 
 <!-- Filtro por fecha -->
 <form method="get" action="@Url.Action("History", "TrainingLimpieza")">
-    <div class="form-group">
-        <label for="startDate">Desde:</label>
+    <div class="form-floating">
         <input type="date" class="form-control" id="startDate" name="startDate">
+        <label for="startDate">Desde:</label>
     </div>
-    <div class="form-group">
-        <label for="endDate">Hasta:</label>
-        <input type="date" class="form-control" id="endDate" name="endDate">
+    <br />
+    <div class="form-floating">
+        <input type="date" class="form-control" id="floatingSelect" name="endDate">
+        <label for="floatingSelect">Hasta:</label>
     </div>
-    <button type="submit" class="btn btn-primary">Filtrar</button>
+    <br />
+    <div class="d-grid gap-2">
+        <button type="submit" class="btn btn-primary">Filtrar</button>
+    </div>
 </form>
 

@@ -8,5 +8,17 @@ namespace scg_clinicasur.Controllers
         {
             return View();
         }
+        public IActionResult AdminSchedule()
+        {
+            return View();
+        }
+        public IActionResult AdminScheduleMed()
+        {
+            return View();
+        }
+        public IActionResult AdminSchedulelimpieza()
+        {
+            return View();
+        }
     }
 }
