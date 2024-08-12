@@ -1,0 +1,198 @@
+﻿@{
+    ViewData["Title"] = "Listado de Citas";
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="stylesheet" href="~/css/site.css">
+    <title>@ViewData["Title"]</title>
+</head>
+<body>
+    <header>
+        <h1>@ViewData["Title"]</h1>
+        <nav>
+            <div class="header-buttons">
+                <a asp-action="Crear" class="button">Crear Cita</a>
+                <div class="dropdown">
+                    <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
+                        Estado de Cita
+                    </button>
+                    <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                        <li>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" id="checkActivas">
+                                <label class="form-check-label" for="checkActivas">
+                                    Activa
+                                </label>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" id="checkCanceladas">
+                                <label class="form-check-label" for="checkCanceladas">
+                                    Cancelada
+                                </label>
+                            </div>
+                        </li>
+
+                        <li>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" id="checkPresente">
+                                <label class="form-check-label" for="checkPresente">
+                                    Presente
+                                </label>
+                            </div>
+                        </li>
+
+                        <li>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" id="checkProximas">
+                                <label class="form-check-label" for="checkProximas">
+                                    Proxima
+                                </label>
+                            </div>
+                        </li>
+                        <li>
+                        </li>
+                        <li><hr class="dropdown-divider"></li> <!-- Línea divisoria -->
+                        <li>
+                            <button class="btn btn-secondary w-100" id="confirmFilter">Confirmar</button>
+                        </li>
+                        <li>
+                            <button class="btn btn-secondary w-100" id="resetFilter">Resetear Filtro</button>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </header>
+    <main>
+        <table>
+            <thead>
+                <tr>
+                    <th>Paciente</th>
+                    <th>Fecha</th>
+                    <th>Motivo</th>
+                    <th>Estado</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Álvaro Sanabria</td>
+                    <td>14/08/2024</td>
+                    <td>Control</td>
+                    <td>Activa</td>
+                    <td>
+                        <a asp-action="Editar" class="button">Editar</a>
+                        <a asp-action="Eliminar" class="button">Eliminar</a>
+                    </td>
+                </tr>
+            
+            </tbody>
+
+            <tbody>
+                <tr>
+                    <td>Victor Gonzalez</td>
+                    <td>10/08/2024</td>
+                    <td>Examen</td>
+                    <td>Cancelada</td>
+                    <td>
+                        <a asp-action="Editar" class="button">Editar</a>
+                        <a asp-action="Eliminar" class="button">Eliminar</a>
+                    </td>
+                </tr>
+
+            </tbody>
+
+            <tbody>
+                <tr>
+                    <td>Monica Rodriguez</td>
+                    <td>11/08/2024</td>
+                    <td>Control</td>
+                    <td>Presente</td>
+                    <td>
+                        <a asp-action="Editar" class="button">Editar</a>
+                        <a asp-action="Eliminar" class="button">Eliminar</a>
+                    </td>
+                </tr>
+
+            </tbody>
+
+
+            <tbody>
+                <tr>
+                    <td>Juan Diego</td>
+                    <td>15/08/2024</td>
+                    <td>Control</td>
+                    <td>Activa</td>
+                    <td>
+                        <a asp-action="Editar" class="button">Editar</a>
+                        <a asp-action="Eliminar" class="button">Eliminar</a>
+                    </td>
+                </tr>
+
+            </tbody>
+
+            <tbody>
+                <tr>
+                    <td>Torres Briseño</td>
+                    <td>14/08/2024</td>
+                    <td>Consulta</td>
+                    <td>Cancelada</td>
+                    <td>
+                        <a asp-action="Editar" class="button">Editar</a>
+                        <a asp-action="Eliminar" class="button">Eliminar</a>
+                    </td>
+                </tr>
+
+            </tbody>
+
+            <tbody>
+                <tr>
+                    <td>Samuel Quiros</td>
+                    <td>20/09/2024</td>
+                    <td>Control</td>
+                    <td>Activa</td>
+                    <td>
+                        <a asp-action="Editar" class="button">Editar</a>
+                        <a asp-action="Eliminar" class="button">Eliminar</a>
+                    </td>
+                </tr>
+
+            </tbody>
+
+            <tbody>
+                <tr>
+                    <td>Erica Mata</td>
+                    <td>16/08/2024</td>
+                    <td>Control</td>
+                    <td>Cancelada</td>
+                    <td>
+                        <a asp-action="Editar" class="button">Editar</a>
+                        <a asp-action="Eliminar" class="button">Eliminar</a>
+                    </td>
+                </tr>
+
+            </tbody>
+
+            <tbody>
+                <tr>
+                    <td>Jimmy Bermudez</td>
+                    <td>17/08/2024</td>
+                    <td>Control</td>
+                    <td>Activa</td>
+                    <td>
+                        <a asp-action="Editar" class="button">Editar</a>
+                        <a asp-action="Eliminar" class="button">Eliminar</a>
+                    </td>
+                </tr>
+
+            </tbody>
+
+
+        </table>
+    </main>
+</body>
+</html>

@@ -1,0 +1,41 @@
+﻿@{
+    ViewData["Title"] = "Editar Cita";
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="stylesheet" href="~/css/site.css">
+    <title>@ViewData["Title"]</title>
+</head>
+<body>
+    <header>
+        <h1>@ViewData["Title"]</h1>
+        <nav>
+            <a asp-action="Index" class="button">Volver al Listado</a>
+        </nav>
+    </header>
+    <main>
+        <form method="post" asp-action="Editar">
+            <label for="paciente">Paciente:</label>
+            <input type="text" id="nombre" name="nombre" value="Álvaro Sanabria" required>
+
+            <label for="username">Fecha:</label>
+            <input type="text" id="fecha" name="fecha" value="14/08/2024" required>
+
+            <label for="motivo">Motivo:</label>
+            <input type="text" id="motivo" name="password" value="Control" required>
+
+            <label for="estado">Estado:</label>
+            <select id="estado" name="estado">
+                <option value="activo">Activo</option>
+                <option value="cancelado">Cancelado</option>
+                <option value="presente">Presente</option>
+                <option value="proxima">Proxima</option>
+            </select>
+
+            <button type="submit" class="button">Actualizar</button>
+        </form>
+    </main>
+</body>
+</html>

@@ -1,0 +1,42 @@
+﻿@{
+    ViewData["Title"] = "Crear Cita";
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="stylesheet" href="~/css/site.css">
+    <title>@ViewData["Title"]</title>
+</head>
+<body>
+    <header>
+        <h1>@ViewData["Title"]</h1>
+        <nav>
+            <a asp-action="Index" class="button">Volver al Listado</a>
+        </nav>
+    </header>
+    <main>
+        <form method="post" asp-action="Crear">
+            <label for="paciente">Paciente:</label>
+            <input type="text" id="paciente" name="paciente" required>
+
+            <label for="fecha">Fecha:</label>
+            <input type="text" id="fecha" name="fecha" required>
+
+            <label for="motivo">Motivo:</label>
+            <input type="text" id="motivo" name="motivo" required>
+
+            <label for="estado">Estado:</label>
+            <select id="estado" name="estado">
+                <option value="activo">Activo</option>
+                <option value="cancelado">Cancelado</option>
+                <option value="presente">Presente</option>
+                <option value="proxima">Proxima</option>
+            </select>
+
+
+            <button type="submit" class="button">Guardar</button>
+        </form>
+    </main>
+</body>
+</html>

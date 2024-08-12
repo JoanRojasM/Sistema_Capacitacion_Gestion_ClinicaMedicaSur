@@ -1,0 +1,26 @@
+﻿@{
+    ViewData["Title"] = "Confirmar Eliminación";
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="stylesheet" href="~/css/site.css">
+    <title>@ViewData["Title"]</title>
+</head>
+<body>
+    <header>
+        <h1>@ViewData["Title"]</h1>
+        <nav>
+            <a asp-action="Index" class="button">Volver al Listado</a>
+        </nav>
+    </header>
+    <main>
+        <p>¿Estás seguro de que deseas eliminar a Álvaro Sanabria?</p>
+        <form method="post" asp-action="Eliminar">
+            <button type="submit" class="button">Sí, Eliminar</button>
+        </form>
+        <a href="@Url.Action("Index")" class="button">Cancelar</a>
+    </main>
+</body>
+</html>
