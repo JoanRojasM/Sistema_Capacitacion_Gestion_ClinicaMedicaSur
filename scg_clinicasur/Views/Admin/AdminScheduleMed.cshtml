@@ -1,5 +1,64 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
-@{
+﻿@{
+    ViewBag.Title = "Gestión de Capacitaciones - Asistente Médico";
+    Layout = "~/Views/Shared/_Layout.cshtml";
 }
+<header>
+    <nav class="navbar navbar-expand-lg bg-body-tertiary">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">Menú</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse justify-content-center" id="navbarNavAltMarkup">
+                <div class="navbar-nav">
+                    <ul class="navbar-nav flex-grow-1">
+                        <li class="nav-item">
+                            <a class="nav-link text-dark active" aria-current="page" asp-area="" asp-controller="Admin" asp-action="AdminScheduleMed">Gestión de Capacitaciones Asistente Médico</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Admin" asp-action="AdminScheduleLimpieza">Gestión de Capacitaciones Personal de Limpieza</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </nav>
+</header>
+
+<body>
+    <div class="col-12 text-center">
+        <h1 class="display-5 mt-4">Gestión de Capacitaciones - Asistente Médico</h1>
+        <p class="lead">Administra las capacitaciones para los asistentes médicos.</p>
+    </div>
+
+    <div class="container mt-5">
+        <h3>Programación de Capacitaciones</h3>
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Fecha</th>
+                    <th>Hora</th>
+                    <th>Capacitación</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Ejemplo de una fila -->
+                <tr>
+                    <td>02/09/2024</td>
+                    <td>02:00 PM</td>
+                    <td>Atención al Paciente</td>
+                    <td>
+                        <a href="#" class="btn btn-primary">Editar</a>
+                        <a href="#" class="btn btn-danger">Eliminar</a>
+                    </td>
+                </tr>
+                <!-- Más filas de ejemplo -->
+            </tbody>
+        </table>
+
+        <div class="text-end">
+            <a href="#" class="btn btn-success">Agregar Nueva Capacitación</a>
+        </div>
+    </div>
+</body>

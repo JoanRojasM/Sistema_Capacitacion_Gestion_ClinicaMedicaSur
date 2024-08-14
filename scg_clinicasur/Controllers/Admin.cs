@@ -20,5 +20,13 @@ namespace scg_clinicasur.Controllers
         {
             return View();
         }
+        public IActionResult AdminResources()
+        {
+            return View();
+        }
+        public IActionResult AdminHistory()
+        {
+            return View();
+        }
     }
 }
