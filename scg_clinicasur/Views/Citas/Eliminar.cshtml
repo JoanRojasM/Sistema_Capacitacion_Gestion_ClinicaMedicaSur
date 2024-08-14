@@ -18,7 +18,9 @@
     <main>
         <p>¿Estás seguro de que deseas eliminar a Álvaro Sanabria?</p>
         <form method="post" asp-action="Eliminar">
-            <button type="submit" class="button">Sí, Eliminar</button>
+            <a href="#" class="btn btn-danger">Si Eliminar</a>
+@*             <button type="submit" class="button">Sí, Eliminar</button>
+ *@
         </form>
         <a href="@Url.Action("Index")" class="button">Cancelar</a>
     </main>
