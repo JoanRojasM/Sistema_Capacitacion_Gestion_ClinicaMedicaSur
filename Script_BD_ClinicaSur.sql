@@ -1,6 +1,6 @@
-Create Database ClinicaMedicaSur;
+CREATE DATABASE ClinicaMedicaSur;
 
-Use ClinicaMedicaSur;
+USE ClinicaMedicaSur;
 
 CREATE TABLE roles (
     id_rol INT PRIMARY KEY IDENTITY(1,1),
@@ -19,7 +19,7 @@ CREATE TABLE usuarios (
     nombre VARCHAR(100),
     apellido VARCHAR(100),
     correo VARCHAR(100) UNIQUE,
-    contraseña VARCHAR(255), -- Almacenar contraseñas hasheadas
+    contrasena VARCHAR(255), -- Almacenar contraseÃ±as hasheadas
     telefono VARCHAR(15),
     id_rol INT,
     fecha_registro DATETIME DEFAULT GETDATE(),
@@ -53,11 +53,11 @@ CREATE TABLE capacitacion_usuarios (
     id_capacitacion INT,
     fecha_inscripcion DATETIME DEFAULT GETDATE(),
     nota DECIMAL(5,2) DEFAULT NULL,
-    id_estado INT, -- Se usará para la referencia a la tabla estado_capacitacion
+    id_estado INT, -- Se usarÃ¡ para la referencia a la tabla estado_capacitacion
     FOREIGN KEY (id_usuario) REFERENCES usuarios(id_usuario),
     FOREIGN KEY (id_capacitacion) REFERENCES capacitacion(id_capacitacion),
     FOREIGN KEY (id_estado) REFERENCES estado_capacitacion(id_estado), -- Referencia a la tabla estado_capacitacion
-    CONSTRAINT unique_user_cap UNIQUE (id_usuario, id_capacitacion) -- Restricción para evitar múltiples inscripciones
+    CONSTRAINT unique_user_cap UNIQUE (id_usuario, id_capacitacion) -- RestricciÃ³n para evitar mÃºltiples inscripciones
 );
 
 CREATE TABLE estado_citas (
@@ -81,7 +81,7 @@ CREATE TABLE citas (
     fecha_creacion DATETIME DEFAULT GETDATE(),
     FOREIGN KEY (id_paciente) REFERENCES usuarios(id_usuario),
     FOREIGN KEY (id_doctor) REFERENCES usuarios(id_usuario),
-    FOREIGN KEY (id_estado_cita) REFERENCES estado_citas(id_estado_cita) -- Relación con estado_citas
+    FOREIGN KEY (id_estado_cita) REFERENCES estado_citas(id_estado_cita) -- RelaciÃ³n con estado_citas
 );
 
 CREATE TABLE estado_ticket (
@@ -100,10 +100,9 @@ CREATE TABLE tickets_citas (
     fecha_creacion DATETIME DEFAULT GETDATE(),
     id_estado_ticket INT, -- Columna que referencia la tabla estado_ticket
     FOREIGN KEY (id_cita) REFERENCES citas(id_cita),
-    FOREIGN KEY (id_estado_ticket) REFERENCES estado_ticket(id_estado), -- Clave foránea hacia estado_ticket
-    CONSTRAINT unique_ticket_num UNIQUE (numero_ticket) -- Restricción de unicidad para el número de ticket
+    FOREIGN KEY (id_estado_ticket) REFERENCES estado_ticket(id_estado), -- Clave forÃ¡nea hacia estado_ticket
+    CONSTRAINT unique_ticket_num UNIQUE (numero_ticket) -- RestricciÃ³n de unicidad para el nÃºmero de ticket
 );
-
 
 CREATE TABLE expedientes (
     id_expediente INT PRIMARY KEY IDENTITY(1,1),
@@ -154,8 +153,17 @@ CREATE TABLE notificacion (
     id_recordatorio INT PRIMARY KEY IDENTITY(1,1),
     id_usuario INT,
     tipo_recordatorio VARCHAR(50), -- 'cita' o 'capacitacion'
-    id_referencia INT, -- Referencia a una cita o capacitación
+    id_referencia INT, -- Referencia a una cita o capacitaciÃ³n
     fecha_envio DATETIME,
     mensaje VARCHAR(255),
     FOREIGN KEY (id_usuario) REFERENCES usuarios(id_usuario)
 );
+
+-- Insertar un usuario para cada rol
+INSERT INTO usuarios (nombre, apellido, correo, contrasena, telefono, id_rol)
+VALUES
+('Maria', 'Perez', 'maria.perez@example.com', '123', '1234567890', (SELECT id_rol FROM roles WHERE nombre_rol = 'asistente_limpieza')),
+('Carlos', 'Rodriguez', 'carlos.rodriguez@example.com', '123', '2345678901', (SELECT id_rol FROM roles WHERE nombre_rol = 'asistente_medico')),
+('Ana', 'Lopez', 'ana.lopez@example.com', '123', '3456789012', (SELECT id_rol FROM roles WHERE nombre_rol = 'paciente')),
+('Jorge', 'Martinez', 'jorge.martinez@example.com', '123', '4567890123', (SELECT id_rol FROM roles WHERE nombre_rol = 'doctor')),
+('Laura', 'Fernandez', 'laura.fernandez@example.com', '123', '5678901234', (SELECT id_rol FROM roles WHERE nombre_rol = 'administrador'));
