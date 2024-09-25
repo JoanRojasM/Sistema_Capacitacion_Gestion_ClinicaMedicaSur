@@ -1,0 +1,23 @@
+{
+  "runtimeTarget": {
+    "name": ".NETCoreApp,Version=v8.0",
+    "signature": ""
+  },
+  "compilationOptions": {},
+  "targets": {
+    ".NETCoreApp,Version=v8.0": {
+      "scg_clinicasur/1.0.0": {
+        "runtime": {
+          "scg_clinicasur.dll": {}
+        }
+      }
+    }
+  },
+  "libraries": {
+    "scg_clinicasur/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    }
+  }
+}
