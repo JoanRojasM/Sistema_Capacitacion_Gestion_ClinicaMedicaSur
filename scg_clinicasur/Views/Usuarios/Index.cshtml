@@ -1,4 +1,6 @@
-﻿@{
+﻿@model IEnumerable<scg_clinicasur.Models.Usuario>
+
+@{
     ViewData["Title"] = "Listado de Usuarios";
 }
 
@@ -68,53 +70,28 @@
             <thead>
                 <tr>
                     <th>Nombre</th>
-                    <th>Username</th>
+                    <th>Correo</th>
+                    <th>Teléfono</th>
                     <th>Rol</th>
-                    <th>Email</th>
+                    <th>Fecha de Registro</th>
                     <th>Acciones</th>
                 </tr>
             </thead>
             <tbody>
-                <tr>
-                    <td>Álvaro Sanabria</td>
-                    <td>alvasan</td>
-                    <td>Doctor</td>
-                    <td>alvaro.sanabria@gmail.com</td>
-                    <td>
-                        <a asp-action="Editar" class="button">Editar</a>
-                        <a asp-action="Eliminar" class="button">Eliminar</a>
-                    </td>
-                </tr>
-                <tr>
-                    <td>Alejandor Rojas</td>
-                    <td>aleroj</td>
-                    <td>Asistente Médico</td>
-                    <td>alejandrorojas22@gmail.com</td>
-                    <td>
-                        <a asp-action="Editar" class="button">Editar</a>
-                        <a asp-action="Eliminar" class="button">Eliminar</a>
-                    </td>
-                </tr>
-                <tr>
-                    <td>María Herrera</td>
-                    <td>marih</td>
-                    <td>Asistente de Limpieza</td>
-                    <td>mherrera@gmail.com</td>
-                    <td>
-                        <a asp-action="Editar" class="button">Editar</a>
-                        <a asp-action="Eliminar" class="button">Eliminar</a>
-                    </td>
-                </tr>
-                <tr>
-                    <td>Juan Domínguez</td>
-                    <td>juandominguez</td>
-                    <td>Paciente</td>
-                    <td>juandomin72@gmail.com</td>
-                    <td>
-                        <a asp-action="Editar" class="button">Editar</a>
-                        <a asp-action="Eliminar" class="button">Eliminar</a>
-                    </td>
-                </tr>
+                @foreach (var usuario in Model)
+                {
+                    <tr>
+                        <td>@usuario.nombre @usuario.apellido</td>
+                        <td>@usuario.correo</td>
+                        <td>@usuario.telefono</td>
+                        <td>@usuario.roles.nombre_rol</td>
+                        <td>@usuario.fecha_registro.ToString("dd/MM/yyyy")</td>
+                        <td>
+                            <a asp-action="Editar" asp-route-id="@usuario.id_usuario" class="button">Editar</a>
+                            <a asp-action="Eliminar" asp-route-id="@usuario.id_usuario" class="button">Eliminar</a>
+                        </td>
+                    </tr>
+                }
             </tbody>
         </table>
     </main>

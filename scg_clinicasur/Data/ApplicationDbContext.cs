@@ -10,6 +10,6 @@ namespace scg_clinicasur.Data
         }
 
         public DbSet<scg_clinicasur.Models.Usuario> Usuarios { get; set; }
-        public DbSet<scg_clinicasur.Models.Rol> Roles { get; set; }
+        public DbSet<scg_clinicasur.Models.Roles> Roles { get; set; }
     }
 }

@@ -7,44 +7,46 @@ namespace scg_clinicasur.Models
     public class Usuario
     {
         [Key]
-        public int IdUsuario { get; set; }
+        public int id_usuario { get; set; }
 
-        [Required (ErrorMessage = "El nombre del usuario es requerido")]
+        [Required(ErrorMessage = "El nombre del usuario es requerido")]
         [StringLength(100)]
-        public string Nombre { get; set; }
+        public string nombre { get; set; }
 
         [Required]
         [StringLength(100)]
-        public string Apellido { get; set; }
+        public string apellido { get; set; }
 
         [Required(ErrorMessage = "El correo electrónico del usuario es requerido")]
         [StringLength(100)]
         [EmailAddress(ErrorMessage = "La información debe ser un correo electrónico")]
-        public string Correo { get; set; }
+        public string correo { get; set; }
 
         [Required(ErrorMessage = "La contraseña es requerida")]
         [StringLength(255)]
-        public string Contraseña { get; set; }
+        public string contraseña { get; set; }
 
         [StringLength(15)]
-        public string? Telefono { get; set; }
+        public string? telefono { get; set; }
 
-        public DateTime FechaRegistro { get; set; } = DateTime.Now;
+        public DateTime fecha_registro { get; set; } = DateTime.Now;
 
-        // Relación con la tabla Roles
-        public int IdRol { get; set; }
+        // Campo que debe ser requerido: id_rol, no roles
+        [Required(ErrorMessage = "El rol es requerido")]
+        public int id_rol { get; set; }
 
-        [ForeignKey("IdRol")]
-        public Rol Rol { get; set; }
+        // La propiedad de navegación para Roles no necesita validación
+        [ForeignKey("id_rol")]
+        public Roles? roles { get; set; }  // Esto solo es útil cuando consultas el usuario, no durante la creación
     }
 
-    public class Rol
+    public class Roles
     {
         [Key]
-        public int IdRol { get; set; }
+        public int id_rol { get; set; }
 
         [Required]
         [StringLength(50)]
-        public string NombreRol { get; set; }
+        public string nombre_rol { get; set; }
     }
 }
