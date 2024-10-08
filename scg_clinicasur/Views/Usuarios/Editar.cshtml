@@ -1,4 +1,6 @@
-﻿@{
+﻿@model scg_clinicasur.Models.Usuario
+
+@{
     ViewData["Title"] = "Editar Usuario";
 }
 
@@ -16,29 +18,50 @@
         </nav>
     </header>
     <main>
-        <form method="post" asp-action="Editar">
-            <label for="nombre">Nombre:</label>
-            <input type="text" id="nombre" name="nombre" value="Álvaro Sanabria" required>
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        <form method="post" asp-action="Editar" asp-route-id="@Model.id_usuario">
+            <input type="hidden" asp-for="id_usuario" /> <!-- Campo oculto para enviar el ID -->
 
-            <label for="username">Username:</label>
-            <input type="text" id="username" name="username" value="alvasan" required>
+            <label asp-for="nombre">Nombre:</label>
+            <input asp-for="nombre" class="form-control" />
+            <span asp-validation-for="nombre" class="text-danger"></span>
 
-            <label for="password">Password:</label>
-            <input type="password" id="password" name="password" placeholder="clinica423">
+            <label asp-for="apellido">Apellido:</label>
+            <input asp-for="apellido" class="form-control" />
+            <span asp-validation-for="apellido" class="text-danger"></span>
 
-            <label for="rol">Rol:</label>
-            <select id="rol" name="rol">
-                <option value="doctor" selected>Doctor</option>
-                <option value="asistente_medico">Asistente Médico</option>
-                <option value="asistente_limpieza">Asistente de Limpieza</option>
-                <option value="paciente">Paciente</option>
-            </select>
+            <label asp-for="contraseña">Contraseña (deja en blanco si no deseas cambiar la contraseña):</label>
+            <input asp-for="contraseña" type="password" class="form-control" placeholder="Deja en blanco si no deseas cambiar la contraseña" />
+            <span asp-validation-for="contraseña" class="text-danger"></span>
 
-            <label for="email">Email:</label>
-            <input type="email" id="email" name="email" value="alvaro.sanabria@gmail.com" required>
+            <label asp-for="correo">Correo electrónico:</label>
+            <input asp-for="correo" type="email" class="form-control" />
+            <span asp-validation-for="correo" class="text-danger"></span>
 
-            <button type="submit" class="button">Actualizar</button>
+            <label asp-for="telefono">Teléfono:</label>
+            <input asp-for="telefono" class="form-control" />
+            <span asp-validation-for="telefono" class="text-danger"></span>
+
+            <label asp-for="id_rol">Rol:</label>
+            <select asp-for="id_rol" class="form-control" asp-items="ViewBag.Roles"></select>
+            <span asp-validation-for="id_rol" class="text-danger"></span>
+
+            <label asp-for="estado">Estado:</label>
+            <select asp-for="estado" class="form-control" asp-items="ViewBag.Estados"></select>
+            <span asp-validation-for="estado" class="text-danger"></span>
+
+            <button type="submit" class="btn btn-primary">Actualizar</button>
         </form>
     </main>
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            // Desactivar validación del campo "contraseña" al cargar la página
+            $('input[name="contraseña"]').removeAttr('data-val');
+            $('input[name="contraseña"]').removeAttr('data-val-required');
+        });
+    </script>
+
 </body>
 </html>

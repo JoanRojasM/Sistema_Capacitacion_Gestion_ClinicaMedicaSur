@@ -1,4 +1,6 @@
-﻿@{
+﻿@model scg_clinicasur.Models.Usuario
+
+@{
     ViewData["Title"] = "Confirmar Eliminación";
 }
 
@@ -16,8 +18,17 @@
         </nav>
     </header>
     <main>
-        <p>¿Estás seguro de que deseas eliminar a Álvaro Sanabria?</p>
+        <h3>Detalles del Usuario</h3>
+        <p><strong>Nombre:</strong> @Model.nombre @Model.apellido</p>
+        <p><strong>Correo:</strong> @Model.correo</p>
+        <p><strong>Teléfono:</strong> @Model.telefono</p>
+        <p><strong>Rol:</strong> @Model.roles.nombre_rol</p> <!-- Asegúrate de incluir el rol del usuario -->
+        <p><strong>Estado:</strong> @Model.estado</p>
+        <p><strong>Fecha de Registro:</strong> @Model.fecha_registro.ToString("dd/MM/yyyy")</p>
+
+        <h4>¿Estás seguro de que deseas eliminar a este usuario?</h4>
         <form method="post" asp-action="Eliminar">
+            <input type="hidden" asp-for="id_usuario" />
             <button type="submit" class="button">Sí, Eliminar</button>
         </form>
         <a href="@Url.Action("Index")" class="button">Cancelar</a>

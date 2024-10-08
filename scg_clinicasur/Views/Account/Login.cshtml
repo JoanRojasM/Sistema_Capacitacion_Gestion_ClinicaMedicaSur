@@ -7,24 +7,24 @@
     <p class="lead d-grid gap-2">
         Inicio de Sesión
     </p>
+
     @if (ViewBag.ErrorMessage != null)
     {
         <div class="alert alert-danger">@ViewBag.ErrorMessage</div>
     }
+
     <form method="post" action="/Account/Login">
         <div class="form-floating mb-3">
-            <input type="text" class="form-control" id="floatingInput" name="username" placeholder="" required>
-            <label for="floatingInput">Username</label>
+            <input type="text" class="form-control" id="floatingInput" name="correo" placeholder="Correo Electrónico" required>
+            <label for="floatingInput">Correo Electrónico</label>
         </div>
         <div class="form-floating mb-3">
-            <input type="password" class="form-control" id="floatingInput" name="password" placeholder="" required>
-            <label for="floatingInput">Password</label>
+            <input type="password" class="form-control" id="floatingPassword" name="contraseña" placeholder="Contraseña" required>
+            <label for="floatingPassword">Contraseña</label>
         </div>
         <div class="d-grid gap-2">
-        <button type="submit" class="btn btn-success">Ingresar</button>
+            <button type="submit" class="btn btn-success">Ingresar</button>
             <a href="/Account/ForgotPassword" class="btn btn-primary active">¿Olvidaste tu contraseña?</a>
         </div>
-        
     </form>
 </div>
-
