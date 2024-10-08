@@ -361,3 +361,14 @@ MigrationBackup/
 
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
+scg_clinicasur/.vs/scg_clinicasur/DesignTimeBuild/.dtbcache.v2
+scg_clinicasur/obj/Debug/net8.0/apphost.exe
+scg_clinicasur/obj/Debug/net8.0/ref/scg_clinicasur.dll
+scg_clinicasur/obj/Debug/net8.0/refint/scg_clinicasur.dll
+scg_clinicasur/obj/Debug/net8.0/scg_clinicasur.assets.cache
+scg_clinicasur/obj/Debug/net8.0/scg_clinicasur.csproj.AssemblyReference.cache
+scg_clinicasur/obj/Debug/net8.0/scg_clinicasur.csproj.CoreCompileInputs.cache
+scg_clinicasur/obj/Debug/net8.0/scg_clinicasur.csproj.FileListAbsolute.txt
+scg_clinicasur/obj/Debug/net8.0/scg_clinicasur.dll
+scg_clinicasur/obj/Debug/net8.0/scg_clinicasur.pdb
+*.pdb
