@@ -1,7 +1,24 @@
 {
   "Version": 1,
   "WorkspaceRootPath": "C:\\Users\\joand\\OneDrive\\Documentos\\GitHub\\Sistema_Capacitacion_Gestion_ClinicaMedicaSur\\scg_clinicasur\\",
-  "Documents": [],
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{725F065E-1652-4DC8-8AB2-3A6C4BFAB6C7}|scg_clinicasur.csproj|c:\\users\\joand\\onedrive\\documentos\\github\\sistema_capacitacion_gestion_clinicamedicasur\\scg_clinicasur\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
+      "RelativeMoniker": "D:0:0:{725F065E-1652-4DC8-8AB2-3A6C4BFAB6C7}|scg_clinicasur.csproj|solutionrelative:appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{725F065E-1652-4DC8-8AB2-3A6C4BFAB6C7}|scg_clinicasur.csproj|c:\\users\\joand\\onedrive\\documentos\\github\\sistema_capacitacion_gestion_clinicamedicasur\\scg_clinicasur\\controllers\\usuarioscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{725F065E-1652-4DC8-8AB2-3A6C4BFAB6C7}|scg_clinicasur.csproj|solutionrelative:controllers\\usuarioscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{725F065E-1652-4DC8-8AB2-3A6C4BFAB6C7}|scg_clinicasur.csproj|c:\\users\\joand\\onedrive\\documentos\\github\\sistema_capacitacion_gestion_clinicamedicasur\\scg_clinicasur\\views\\usuarios\\crear.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{725F065E-1652-4DC8-8AB2-3A6C4BFAB6C7}|scg_clinicasur.csproj|solutionrelative:views\\usuarios\\crear.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{725F065E-1652-4DC8-8AB2-3A6C4BFAB6C7}|scg_clinicasur.csproj|c:\\users\\joand\\onedrive\\documentos\\github\\sistema_capacitacion_gestion_clinicamedicasur\\scg_clinicasur\\views\\usuarios\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{725F065E-1652-4DC8-8AB2-3A6C4BFAB6C7}|scg_clinicasur.csproj|solutionrelative:views\\usuarios\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    }
+  ],
   "DocumentGroupContainers": [
     {
       "Orientation": 0,
@@ -9,11 +26,63 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": -1,
+          "SelectedChildIndex": 0,
           "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "appsettings.json",
+              "DocumentMoniker": "C:\\Users\\joand\\OneDrive\\Documentos\\GitHub\\Sistema_Capacitacion_Gestion_ClinicaMedicaSur\\scg_clinicasur\\appsettings.json",
+              "RelativeDocumentMoniker": "appsettings.json",
+              "ToolTip": "C:\\Users\\joand\\OneDrive\\Documentos\\GitHub\\Sistema_Capacitacion_Gestion_ClinicaMedicaSur\\scg_clinicasur\\appsettings.json",
+              "RelativeToolTip": "appsettings.json",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
+              "WhenOpened": "2024-10-08T07:22:32.562Z",
+              "EditorCaption": ""
+            },
             {
               "$type": "Bookmark",
               "Name": "ST:0:0:{1c4feeaa-4718-4aa9-859d-94ce25d182ba}"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "Crear.cshtml",
+              "DocumentMoniker": "C:\\Users\\joand\\OneDrive\\Documentos\\GitHub\\Sistema_Capacitacion_Gestion_ClinicaMedicaSur\\scg_clinicasur\\Views\\Usuarios\\Crear.cshtml",
+              "RelativeDocumentMoniker": "Views\\Usuarios\\Crear.cshtml",
+              "ToolTip": "C:\\Users\\joand\\OneDrive\\Documentos\\GitHub\\Sistema_Capacitacion_Gestion_ClinicaMedicaSur\\scg_clinicasur\\Views\\Usuarios\\Crear.cshtml",
+              "RelativeToolTip": "Views\\Usuarios\\Crear.cshtml",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAA4AAAAHAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2024-10-08T05:28:07.55Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "UsuariosController.cs",
+              "DocumentMoniker": "C:\\Users\\joand\\OneDrive\\Documentos\\GitHub\\Sistema_Capacitacion_Gestion_ClinicaMedicaSur\\scg_clinicasur\\Controllers\\UsuariosController.cs",
+              "RelativeDocumentMoniker": "Controllers\\UsuariosController.cs",
+              "ToolTip": "C:\\Users\\joand\\OneDrive\\Documentos\\GitHub\\Sistema_Capacitacion_Gestion_ClinicaMedicaSur\\scg_clinicasur\\Controllers\\UsuariosController.cs",
+              "RelativeToolTip": "Controllers\\UsuariosController.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAF8BAAAMAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-10-08T05:11:36.703Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "Index.cshtml",
+              "DocumentMoniker": "C:\\Users\\joand\\OneDrive\\Documentos\\GitHub\\Sistema_Capacitacion_Gestion_ClinicaMedicaSur\\scg_clinicasur\\Views\\Usuarios\\Index.cshtml",
+              "RelativeDocumentMoniker": "Views\\Usuarios\\Index.cshtml",
+              "ToolTip": "C:\\Users\\joand\\OneDrive\\Documentos\\GitHub\\Sistema_Capacitacion_Gestion_ClinicaMedicaSur\\scg_clinicasur\\Views\\Usuarios\\Index.cshtml",
+              "RelativeToolTip": "Views\\Usuarios\\Index.cshtml",
+              "ViewState": "AQIAACQAAAAAAAAAAAAAABgAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2024-10-08T05:07:54.568Z",
+              "EditorCaption": ""
             }
           ]
         }
