@@ -1,0 +1,43 @@
+﻿@model scg_clinicasur.Models.CambiarContraseña
+
+@{
+    ViewBag.Title = "Restablecer Contraseña";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container">
+    <h2>Restablecer Contraseña</h2>
+    @if (!string.IsNullOrEmpty(ViewBag.ErrorMessage))
+    {
+        <div class="alert alert-danger">
+            @ViewBag.ErrorMessage
+        </div>
+    }
+    @if (!string.IsNullOrEmpty(ViewBag.SuccessMessage))
+    {
+        <div class="alert alert-success">
+            @ViewBag.SuccessMessage
+        </div>
+    }
+
+    <form method="post" action="/Account/CambiarContraseña">
+        <input type="hidden" asp-for="Token" />
+        <input type="hidden" asp-for="Correo" />
+
+        <div class="form-floating mb-3">
+            <input asp-for="NuevaContraseña" class="form-control" placeholder="Nueva Contraseña" required />
+            <label asp-for="NuevaContraseña">Nueva Contraseña</label>
+            <span asp-validation-for="NuevaContraseña" class="text-danger"></span>
+        </div>
+
+        <div class="form-floating mb-3">
+            <input asp-for="ConfirmarContraseña" class="form-control" placeholder="Confirmar Contraseña" required />
+            <label asp-for="ConfirmarContraseña">Confirmar Contraseña</label>
+            <span asp-validation-for="ConfirmarContraseña" class="text-danger"></span>
+        </div>
+
+        <div class="d-grid gap-2">
+            <button type="submit" class="btn btn-success">Restablecer Contraseña</button>
+        </div>
+    </form>
+</div>

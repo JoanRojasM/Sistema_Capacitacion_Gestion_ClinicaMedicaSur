@@ -8,6 +8,12 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
+// Soporte para sesiones
+builder.Services.AddSession();
+
+// Registro IHttpContextAccessor
+builder.Services.AddHttpContextAccessor();
+
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 
@@ -26,7 +32,10 @@ app.UseStaticFiles();
 
 app.UseRouting();
 
-app.UseAuthorization();
+app.UseAuthentication(); // Añade autenticación
+app.UseAuthorization();  // Añade autorización
+
+app.UseSession(); // Habilitar sesión
 
 app.MapControllerRoute(
     name: "default",
