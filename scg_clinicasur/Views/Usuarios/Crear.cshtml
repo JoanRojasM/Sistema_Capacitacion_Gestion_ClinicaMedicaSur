@@ -2,6 +2,9 @@
 
 @{
     ViewData["Title"] = "Crear Usuario";
+
+    // Obtener el rol del usuario
+    var userRole = Context.Session.GetString("UserRole");
 }
 
 <!DOCTYPE html>
@@ -17,34 +20,49 @@
             <a asp-action="Index" class="button">Volver al Listado</a>
         </nav>
     </header>
-        <main>
-            <form method="post" asp-action="Crear">
-                <label asp-for="nombre">Nombre:</label>
-                <input asp-for="nombre" class="form-control" />
-                <span asp-validation-for="nombre" class="text-danger"></span>
+    <main>
+        <form method="post" asp-action="Crear">
+            <label asp-for="nombre">Nombre:</label>
+            <input asp-for="nombre" class="form-control" />
+            <span asp-validation-for="nombre" class="text-danger"></span>
 
-                <label asp-for="apellido">Apellido:</label>
-                <input asp-for="apellido" class="form-control" />
-                <span asp-validation-for="apellido" class="text-danger"></span>
+            <label asp-for="apellido">Apellido:</label>
+            <input asp-for="apellido" class="form-control" />
+            <span asp-validation-for="apellido" class="text-danger"></span>
 
-                <label asp-for="correo">Correo Electronico:</label>
-                <input asp-for="correo" type="email" class="form-control" />
-                <span asp-validation-for="correo" class="text-danger"></span>
+            <label asp-for="correo">Correo Electrónico:</label>
+            <input asp-for="correo" type="email" class="form-control" />
+            <span asp-validation-for="correo" class="text-danger"></span>
 
-                <label asp-for="contraseña">Contrasena:</label>
-                <input asp-for="contraseña" type="password" class="form-control" />
-                <span asp-validation-for="contraseña" class="text-danger"></span>
+            <label asp-for="contraseña">Contraseña:</label>
+            <input asp-for="contraseña" type="password" class="form-control" />
+            <span asp-validation-for="contraseña" class="text-danger"></span>
 
-                <label asp-for="telefono">Teléfono:</label>
-                <input asp-for="telefono" class="form-control" />
-                <span asp-validation-for="telefono" class="text-danger"></span>
+            <label asp-for="telefono">Teléfono:</label>
+            <input asp-for="telefono" class="form-control" />
+            <span asp-validation-for="telefono" class="text-danger"></span>
 
-                <label asp-for="id_rol">Rol:</label>
-                <select asp-for="id_rol" class="form-control" asp-items="ViewBag.Roles"></select>
-                <span asp-validation-for="id_rol" class="text-danger"></span>
+            <label asp-for="id_rol">Rol:</label>
+            <select asp-for="id_rol" class="form-control" asp-items="ViewBag.Roles"></select>
+            <span asp-validation-for="id_rol" class="text-danger"></span>
 
-                <button type="submit" class="btn btn-primary">Guardar</button>
-            </form>
-        </main>
+            <label asp-for="estado">Estado:</label>
+            <select asp-for="estado" class="form-control" asp-items="ViewBag.Estados"></select>
+            <span asp-validation-for="estado" class="text-danger"></span>
+
+            <button type="submit" class="btn btn-primary">Guardar</button>
+        </form>
+    </main>
+
+    <script>
+        $(document).ready(function () {
+            var userRole = '@userRole';
+
+            // Si el rol del usuario es 'doctor', solo permitir que se seleccione el rol 'paciente'
+            if (userRole === 'doctor') {
+                $('#id_rol').val('paciente').prop('disabled', true);
+            }
+        });
+    </script>
 </body>
 </html>

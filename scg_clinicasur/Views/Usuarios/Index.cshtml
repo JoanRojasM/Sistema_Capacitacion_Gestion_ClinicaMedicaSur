@@ -1,7 +1,25 @@
 ﻿@model IEnumerable<scg_clinicasur.Models.Usuario>
+@inject Microsoft.AspNetCore.Http.IHttpContextAccessor HttpContextAccessor
 
 @{
     ViewData["Title"] = "Listado de Usuarios";
+    var userRole = HttpContextAccessor.HttpContext.Session.GetString("UserRole"); // Obtener el rol del usuario desde la sesión
+}
+
+@if (TempData["SuccessMessage"] != null)
+{
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+        @TempData["SuccessMessage"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+}
+
+@if (TempData["ErrorMessage"] != null)
+{
+    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+        @TempData["ErrorMessage"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
 }
 
 <!DOCTYPE html>
@@ -16,52 +34,92 @@
         <nav>
             <div class="header-buttons">
                 <a asp-action="Crear" class="button">Crear Usuario</a>
+
+                @if (userRole == "administrador")
+                {
+                    <div class="dropdown">
+                        <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
+                            Filtrar por Rol
+                        </button>
+                        <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                            <li>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="checkDoctor">
+                                    <label class="form-check-label" for="checkDoctor">Doctor</label>
+                                </div>
+                            </li>
+                            <li>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="checkAsistenteMedico">
+                                    <label class="form-check-label" for="checkAsistenteMedico">Asistente Médico</label>
+                                </div>
+                            </li>
+                            <li>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="checkAsistenteLimpieza">
+                                    <label class="form-check-label" for="checkAsistenteLimpieza">Asistente de Limpieza</label>
+                                </div>
+                            </li>
+                            <li>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="checkPaciente">
+                                    <label class="form-check-label" for="checkPaciente">Paciente</label>
+                                </div>
+                            </li>
+                            <li>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="checkAdministrador">
+                                    <label class="form-check-label" for="checkAdministrador">Administrador</label>
+                                </div>
+                            </li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li>
+                                <button class="btn btn-secondary w-100" id="confirmFilter">Confirmar</button>
+                            </li>
+                            <li>
+                                <button class="btn btn-secondary w-100" id="resetFilter">Resetear Filtro</button>
+                            </li>
+                        </ul>
+                    </div>
+                }
+
+                <!-- Filtro por Estado (para ambos roles) -->
                 <div class="dropdown">
-                    <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
-                        Filtrar por Rol
+                    <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuButtonEstado" data-bs-toggle="dropdown" aria-expanded="false">
+                        Filtrar por Estado
                     </button>
-                    <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                    <ul class="dropdown-menu" aria-labelledby="dropdownMenuButtonEstado">
                         <li>
                             <div class="form-check">
-                                <input class="form-check-input" type="checkbox" id="checkDoctor">
-                                <label class="form-check-label" for="checkDoctor">
-                                    Doctor
-                                </label>
+                                <input class="form-check-input" type="checkbox" id="checkActivo">
+                                <label class="form-check-label" for="checkActivo">Activo</label>
                             </div>
                         </li>
                         <li>
                             <div class="form-check">
-                                <input class="form-check-input" type="checkbox" id="checkAsistenteMedico">
-                                <label class="form-check-label" for="checkAsistenteMedico">
-                                    Asistente Médico
-                                </label>
+                                <input class="form-check-input" type="checkbox" id="checkInactivo">
+                                <label class="form-check-label" for="checkInactivo">Inactivo</label>
                             </div>
                         </li>
+                        <li><hr class="dropdown-divider"></li>
                         <li>
-                            <div class="form-check">
-                                <input class="form-check-input" type="checkbox" id="checkAsistenteLimpieza">
-                                <label class="form-check-label" for="checkAsistenteLimpieza">
-                                    Asistente de Limpieza
-                                </label>
-                            </div>
+                            <button class="btn btn-secondary w-100" id="confirmFilterEstado">Confirmar</button>
                         </li>
                         <li>
-                            <div class="form-check">
-                                <input class="form-check-input" type="checkbox" id="checkPaciente">
-                                <label class="form-check-label" for="checkPaciente">
-                                    Paciente
-                                </label>
-                            </div>
-                        </li>
-                        <li><hr class="dropdown-divider"></li> <!-- Línea divisoria -->
-                        <li>
-                            <button class="btn btn-secondary w-100" id="confirmFilter">Confirmar</button>
-                        </li>
-                        <li>
-                            <button class="btn btn-secondary w-100" id="resetFilter">Resetear Filtro</button>
+                            <button class="btn btn-secondary w-100" id="resetFilterEstado">Resetear Filtro</button>
                         </li>
                     </ul>
                 </div>
+
+                <form method="get" action="@Url.Action("Index")" class="d-flex">
+                    <!-- Campo de búsqueda por nombre -->
+                    <input type="text" name="searchName" class="form-control me-2" placeholder="Buscar por nombre" value="@ViewData["searchName"]">
+
+                    <!-- Botón para realizar la búsqueda -->
+                    <button type="submit" class="btn btn-outline-success">Buscar</button>
+                    <a href="@Url.Action("Index")" class="btn btn-outline-danger">Resetear</a>
+                </form>
+
             </div>
         </nav>
     </header>
@@ -71,8 +129,8 @@
                 <tr>
                     <th>Nombre</th>
                     <th>Correo</th>
-                    <th>Teléfono</th>
                     <th>Rol</th>
+                    <th>Estado</th>
                     <th>Fecha de Registro</th>
                     <th>Acciones</th>
                 </tr>
@@ -83,10 +141,11 @@
                     <tr>
                         <td>@usuario.nombre @usuario.apellido</td>
                         <td>@usuario.correo</td>
-                        <td>@usuario.telefono</td>
                         <td>@usuario.roles.nombre_rol</td>
+                        <td>@usuario.estado</td>
                         <td>@usuario.fecha_registro.ToString("dd/MM/yyyy")</td>
                         <td>
+                            <a asp-action="Detalles" asp-route-id="@usuario.id_usuario" class="button">Detalles</a>
                             <a asp-action="Editar" asp-route-id="@usuario.id_usuario" class="button">Editar</a>
                             <a asp-action="Eliminar" asp-route-id="@usuario.id_usuario" class="button">Eliminar</a>
                         </td>
@@ -95,5 +154,85 @@
             </tbody>
         </table>
     </main>
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+
+    <script>
+        $(document).ready(function () {
+            // Filtrado por Roles
+            $('#confirmFilter').on('click', function () {
+                var selectedRoles = [];
+                // Capturar roles seleccionados
+                if ($('#checkDoctor').is(':checked')) {
+                    selectedRoles.push('doctor');
+                }
+                if ($('#checkAsistenteMedico').is(':checked')) {
+                    selectedRoles.push('asistente_medico');
+                }
+                if ($('#checkAsistenteLimpieza').is(':checked')) {
+                    selectedRoles.push('asistente_limpieza');
+                }
+                if ($('#checkPaciente').is(':checked')) {
+                    selectedRoles.push('paciente');
+                }
+                if ($('#checkAdministrador').is(':checked')) {
+                    selectedRoles.push('administrador');
+                }
+
+                // Construir la URL solo con roles seleccionados como parámetros de consulta
+                var url = '@Url.Action("Index", "Usuarios")';
+                var queryParams = [];
+
+                if (selectedRoles.length > 0) {
+                    queryParams.push("roles=" + selectedRoles.join(','));
+                }
+
+                if (queryParams.length > 0) {
+                    url += "?" + queryParams.join('&');
+                }
+
+                // Redirigir a la URL generada para aplicar el filtro
+                window.location.href = url;
+            });
+
+            // Filtrado por Estado
+            $('#confirmFilterEstado').on('click', function () {
+                var selectedEstados = [];
+
+                // Capturar estados seleccionados
+                if ($('#checkActivo').is(':checked')) {
+                    selectedEstados.push('activo');
+                }
+                if ($('#checkInactivo').is(':checked')) {
+                    selectedEstados.push('inactivo');
+                }
+
+                // Construir la URL solo con estados seleccionados como parámetros de consulta
+                var url = '@Url.Action("Index", "Usuarios")';
+                var queryParams = [];
+
+                if (selectedEstados.length > 0) {
+                    queryParams.push("estado=" + selectedEstados.join(','));
+                }
+
+                if (queryParams.length > 0) {
+                    url += "?" + queryParams.join('&');
+                }
+
+                // Redirigir a la URL generada para aplicar el filtro
+                window.location.href = url;
+            });
+
+            // Al hacer clic en "Resetear Filtro" se limpia el filtro y se recarga la página
+            $('#resetFilter').on('click', function () {
+                window.location.href = '@Url.Action("Index", "Usuarios")';
+            });
+
+            $('#resetFilterEstado').on('click', function () {
+                window.location.href = '@Url.Action("Index", "Usuarios")';
+            });
+        });
+    </script>
+
 </body>
 </html>

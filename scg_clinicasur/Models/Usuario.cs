@@ -22,22 +22,24 @@ namespace scg_clinicasur.Models
         [EmailAddress(ErrorMessage = "La información debe ser un correo electrónico")]
         public string correo { get; set; }
 
-        [Required(ErrorMessage = "La contraseña es requerida")]
         [StringLength(255)]
-        public string contraseña { get; set; }
+        public string contraseña { get; set; } // Eliminar el [Required] para hacerlo opcional en la edición
 
         [StringLength(15)]
         public string? telefono { get; set; }
 
         public DateTime fecha_registro { get; set; } = DateTime.Now;
 
-        // Campo que debe ser requerido: id_rol, no roles
         [Required(ErrorMessage = "El rol es requerido")]
         public int id_rol { get; set; }
 
-        // La propiedad de navegación para Roles no necesita validación
         [ForeignKey("id_rol")]
-        public Roles? roles { get; set; }  // Esto solo es útil cuando consultas el usuario, no durante la creación
+        public Roles? roles { get; set; }
+
+        [Required]
+        [StringLength(10)]
+        [RegularExpression("(activo|inactivo)", ErrorMessage = "El estado debe ser 'activo' o 'inactivo'.")]
+        public string estado { get; set; } = "activo";
     }
 
     public class Roles

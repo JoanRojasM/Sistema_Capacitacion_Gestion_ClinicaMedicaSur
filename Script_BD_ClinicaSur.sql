@@ -19,10 +19,11 @@ CREATE TABLE usuarios (
     nombre VARCHAR(100),
     apellido VARCHAR(100),
     correo VARCHAR(100) UNIQUE,
-    contrasena VARCHAR(255), -- Almacenar contraseñas hasheadas
+    contraseña VARCHAR(255), -- Almacenar contraseñas hasheadas
     telefono VARCHAR(15),
     id_rol INT,
     fecha_registro DATETIME DEFAULT GETDATE(),
+    estado VARCHAR(10) DEFAULT 'activo' CHECK (estado IN ('activo', 'inactivo')),
     FOREIGN KEY (id_rol) REFERENCES roles(id_rol)
 );
 
@@ -159,11 +160,11 @@ CREATE TABLE notificacion (
     FOREIGN KEY (id_usuario) REFERENCES usuarios(id_usuario)
 );
 
--- Insertar un usuario para cada rol
-INSERT INTO usuarios (nombre, apellido, correo, contrasena, telefono, id_rol)
+-- Insertar un usuario para cada rol con estado "activo"
+INSERT INTO usuarios (nombre, apellido, correo, contrasena, telefono, id_rol, estado)
 VALUES
-('Maria', 'Perez', 'maria.perez@example.com', '123', '1234567890', (SELECT id_rol FROM roles WHERE nombre_rol = 'asistente_limpieza')),
-('Carlos', 'Rodriguez', 'carlos.rodriguez@example.com', '123', '2345678901', (SELECT id_rol FROM roles WHERE nombre_rol = 'asistente_medico')),
-('Ana', 'Lopez', 'ana.lopez@example.com', '123', '3456789012', (SELECT id_rol FROM roles WHERE nombre_rol = 'paciente')),
-('Jorge', 'Martinez', 'jorge.martinez@example.com', '123', '4567890123', (SELECT id_rol FROM roles WHERE nombre_rol = 'doctor')),
-('Laura', 'Fernandez', 'laura.fernandez@example.com', '123', '5678901234', (SELECT id_rol FROM roles WHERE nombre_rol = 'administrador'));
+('Maria', 'Perez', 'maria.perez@example.com', '123', '1234567890', (SELECT id_rol FROM roles WHERE nombre_rol = 'asistente_limpieza'), 'activo'),
+('Carlos', 'Rodriguez', 'carlos.rodriguez@example.com', '123', '2345678901', (SELECT id_rol FROM roles WHERE nombre_rol = 'asistente_medico'), 'activo'),
+('Ana', 'Lopez', 'ana.lopez@example.com', '123', '3456789012', (SELECT id_rol FROM roles WHERE nombre_rol = 'paciente'), 'activo'),
+('Jorge', 'Martinez', 'jorge.martinez@example.com', '123', '4567890123', (SELECT id_rol FROM roles WHERE nombre_rol = 'doctor'), 'activo'),
+('Laura', 'Fernandez', 'laura.fernandez@example.com', '123', '5678901234', (SELECT id_rol FROM roles WHERE nombre_rol = 'administrador'), 'activo');

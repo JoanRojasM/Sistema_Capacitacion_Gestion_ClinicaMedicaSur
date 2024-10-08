@@ -177,6 +177,16 @@ namespace scg_clinicasur.Controllers
             ViewBag.SuccessMessage = "Contraseña restablecida con éxito. Ahora puedes iniciar sesión con tu nueva contraseña.";
             return RedirectToAction("Login");
         }
+
+        [HttpGet]
+        public IActionResult Logout()
+        {
+            // Limpiar la sesión
+            HttpContext.Session.Clear();
+
+            // Redirigir al login
+            return RedirectToAction("Login", "Account");
+        }
     }
 }
 
