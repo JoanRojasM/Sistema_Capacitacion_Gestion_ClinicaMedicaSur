@@ -1,0 +1,127 @@
+﻿@model scg_clinicasur.Models.Expediente
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Imprimir Secciones del Expediente Médico</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+
+        h1 {
+            text-align: center;
+        }
+
+        .expediente-info {
+            margin-bottom: 20px;
+        }
+
+            .expediente-info p {
+                font-size: 16px;
+            }
+
+        .no-print {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <h1>Imprimir Secciones del Expediente</h1>
+
+    <form id="seccionesForm">
+        <div class="expediente-info">
+            <label><input type="checkbox" class="seccion-checkbox" value="nombrePaciente" checked> Nombre del Paciente</label><br>
+            <label><input type="checkbox" class="seccion-checkbox" value="idPaciente" checked> ID del Paciente</label><br>
+            <label><input type="checkbox" class="seccion-checkbox" value="fechaNacimiento" checked> Fecha de Nacimiento</label><br>
+            <label><input type="checkbox" class="seccion-checkbox" value="ultimaConsulta" checked> Última Consulta</label><br>
+            <label><input type="checkbox" class="seccion-checkbox" value="diagnostico" checked> Diagnóstico</label><br>
+            <label><input type="checkbox" class="seccion-checkbox" value="descripcion" checked> Descripción</label><br>
+            <label><input type="checkbox" class="seccion-checkbox" value="tratamientosPrevios" checked> Tratamientos Previos</label><br>
+        </div>
+        <!-- Botón para generar el PDF con las secciones seleccionadas -->
+        <button type="button" onclick="downloadPDF()" class="btn btn-primary">Imprimir Secciones Seleccionadas</button>
+    </form>
+
+    <!-- Librerías de jsPDF y html2canvas -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+
+    <script>
+        function downloadPDF() {
+            var doc = new jspdf.jsPDF();  // Crear un nuevo documento PDF
+
+            // Obtener las secciones seleccionadas
+            var selectedSections = document.querySelectorAll('.seccion-checkbox:checked');
+
+            // Crear un contenedor temporal con las secciones seleccionadas
+            var tempContent = '';
+            selectedSections.forEach(function (section) {
+                switch (section.value) {
+                    case 'nombrePaciente':
+                        tempContent += '<p><strong>Nombre del Paciente:</strong> @Model.nombrePaciente</p>';
+                        break;
+                    case 'idPaciente':
+                        tempContent += '<p><strong>ID del Paciente:</strong> @Model.idPaciente</p>';
+                        break;
+                    case 'fechaNacimiento':
+                        tempContent += '<p><strong>Fecha de Nacimiento:</strong> @Model.fechaNacimiento.ToString("yyyy-MM-dd")</p>';
+                        break;
+                    case 'ultimaConsulta':
+                        tempContent += '<p><strong>Última Consulta:</strong> @(Model.ultimaConsulta.ToString("yyyy-MM-dd") ?? "No disponible")</p>';
+                        break;
+                    case 'diagnostico':
+                        tempContent += '<p><strong>Diagnóstico:</strong> @Model.diagnostico</p>';
+                        break;
+                    case 'descripcion':
+                        tempContent += '<p><strong>Descripción:</strong> @Model.descripcion</p>';
+                        break;
+                    case 'tratamientosPrevios':
+                        tempContent += '<p><strong>Tratamientos Previos:</strong> @Model.tratamientosPrevios</p>';
+                        break;
+                }
+            });
+
+            // Crear un div temporal para renderizar las secciones seleccionadas
+            var tempDiv = document.createElement('div');
+            tempDiv.innerHTML = tempContent;
+            document.body.appendChild(tempDiv);
+
+            // Usar html2canvas para capturar el contenido del div temporal
+            html2canvas(tempDiv).then(canvas => {
+                var imgData = canvas.toDataURL("image/png");  // Convertir el contenido a imagen
+
+                // Agregar la imagen al documento PDF
+                var imgWidth = 210; // A4 width in mm
+                var pageHeight = 295; // A4 height in mm
+                var imgHeight = canvas.height * imgWidth / canvas.width;
+                var heightLeft = imgHeight;
+
+                var position = 0;
+
+                doc.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
+                heightLeft -= pageHeight;
+
+                // Si el contenido es mayor que una página, agregar más páginas
+                while (heightLeft >= 0) {
+                    position = heightLeft - imgHeight;
+                    doc.addPage();
+                    doc.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
+                    heightLeft -= pageHeight;
+                }
+
+                // Descargar el archivo PDF
+                doc.save("Expediente_Medico_Secciones.pdf");
+            }).catch(function (error) {
+                console.error("Error capturando el contenido para PDF:", error);
+            });
+
+            // Remover el div temporal
+            document.body.removeChild(tempDiv);
+        }
+    </script>
+</body>
+</html>

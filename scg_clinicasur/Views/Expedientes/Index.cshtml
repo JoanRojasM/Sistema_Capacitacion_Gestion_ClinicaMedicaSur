@@ -1,29 +1,60 @@
-﻿@{
+﻿@model IEnumerable<scg_clinicasur.Models.Expediente>
+
+@{
     ViewData["Title"] = "Listado de Expedientes Médicos";
 }
 
 <h1>@ViewData["Title"]</h1>
 
+<!-- Formulario de búsqueda -->
+<form method="get" action="@Url.Action("Index")" class="d-flex mb-3">
+    <!-- Campo de búsqueda por nombre -->
+    <input type="text" name="searchName" class="form-control me-2" placeholder="Buscar por nombre" value="@ViewData["searchName"]">
+
+    <!-- Botón para realizar la búsqueda -->
+    <button type="submit" class="btn btn-outline-success">Buscar</button>
+    <a href="@Url.Action("Index")" class="btn btn-outline-danger ms-2">Resetear</a>
+</form>
+
+<!-- Botón para crear un nuevo expediente -->
+<div class="header-buttons">
+    <a asp-action="CrearExpediente" class="button">Crear Expediente</a>
+</div>
+
+<!-- Tabla de resultados -->
 <table class="table">
     <thead>
         <tr>
             <th>ID</th>
             <th>Nombre del Paciente</th>
+            <th>ID del Paciente</th>
             <th>Fecha de Nacimiento</th>
             <th>Última Consulta</th>
             <th>Acciones</th>
         </tr>
     </thead>
     <tbody>
-        <tr>
-            <td>001</td>
-            <td>Juan Domínguez</td>
-            <td>1980-05-15</td>
-            <td>2024-07-20</td>
-            <td>
-                <a href="@Url.Action("DetallesConsulta", "Expedientes", new { id = 001 })" class="btn btn-primary">Ver Detalles</a>
-            </td>
-        </tr>
+        @if (Model.Any())
+        {
+            @foreach (var expediente in Model)
+            {
+                <tr>
+                    <td>@expediente.idExpediente</td>
+                    <td>@expediente.nombrePaciente</td> <!-- Aquí usamos NombrePaciente en lugar de nombrePaciente -->
+                    <td>@expediente.idPaciente</td>
+                    <td>@expediente.fechaNacimiento.ToString("yyyy-MM-dd")</td>
+                    <td>@expediente.ultimaConsulta.ToString("yyyy-MM-dd")</td>
+                    <td>
+                        <a href="@Url.Action("DetallesConsulta", "Expedientes", new { id = expediente.idExpediente })" class="btn btn-primary">Ver Detalles</a>
+                    </td>
+                </tr>
+            }
+        }
+        else
+        {
+            <tr>
+                <td colspan="6" class="text-center">No se encontraron resultados</td>
+            </tr>
+        }
     </tbody>
 </table>
-<a href="@Url.Action("BusquedaExpedientes", "Expedientes")" class="btn btn-secondary">Buscar Expediente</a>

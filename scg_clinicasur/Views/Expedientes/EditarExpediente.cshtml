@@ -1,0 +1,40 @@
+﻿@model scg_clinicasur.Models.Expediente
+
+<h1>Editar Expediente Médico</h1>
+
+<form asp-action="EditarExpedientes">
+    <div class="form-group">
+        <label for="nombrePaciente">Nombre del Paciente</label>
+        <input type="text" class="form-control" id="nombrePaciente" name="nombrePaciente" value="@Model.nombrePaciente" readonly />
+    </div>
+
+    <div class="form-group">
+        <label for="fechaNacimiento">Fecha de Nacimiento</label>
+        <input type="date" class="form-control" id="fechaNacimiento" name="fechaNacimiento" value="@Model.fechaNacimiento.ToString("yyyy-MM-dd")" readonly />
+    </div>
+
+    <div class="form-group">
+        <label for="ultimaConsulta">Última Consulta</label>
+        <input type="date" class="form-control" id="ultimaConsulta" name="ultimaConsulta" value="@Model.ultimaConsulta.ToString("yyyy-MM-dd")" />
+    </div>
+
+    <div class="form-group">
+        <label for="diagnostico">Diagnóstico</label>
+        <textarea class="form-control" id="diagnostico" name="diagnostico">@Model.diagnostico</textarea>
+    </div>
+
+    <div class="form-group">
+        <label for="descripcion">Descripción</label>
+        <textarea class="form-control" id="descripcion" name="descripcion">@Model.descripcion</textarea>
+    </div>
+
+    <div class="form-group">
+        <label for="tratamientosPrevios">Tratamientos Previos</label>
+        <textarea class="form-control" id="tratamientosPrevios" name="tratamientosPrevios">@Model.tratamientosPrevios</textarea>
+    </div>
+
+    <input type="hidden" name="idExpediente" value="@Model.idExpediente" />
+
+    <button type="submit" class="btn btn-primary">Guardar Cambios</button>
+    <a href="@Url.Action("DetallesConsulta", "Expedientes", new { id = Model.idExpediente })" class="btn btn-secondary">Cancelar</a>
+</form>
