@@ -1,0 +1,43 @@
+﻿@model scg_clinicasur.Models.Expediente
+
+<h1>Crear Nuevo Expediente</h1>
+
+<form asp-action="CrearExpediente" method="post">
+    <div class="form-group">
+        <label for="nombrePaciente">Nombre del Paciente</label>
+        <input type="text" class="form-control" id="nombrePaciente" name="nombrePaciente" required />
+    </div>
+
+    <div class="form-group">
+        <label for="idPaciente">ID del Paciente</label>
+        <input type="number" class="form-control" id="idPaciente" name="idPaciente" required />
+    </div>
+
+    <div class="form-group">
+        <label for="fechaNacimiento">Fecha de Nacimiento</label>
+        <input type="date" class="form-control" id="fechaNacimiento" name="fechaNacimiento" required />
+    </div>
+
+    <div class="form-group">
+        <label for="ultimaConsulta">Última Consulta</label>
+        <input type="date" class="form-control" id="ultimaConsulta" name="ultimaConsulta" />
+    </div>
+
+    <div class="form-group">
+        <label for="diagnostico">Diagnóstico</label>
+        <textarea class="form-control" id="diagnostico" name="diagnostico"></textarea>
+    </div>
+
+    <div class="form-group">
+        <label for="descripcion">Descripción</label>
+        <textarea class="form-control" id="descripcion" name="descripcion"></textarea>
+    </div>
+
+    <div class="form-group">
+        <label for="tratamientosPrevios">Tratamientos Previos</label>
+        <textarea class="form-control" id="tratamientosPrevios" name="tratamientosPrevios"></textarea>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Guardar</button>
+    <a href="@Url.Action("Index", "Expedientes")" class="btn btn-secondary">Cancelar</a>
+</form>

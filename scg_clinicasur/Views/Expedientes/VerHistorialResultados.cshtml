@@ -1,0 +1,50 @@
+﻿@model IEnumerable<scg_clinicasur.Models.ResultadosLaboratorio>
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Historial de Resultados de Laboratorio</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+    <div class="container mt-5">
+        <h2>Historial de Resultados de Laboratorio</h2>
+
+        @if (Model.Any())
+        {
+            <table class="table table-bordered table-striped">
+                <thead>
+                    <tr>
+                        <th>Fecha de Prueba</th>
+                        <th>Tipo de Prueba</th>
+                        <th>Resultado</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var resultado in Model)
+                    {
+                        <tr>
+                            <td>@resultado.FechaPrueba.ToString("yyyy-MM-dd")</td>
+                            <td>@resultado.TipoPrueba</td>
+                            <td>@resultado.Resultado</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        }
+        else
+        {
+            <div class="alert alert-warning">
+                No se encontraron resultados de laboratorio para este paciente.
+            </div>
+        }
+
+        <a href="@Url.Action("Index", "Expedientes")" class="btn btn-secondary mt-3">Volver al Expediente</a>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

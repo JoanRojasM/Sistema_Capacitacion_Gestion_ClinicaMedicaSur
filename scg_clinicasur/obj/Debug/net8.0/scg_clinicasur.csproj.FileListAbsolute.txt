@@ -1,4 +1,3 @@
-C:\Users\joand\OneDrive\Documentos\GitHub\Sistema_Capacitacion_Gestion_ClinicaMedicaSur\scg_clinicasur\bin\Debug\net8.0\appsettings.Development.json
 C:\Users\joand\OneDrive\Documentos\GitHub\Sistema_Capacitacion_Gestion_ClinicaMedicaSur\scg_clinicasur\bin\Debug\net8.0\appsettings.json
 C:\Users\joand\OneDrive\Documentos\GitHub\Sistema_Capacitacion_Gestion_ClinicaMedicaSur\scg_clinicasur\bin\Debug\net8.0\scg_clinicasur.staticwebassets.runtime.json
 C:\Users\joand\OneDrive\Documentos\GitHub\Sistema_Capacitacion_Gestion_ClinicaMedicaSur\scg_clinicasur\bin\Debug\net8.0\scg_clinicasur.exe

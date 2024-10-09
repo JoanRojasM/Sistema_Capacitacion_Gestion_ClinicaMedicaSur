@@ -1,11 +1,48 @@
-﻿@{
-    ViewData["Title"] = "Detalles de Consulta";
-}
+﻿@model scg_clinicasur.Models.Expediente
 
-<h1>@ViewData["Title"]</h1>
+<h1>Detalles del Expediente</h1>
 
-<h2>Consulta del 2024-07-20</h2>
-<p><strong>Descripción:</strong> Consulta general</p>
-<p><strong>Diagnóstico:</strong> Hipertensión</p>
-<p><strong>Tratamiento:</strong> Medicamento A</p>
-<a href="@Url.Action("Historial", "Expedientes")" class="btn btn-secondary">Volver al Historial Clínico</a>
+<div>
+    <h3>Nombre del Paciente: @Model.nombrePaciente</h3>
+    <p>ID del Paciente: @Model.idPaciente</p>
+    <p>Fecha de Nacimiento: @Model.fechaNacimiento.ToString("yyyy-MM-dd")</p>
+    <p>Última Consulta: @(Model.ultimaConsulta.ToString("yyyy-MM-dd") ?? "No disponible")</p>
+    <p>Diagnóstico: @Model.diagnostico</p>
+    <p>Descripción: @Model.descripcion</p>
+    <p>Tratamientos Previos: @Model.tratamientosPrevios</p>
+    <p>Fecha de Creación: @Model.fechaCreacion.ToString("yyyy-MM-dd")</p>
+</div>
+
+<div class="d-inline">
+    <a href="@Url.Action("EditarExpedientes", "Expedientes", new { id = Model.idExpediente })" class="btn btn-warning d-inline">Editar</a>
+
+    <form id="eliminarForm" method="post" action="@Url.Action("EliminarExpediente", "Expedientes")" class="d-inline">
+        @Html.AntiForgeryToken()
+        <input type="hidden" name="id" value="@Model.idExpediente" />
+        <button type="button" class="btn btn-danger" onclick="confirmarEliminacion()">Eliminar</button>
+    </form>
+
+</div>
+
+<a href="@Url.Action("ImprimirExpedienteCompleto", "Expedientes", new { id = Model.idExpediente })" class="btn btn-primary">Imprimir Expediente Completo</a>
+<a href="@Url.Action("Index", "Expedientes")" class="btn btn-secondary">Volver al Listado</a>
+
+<h4>Resultados de Laboratorio</h4>
+<a href="@Url.Action("VerResultadosRecientes", "Expedientes", new { idExpediente = Model.idExpediente })" class="btn btn-primary">
+    Ver Resultados Recientes
+</a>
+
+<!-- Aquí también puedes agregar otros botones, como ver el historial completo -->
+<a href="@Url.Action("VerHistorialResultados", "Expedientes", new { idExpediente = Model.idExpediente })" class="btn btn-secondary">
+    Ver Historial de Resultados
+</a>
+
+<script type="text/javascript">
+    function confirmarEliminacion() {
+        var confirmacion = confirm("¿Estás seguro de que deseas eliminar este expediente? Esta acción no se puede deshacer.");
+        if (confirmacion) {
+            // Enviar el formulario si se confirma la eliminación
+            document.getElementById('eliminarForm').submit();
+        }
+    }
+</script>
