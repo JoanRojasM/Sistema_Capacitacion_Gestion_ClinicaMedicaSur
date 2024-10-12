@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using scg_clinicasur.Models;
 
 namespace scg_clinicasur.Data
 {

@@ -1,9 +1,18 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using scg_clinicasur.Data;
+using scg_clinicasur.Models;
 
 namespace scg_clinicasur.Controllers
 {
     public class Admin : Controller
     {
+        private readonly ApplicationDbContext _context;
+
+        public Admin(ApplicationDbContext context)
+        {
+            _context = context;
+        }
         public IActionResult Index()
         {
             return View();
@@ -28,5 +37,6 @@ namespace scg_clinicasur.Controllers
         {
             return View();
         }
+
     }
 }
