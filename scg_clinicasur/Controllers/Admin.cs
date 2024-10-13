@@ -1,7 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using scg_clinicasur.Data;
 using scg_clinicasur.Models;
+using System.Threading;
 
 namespace scg_clinicasur.Controllers
 {
@@ -13,27 +15,11 @@ namespace scg_clinicasur.Controllers
         {
             _context = context;
         }
-        public IActionResult Index()
-        {
-            return View();
-        }
         public IActionResult AdminSchedule()
         {
             return View();
         }
-        public IActionResult AdminScheduleMed()
-        {
-            return View();
-        }
-        public IActionResult AdminSchedulelimpieza()
-        {
-            return View();
-        }
-        public IActionResult AdminResources()
-        {
-            return View();
-        }
-        public IActionResult AdminHistory()
+        public IActionResult Index()
         {
             return View();
         }

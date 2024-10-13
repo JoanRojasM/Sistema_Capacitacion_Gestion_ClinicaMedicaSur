@@ -1,0 +1,29 @@
+﻿@model IEnumerable<scg_clinicasur.Models.Evaluacion>
+
+<h1>Gestión de Evaluaciones</h1>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Nombre</th>
+            <th>Descripción</th>
+            <th>Tiempo de Prueba</th>
+            <th>Archivo</th>
+            <th>Asignado a</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var evaluacion in Model)
+        {
+            <tr>
+                <td>@evaluacion.nombre</td>
+                <td>@evaluacion.descripcion</td>
+                <td>@evaluacion.tiempo_prueba</td>
+                <td>@evaluacion.archivo</td>
+                <td>@evaluacion.Usuario.nombre @evaluacion.Usuario.apellido</td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<a class="btn btn-primary" asp-action="CrearEvaluacion">Agregar Nueva Evaluacion</a>
