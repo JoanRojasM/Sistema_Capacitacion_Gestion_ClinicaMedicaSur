@@ -47,9 +47,14 @@ namespace scg_clinicasur.Controllers
                 ViewBag.ErrorMessage = "Contraseña incorrecta.";
                 return View();
             }
+            // Guardar el ID del usuario en la sesión
+            HttpContext.Session.SetString("UserId", user.id_usuario.ToString());
 
             // Guardar el rol en la sesión
             HttpContext.Session.SetString("UserRole", user.roles.nombre_rol);
+
+            // Guardar el nombre del usuario en la sesión
+            HttpContext.Session.SetString("UserName", user.nombre);
 
             // Validar el rol y redirigir según corresponda
             if (user.roles != null)

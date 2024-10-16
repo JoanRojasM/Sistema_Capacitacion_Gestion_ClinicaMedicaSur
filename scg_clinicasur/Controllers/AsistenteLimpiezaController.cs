@@ -14,38 +14,25 @@ namespace scg_clinicasur.Controllers
         {
             _context = context;
         }
+
         public IActionResult Index()
         {
             return View();
         }
 
-        public IActionResult Schedule()
+        // Método para mostrar las evaluaciones del usuario actual
+        public async Task<IActionResult> Evaluaciones()
         {
-            return View();
-        }
+            // Obtener el nombre del usuario de la sesión
+            var userName = HttpContext.Session.GetString("UserName");
+            // Obtener el ID del usuario actual desde la sesión
+            var userId = int.Parse(HttpContext.Session.GetString("UserId"));
 
-        // Acción para agendar una capacitación
-        public IActionResult ScheduleTraining()
-        {
-            return View();
+            // Filtrar las evaluaciones por el ID del usuario actual
+            var evaluaciones = await _context.Evaluaciones
+                                             .Where(e => e.id_usuario == userId)
+                                             .ToListAsync();
+            return View(evaluaciones);
         }
-
-        // Acción para gestionar la programación de capacitaciones
-        public IActionResult ManageSchedule()
-        {
-            return View();
-        }
-
-        // Acción para ver el historial de capacitaciones
-        public IActionResult History()
-        {
-            return View();
-        }
-
-        // Acción para acceder a materiales de capacitación
-        public IActionResult Resources()
-        {
-            return View();
-        }
-
-    } }
+    }
+}

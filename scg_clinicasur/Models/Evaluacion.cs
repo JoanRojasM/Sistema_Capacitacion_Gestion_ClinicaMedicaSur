@@ -9,7 +9,7 @@ namespace scg_clinicasur.Models
         [Key]
         public int id_evaluacion { get; set; }
 
-        [Required]
+       
         [StringLength(255)]
         public string nombre { get; set; }
 

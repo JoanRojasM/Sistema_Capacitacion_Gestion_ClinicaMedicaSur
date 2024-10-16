@@ -53,5 +53,101 @@ namespace scg_clinicasur.Controllers
             ViewBag.Usuarios = new SelectList(usuarios, "id_usuario", "nombre"); // Ajusta para incluir nombre y rol
             return View(evaluacion);
         }
+
+        public async Task<IActionResult> Detalles(int id)
+        {
+            var evaluacion = _context.Evaluaciones.FirstOrDefault(e => e.id_evaluacion == id);
+            if (evaluacion == null)
+            {
+                return NotFound();
+            }
+            return View(evaluacion);
+        }
+
+        [HttpGet]
+        public IActionResult Crear()
+        {
+            ViewData["Usuarios"] = new SelectList(_context.Usuarios, "id_usuario", "nombre");
+            return View();
+        }
+
+        // Crear una nueva evaluación (POST)
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Crear(Evaluacion evaluacion)
+        {
+            if (ModelState.IsValid)
+            {
+                _context.Add(evaluacion);
+                await _context.SaveChangesAsync();
+                return RedirectToAction(nameof(Index));
+            }
+            ViewData["Usuarios"] = new SelectList(_context.Usuarios, "id_usuario", "nombre", evaluacion.id_usuario);
+            return View(evaluacion);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> Editar(int id)
+        {
+            var evaluacion = _context.Evaluaciones.Find(id);
+            if (evaluacion == null)
+            {
+                return NotFound();
+            }
+            ViewData["Usuarios"] = new SelectList(_context.Usuarios, "id_usuario", "nombre", evaluacion.id_usuario);
+            return View(evaluacion);
+        }
+
+        // Editar evaluación (POST)
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Editar(int id, Evaluacion evaluacion)
+        {
+            if (id != evaluacion.id_evaluacion)
+            {
+                return NotFound();
+            }
+
+            if (ModelState.IsValid)
+            {
+                _context.Update(evaluacion);
+                await _context.SaveChangesAsync();
+                return RedirectToAction(nameof(Index));
+            }
+            ViewData["Usuarios"] = new SelectList(_context.Usuarios, "id_usuario", "nombre", evaluacion.id_usuario);
+            return View(evaluacion);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> Eliminar(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            // Usamos Include para cargar la entidad relacionada Usuario
+            var evaluacion = await _context.Evaluaciones
+                .Include(e => e.Usuario) // Asegura que el Usuario está cargado
+                .FirstOrDefaultAsync(m => m.id_evaluacion == id);
+
+            if (evaluacion == null)
+            {
+                return NotFound();
+            }
+
+            return View(evaluacion);
+        }
+
+        // Eliminar evaluación (POST)
+        [HttpPost, ActionName("Eliminar")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> EliminarConfirmado(int id)
+        {
+            var evaluacion = _context.Evaluaciones.Find(id);
+            _context.Evaluaciones.Remove(evaluacion);
+            await _context.SaveChangesAsync();
+            return RedirectToAction(nameof(Index));
+        }
     }
 }

@@ -1,0 +1,23 @@
+﻿@model scg_clinicasur.Models.Evaluacion
+@{
+    ViewData["Title"] = "Detalles de la Evaluación";
+}
+
+<h2>@Model.nombre</h2>
+
+<div>
+    <dl class="row">
+        <dt class="col-sm-2">Descripción</dt>
+        <dd class="col-sm-10">@Model.descripcion</dd>
+
+        <dt class="col-sm-2">Tiempo de Prueba</dt>
+        <dd class="col-sm-10">@Model.tiempo_prueba</dd>
+
+        <dt class="col-sm-2">Archivo</dt>
+        <dd class="col-sm-10">@Model.archivo</dd>
+    </dl>
+</div>
+
+<a asp-action="Index" class="btn btn-primary">Volver al Listado</a>
+<a asp-action="Editar" asp-route-id="@Model.id_evaluacion" class="btn btn-warning">Editar</a>
+<a asp-action="Eliminar" asp-route-id="@Model.id_evaluacion" class="btn btn-danger">Eliminar</a>
