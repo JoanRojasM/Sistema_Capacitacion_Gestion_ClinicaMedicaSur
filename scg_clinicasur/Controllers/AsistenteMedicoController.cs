@@ -30,5 +30,18 @@ namespace scg_clinicasur.Controllers
 
             return View(evaluaciones);
         }
+
+        public async Task<IActionResult> Capacitaciones()
+        {
+            // Obtener el ID del usuario actual desde la sesión
+            var userId = int.Parse(HttpContext.Session.GetString("UserId"));
+
+            // Filtrar las evaluaciones por el ID del usuario actual
+            var capacitaciones = await _context.Capacitaciones
+                                             .Where(e => e.id_usuario == userId)
+                                             .ToListAsync();
+
+            return View(capacitaciones);
+        }
     }
 }

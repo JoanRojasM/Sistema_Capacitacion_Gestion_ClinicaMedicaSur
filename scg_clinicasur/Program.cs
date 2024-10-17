@@ -11,9 +11,10 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
 // Soporte para sesiones
 builder.Services.AddSession(options =>
 {
-    options.IdleTimeout = TimeSpan.FromMinutes(30); // Configura el tiempo de inactividad de la sesión (30 minutos)
-    options.Cookie.HttpOnly = true; // Asegura que la cookie de la sesión no pueda ser accedida desde JavaScript (más seguro)
-    options.Cookie.IsEssential = true; // Hacer que la cookie de sesión sea esencial para cumplir con GDPR si es necesario
+    options.IdleTimeout = TimeSpan.FromMinutes(30); // Tiempo de inactividad de la sesión
+    options.Cookie.HttpOnly = true; // La cookie no puede ser accedida desde JavaScript
+    options.Cookie.IsEssential = true; // Hacer que la cookie de sesión sea esencial
+    options.Cookie.SecurePolicy = CookieSecurePolicy.Always; // Asegúrate de que la cookie sea segura
 });
 
 // Registro IHttpContextAccessor para acceder a la sesión en controladores/vistas
@@ -23,8 +24,9 @@ builder.Services.AddHttpContextAccessor();
 builder.Services.AddAuthentication("MyCookieAuth")
     .AddCookie("MyCookieAuth", options =>
     {
-        options.LoginPath = "/Account/Login"; // Ruta de login si el usuario no está autenticado
+        options.LoginPath = "/Account/Login"; // Ruta de login
         options.LogoutPath = "/Account/Logout"; // Ruta de logout
+        options.Cookie.SecurePolicy = CookieSecurePolicy.Always; // Asegúrate de que la cookie sea segura
     });
 
 // Add services to the container (controladores y vistas)

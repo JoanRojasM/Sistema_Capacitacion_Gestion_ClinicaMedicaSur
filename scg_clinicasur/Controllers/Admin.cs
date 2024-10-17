@@ -15,10 +15,6 @@ namespace scg_clinicasur.Controllers
         {
             _context = context;
         }
-        public IActionResult AdminSchedule()
-        {
-            return View();
-        }
         public IActionResult Index()
         {
             return View();

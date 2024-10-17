@@ -1,29 +1,26 @@
-﻿@model scg_clinicasur.Models.Evaluacion
+﻿@model scg_clinicasur.Models.Capacitacion
 
 @{
-    ViewData["Title"] = "Eliminar Evaluación";
+    ViewData["Title"] = "Eliminar Capacitacion";
 }
 
-<h2>¿Estás seguro de que deseas eliminar esta evaluación?</h2>
+<h2>¿Estás seguro de que deseas eliminar esta capacitacion?</h2>
 
 <div class="alert alert-danger">
     Esta acción no se puede deshacer.
 </div>
 
 <div>
-    <h4>Detalles de la evaluación</h4>
+    <h4>Detalles de la capacitacion</h4>
     <dl class="row">
         <dt class="col-sm-2">Nombre</dt>
-        <dd class="col-sm-10">@Model.nombre</dd>
+        <dd class="col-sm-10">@Model.titulo</dd>
 
         <dt class="col-sm-2">Descripción</dt>
         <dd class="col-sm-10">@Model.descripcion</dd>
 
         <dt class="col-sm-2">Tiempo de prueba</dt>
-        <dd class="col-sm-10">@Model.tiempo_prueba</dd>
-
-        <dt class="col-sm-2">Archivo</dt>
-        <dd class="col-sm-10">@Model.archivo</dd>
+        <dd class="col-sm-10">@Model.duracion</dd>
 
         <dt class="col-sm-2">Usuario Responsable</dt>
         <dd class="col-sm-10">@Model.Usuario.nombre @Model.Usuario.apellido</dd>
@@ -31,7 +28,7 @@
 </div>
 
 <form asp-action="Eliminar" method="post">
-    <input type="hidden" asp-for="id_evaluacion" />
+    <input type="hidden" asp-for="id_capacitacion" />
     <div class="form-group">
         <input type="submit" value="Eliminar" class="btn btn-danger" />
         <a asp-action="Index" class="btn btn-secondary">Cancelar</a>

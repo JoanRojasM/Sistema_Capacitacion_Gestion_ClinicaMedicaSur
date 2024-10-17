@@ -6,29 +6,29 @@ using scg_clinicasur.Models;
 
 namespace scg_clinicasur.Controllers
 {
-    public class EvaluacionesController : Controller
+    public class CapacitacionesController : Controller
     {
         private readonly ApplicationDbContext _context;
 
-        public EvaluacionesController(ApplicationDbContext context)
+        public CapacitacionesController(ApplicationDbContext context)
         {
             _context = context;
         }
 
         public IActionResult Index()
         {
-            var evaluaciones = _context.Evaluaciones.Include(t => t.Usuario).ThenInclude(u => u.roles).ToList();
-            return View(evaluaciones);
+            var capacitaciones = _context.Capacitaciones.Include(t => t.Usuario).ThenInclude(u => u.roles).ToList();
+            return View(capacitaciones);
         }
 
         public async Task<IActionResult> Detalles(int id)
         {
-            var evaluacion = _context.Evaluaciones.FirstOrDefault(e => e.id_evaluacion == id);
-            if (evaluacion == null)
+            var capacitacion = _context.Capacitaciones.FirstOrDefault(e => e.id_capacitacion == id);
+            if (capacitacion == null)
             {
                 return NotFound();
             }
-            return View(evaluacion);
+            return View(capacitacion);
         }
 
         [HttpGet]
@@ -48,18 +48,18 @@ namespace scg_clinicasur.Controllers
             return View();
         }
 
-        // Crear una nueva evaluación (POST)
+        // Crear una nueva capacitacion (POST)
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Crear(Evaluacion evaluacion)
+        public async Task<IActionResult> Crear(Capacitacion capacitacion)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(evaluacion);
+                _context.Add(capacitacion);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-             var usuarios = _context.Usuarios
+            var usuarios = _context.Usuarios
                           .Include(u => u.roles)
                           .Where(u => u.id_rol == 1 || u.id_rol == 2) // Filtrar por roles 1 y 2
                           .ToList();
@@ -76,58 +76,56 @@ namespace scg_clinicasur.Controllers
         [HttpGet]
         public async Task<IActionResult> Editar(int id)
         {
-            var evaluacion = _context.Evaluaciones.Find(id);
-            if (evaluacion == null)
+            var capacitacion = _context.Capacitaciones.Find(id);
+            if (capacitacion == null)
             {
                 return NotFound();
             }
             ViewData["Usuarios"] = new SelectList(
-     _context.Usuarios
-         .Include(u => u.roles) // Incluir la relación con el rol
-         .Where(u => u.id_rol == 1 || u.id_rol == 2) // Filtrar por roles 1 y 2
-         .ToList()
-         .Select(u => new // Crear una lista anónima con nombre y rol
-         {
-             id_usuario = u.id_usuario,
-             DisplayText = u.nombre + " (" + u.roles.nombre_rol + ")" // Combina el nombre y el rol
-         }),
-     "id_usuario", "DisplayText", evaluacion.id_usuario);
+    _context.Usuarios
+        .Include(u => u.roles) // Incluir la relación con el rol
+        .Where(u => u.id_rol == 1 || u.id_rol == 2) // Filtrar por roles 1 y 2
+        .ToList()
+        .Select(u => new // Crear una lista anónima con nombre y rol
+        {
+            id_usuario = u.id_usuario,
+            DisplayText = u.nombre + " (" + u.roles.nombre_rol + ")" // Combina el nombre y el rol
+        }),
+    "id_usuario", "DisplayText", capacitacion.id_usuario);
 
-            return View(evaluacion);
-
+            return View(capacitacion);
 
         }
 
-        // Editar evaluación (POST)
+        // Editar capacitacion (POST)
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Editar(int id, Evaluacion evaluacion)
+        public async Task<IActionResult> Editar(int id, Capacitacion capacitacion)
         {
-            if (id != evaluacion.id_evaluacion)
+            if (id != capacitacion.id_capacitacion)
             {
                 return NotFound();
             }
 
             if (ModelState.IsValid)
             {
-                _context.Update(evaluacion);
+                _context.Update(capacitacion);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
             ViewData["Usuarios"] = new SelectList(
-     _context.Usuarios
-         .Include(u => u.roles) // Incluir la relación con el rol
-         .Where(u => u.id_rol == 1 || u.id_rol == 2) // Filtrar por roles 1 y 2
-         .ToList()
-         .Select(u => new // Crear una lista anónima con nombre y rol
-         {
-             id_usuario = u.id_usuario,
-             DisplayText = u.nombre + " (" + u.roles.nombre_rol + ")" // Combina el nombre y el rol
-         }),
-     "id_usuario", "DisplayText", evaluacion.id_usuario);
+    _context.Usuarios
+        .Include(u => u.roles) // Incluir la relación con el rol
+        .Where(u => u.id_rol == 1 || u.id_rol == 2) // Filtrar por roles 1 y 2
+        .ToList()
+        .Select(u => new // Crear una lista anónima con nombre y rol
+        {
+            id_usuario = u.id_usuario,
+            DisplayText = u.nombre + " (" + u.roles.nombre_rol + ")" // Combina el nombre y el rol
+        }),
+    "id_usuario", "DisplayText", capacitacion.id_usuario);
 
-            return View(evaluacion);
-
+            return View(capacitacion);
 
         }
 
@@ -140,16 +138,16 @@ namespace scg_clinicasur.Controllers
             }
 
             // Usamos Include para cargar la entidad relacionada Usuario
-            var evaluacion = await _context.Evaluaciones
+            var capacitacion = await _context.Capacitaciones
                 .Include(e => e.Usuario) // Asegura que el Usuario está cargado
-                .FirstOrDefaultAsync(m => m.id_evaluacion == id);
+                .FirstOrDefaultAsync(m => m.id_capacitacion == id);
 
-            if (evaluacion == null)
+            if (capacitacion == null)
             {
                 return NotFound();
             }
 
-            return View(evaluacion);
+            return View(capacitacion);
         }
 
         // Eliminar evaluación (POST)
@@ -157,8 +155,8 @@ namespace scg_clinicasur.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> EliminarConfirmado(int id)
         {
-            var evaluacion = _context.Evaluaciones.Find(id);
-            _context.Evaluaciones.Remove(evaluacion);
+            var capacitacion = _context.Capacitaciones.Find(id);
+            _context.Capacitaciones.Remove(capacitacion);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }

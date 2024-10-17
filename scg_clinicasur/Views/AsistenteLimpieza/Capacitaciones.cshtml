@@ -1,0 +1,28 @@
+﻿@model IEnumerable<scg_clinicasur.Models.Capacitacion>
+
+@{
+    ViewData["Title"] = "Mis Capacitaciones";
+}
+
+<h2>Mis Capacitaciones</h2>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Titulo de la Capacitacion</th>
+            <th>Descripción</th>
+            <th>Duracion de Capacitacion</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var capacitacion in Model)
+        {
+            <tr>
+                <td>@capacitacion.titulo</td>
+                <td>@capacitacion.descripcion</td>
+                <td>@capacitacion.duracion</td>
+            </tr>
+        }
+    </tbody>
+</table>

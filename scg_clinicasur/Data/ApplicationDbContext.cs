@@ -15,5 +15,6 @@ namespace scg_clinicasur.Data
         public DbSet<scg_clinicasur.Models.Expediente> Expedientes { get; set; }
         public DbSet<scg_clinicasur.Models.ResultadosLaboratorio> ResultadosLaboratorio { get; set; }
         public DbSet<scg_clinicasur.Models.Evaluacion> Evaluaciones { get; set; }
+        public DbSet<scg_clinicasur.Models.Capacitacion> Capacitaciones { get; set; }
     }
 }

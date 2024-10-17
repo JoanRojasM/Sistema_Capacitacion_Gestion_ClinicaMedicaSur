@@ -1,0 +1,35 @@
+﻿@model IEnumerable<scg_clinicasur.Models.Capacitacion>
+@{
+    ViewData["Title"] = "Gestión de Capacitaciones";
+}
+
+<h1>@ViewData["Title"]</h1>
+<a asp-action="Crear" class="btn btn-primary">Nueva Capacitación</a>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Titulo</th>
+            <th>Descripción</th>
+            <th>Duracion de la Capacitacion</th>
+            <th>Usuario</th>
+            <th>Acciones</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.titulo</td>
+                <td>@item.descripcion</td>
+                <td>@item.duracion</td>
+                <td>@item.Usuario.nombre @item.Usuario.apellido </td>
+                <td>
+                    <a asp-action="Detalles" asp-route-id="@item.id_capacitacion" class="btn btn-info">Detalles</a>
+                    <a asp-action="Editar" asp-route-id="@item.id_capacitacion" class="btn btn-warning">Editar</a>
+                    <a asp-action="Eliminar" asp-route-id="@item.id_capacitacion" class="btn btn-danger">Eliminar</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
