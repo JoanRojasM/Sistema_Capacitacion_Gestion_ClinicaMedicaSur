@@ -15,11 +15,20 @@ namespace scg_clinicasur.Controllers
             _context = context;
         }
 
-        public IActionResult Index()
+        public IActionResult Index(string searchString)
         {
-            var evaluaciones = _context.Evaluaciones.Include(t => t.Usuario).ThenInclude(u => u.roles).ToList();
-            return View(evaluaciones);
+            ViewData["CurrentFilter"] = searchString;
+
+            var evaluaciones = _context.Evaluaciones.Include(t => t.Usuario).ThenInclude(u => u.roles).AsQueryable();
+
+            if (!string.IsNullOrEmpty(searchString))
+            {
+                evaluaciones = evaluaciones.Where(e => e.Usuario.nombre.Contains(searchString) || e.Usuario.apellido.Contains(searchString));
+            }
+
+            return View(evaluaciones.ToList());
         }
+
 
         public async Task<IActionResult> Detalles(int id)
         {

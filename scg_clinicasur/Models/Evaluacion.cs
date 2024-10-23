@@ -24,6 +24,9 @@ namespace scg_clinicasur.Models
         [ForeignKey("Usuario")]
         public int id_usuario { get; set; }
         public Usuario Usuario { get; set; }
+
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        public DateTime fecha_creacion { get; set; } // Nueva propiedad
     }
 }
 

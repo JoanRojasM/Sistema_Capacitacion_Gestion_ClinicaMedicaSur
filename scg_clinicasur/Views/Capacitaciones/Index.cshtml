@@ -1,18 +1,31 @@
 ﻿@model IEnumerable<scg_clinicasur.Models.Capacitacion>
+
 @{
     ViewData["Title"] = "Gestión de Capacitaciones";
 }
 
 <h1>@ViewData["Title"]</h1>
-<a asp-action="Crear" class="btn btn-primary">Nueva Capacitación</a>
+
+<form asp-action="Index" method="get" class="form-inline mb-3">
+    <div class="form-group">
+        <input type="text" name="searchString" value="@ViewData["CurrentFilter"]" class="form-control" placeholder="Buscar por usuario..." />
+    </div>
+    <button type="submit" class="btn btn-primary ml-2">Buscar</button>
+    <a asp-action="Index" class="btn btn-secondary ml-2">Limpiar</a>
+</form>
+
+<a asp-action="Crear" class="btn btn-primary mb-3">Nueva Capacitación</a>
 
 <table class="table">
     <thead>
         <tr>
-            <th>Titulo</th>
+            <th>Título</th>
             <th>Descripción</th>
-            <th>Duracion de la Capacitacion</th>
+            <th>Duración de la Capacitación</th>
             <th>Usuario</th>
+            <th>Archivos</th>
+            <th>Fecha de Creación</th>
+            <th>Estado de la Capacitación</th>
             <th>Acciones</th>
         </tr>
     </thead>
@@ -23,7 +36,10 @@
                 <td>@item.titulo</td>
                 <td>@item.descripcion</td>
                 <td>@item.duracion</td>
-                <td>@item.Usuario.nombre @item.Usuario.apellido </td>
+                <td>@item.Usuario.nombre @item.Usuario.apellido</td>
+                <td>@item.archivo</td>
+                <td>@item.fecha_creacion.ToString("yyyy-MM-dd HH:mm")</td>
+                <td>@item.estado</td>
                 <td>
                     <a asp-action="Detalles" asp-route-id="@item.id_capacitacion" class="btn btn-info">Detalles</a>
                     <a asp-action="Editar" asp-route-id="@item.id_capacitacion" class="btn btn-warning">Editar</a>

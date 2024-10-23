@@ -15,9 +15,20 @@ namespace scg_clinicasur.Controllers
             _context = context;
         }
 
-        public IActionResult Index()
+        public IActionResult Index(string searchString)
         {
+            ViewData["CurrentFilter"] = searchString; // Almacenar el valor de búsqueda
+
             var capacitaciones = _context.Capacitaciones.Include(t => t.Usuario).ThenInclude(u => u.roles).ToList();
+
+            if (!String.IsNullOrEmpty(searchString))
+            {
+                capacitaciones = capacitaciones
+                    .Where(c => c.Usuario.nombre.Contains(searchString, StringComparison.OrdinalIgnoreCase) ||
+                                c.Usuario.apellido.Contains(searchString, StringComparison.OrdinalIgnoreCase))
+                    .ToList();
+            }
+
             return View(capacitaciones);
         }
 
