@@ -1,4 +1,6 @@
-﻿@{
+﻿@model scg_clinicasur.Models.Cita
+
+@{
     ViewData["Title"] = "Editar Cita";
 }
 
@@ -16,25 +18,73 @@
         </nav>
     </header>
     <main>
+        @if (!string.IsNullOrEmpty(ViewBag.ErrorMessage))
+        {
+            <div class="alert alert-danger">@ViewBag.ErrorMessage</div>
+        }
+        @if (TempData["SuccessMessage"] != null)
+        {
+            <div class="alert alert-success">@TempData["SuccessMessage"]</div>
+        }
+
         <form method="post" asp-action="Editar">
-            <label for="paciente">Paciente:</label>
-            <input type="text" id="nombre" name="nombre" value="Álvaro Sanabria" required>
+            <input type="hidden" asp-for="IdCita" />
 
-            <label for="username">Fecha:</label>
-            <input type="text" id="fecha" name="fecha" value="14/08/2024" required>
+            <div class="form-group">
+                <label for="IdPaciente">Paciente:</label>
+                <select asp-for="IdPaciente" class="form-control">
+                    <option value="">Seleccionar Paciente</option>
+                    @foreach (var paciente in ViewBag.Pacientes)
+                    {
+                        <option value="@paciente.id_usuario"
+                                selected="@(Model.IdPaciente == paciente.id_usuario)">
+                            @paciente.nombre @paciente.apellido
+                        </option>
+                    }
+                </select>
+                <span asp-validation-for="IdPaciente" class="text-danger"></span>
+            </div>
 
-            <label for="motivo">Motivo:</label>
-            <input type="text" id="motivo" name="password" value="Control" required>
+            <div class="form-group">
+                <label for="IdDoctor">Doctor:</label>
+                <select asp-for="IdDoctor" class="form-control">
+                    <option value="">Seleccionar Doctor</option>
+                    @foreach (var doctor in ViewBag.Doctores)
+                    {
+                        <option value="@doctor.id_usuario"
+                                selected="@(Model.IdDoctor == doctor.id_usuario)">
+                            @doctor.nombre @doctor.apellido
+                        </option>
+                    }
+                </select>
+                <span asp-validation-for="IdDoctor" class="text-danger"></span>
+            </div>
 
-            <label for="estado">Estado:</label>
-            <select id="estado" name="estado">
-                <option value="activo">Activo</option>
-                <option value="cancelado">Cancelado</option>
-                <option value="presente">Presente</option>
-                <option value="proxima">Proxima</option>
-            </select>
+            <div class="form-group">
+                <label for="FechaInicio">Fecha de Inicio:</label>
+                <input type="datetime-local" asp-for="FechaInicio" class="form-control" required />
+                <span asp-validation-for="FechaInicio" class="text-danger"></span>
+            </div>
 
-            <button type="submit" class="button">Actualizar</button>
+            <div class="form-group">
+                <label for="FechaFin">Fecha de Fin:</label>
+                <input type="datetime-local" asp-for="FechaFin" class="form-control" required />
+                <span asp-validation-for="FechaFin" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label for="MotivoCita">Motivo de la Cita:</label>
+                <input type="text" asp-for="MotivoCita" class="form-control" />
+                <span asp-validation-for="MotivoCita" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label for="IdEstadoCita">Estado de la Cita:</label>
+                <select asp-for="IdEstadoCita" asp-items="ViewBag.EstadosCita" class="form-control"></select>
+                <span asp-validation-for="IdEstadoCita" class="text-danger"></span>
+            </div>
+
+            <button type="submit" class="btn btn-primary">Guardar Cambios</button>
         </form>
     </main>
 </body>

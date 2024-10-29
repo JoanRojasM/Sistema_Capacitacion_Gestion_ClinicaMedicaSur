@@ -30,6 +30,11 @@ namespace scg_clinicasur.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("id_capacitacion"));
 
+                    b.Property<string>("archivo")
+                        .IsRequired()
+                        .HasMaxLength(255)
+                        .HasColumnType("nvarchar(255)");
+
                     b.Property<string>("descripcion")
                         .IsRequired()
                         .HasMaxLength(1000)
@@ -37,6 +42,15 @@ namespace scg_clinicasur.Migrations
 
                     b.Property<TimeSpan>("duracion")
                         .HasColumnType("time");
+
+                    b.Property<string>("estado")
+                        .IsRequired()
+                        .HasMaxLength(10)
+                        .HasColumnType("nvarchar(10)");
+
+                    b.Property<DateTime>("fecha_creacion")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2");
 
                     b.Property<int>("id_usuario")
                         .HasColumnType("int");

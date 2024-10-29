@@ -1,0 +1,34 @@
+﻿@{
+    ViewData["Title"] = "Error en el Acceso a los Detalles de la Cita";
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="stylesheet" href="~/css/site.css">
+    <title>@ViewData["Title"]</title>
+</head>
+<body>
+    <div class="container mt-5">
+        <h1 class="text-danger">@ViewData["Title"]</h1>
+
+        @if (!string.IsNullOrEmpty(ViewBag.ErrorMessage))
+        {
+            <div class="alert alert-danger">
+                <strong>Error:</strong> @ViewBag.ErrorMessage
+            </div>
+        }
+
+        @if (!string.IsNullOrEmpty(ViewBag.ErrorDetails))
+        {
+            <div class="alert alert-secondary">
+                <strong>Detalles del Error:</strong> @ViewBag.ErrorDetails
+            </div>
+        }
+
+        <p>Por favor, intenta nuevamente más tarde o contacta con soporte técnico si el problema persiste.</p>
+
+        <a asp-action="Index" class="btn btn-primary mt-3">Volver al Listado de Citas</a>
+    </div>
+</body>
+</html>
