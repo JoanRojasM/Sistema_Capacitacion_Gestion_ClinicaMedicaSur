@@ -1,4 +1,5 @@
 ﻿@model IEnumerable<scg_clinicasur.Models.Evaluacion>
+
 @{
     ViewData["Title"] = "Gestión de Evaluaciones";
 }
@@ -33,9 +34,18 @@
             <tr>
                 <td>@item.nombre</td>
                 <td>@item.descripcion</td>
-                <td>@item.tiempo_prueba</td>
+                <td>@(item.tiempo_prueba.HasValue ? item.tiempo_prueba.Value.ToString(@"hh\:mm\:ss") : "No especificado")</td>
                 <td>@item.archivo</td>
-                <td>@item.Usuario.nombre @item.Usuario.apellido</td>
+                <td>
+                    @if (item.Usuario != null)
+                    {
+                        @item.Usuario.nombre @item.Usuario.apellido
+                    }
+                    else
+                    {
+                        <span class="text-muted">No asignado</span>
+                    }
+                </td>
                 <td>@item.fecha_creacion.ToString("yyyy-MM-dd HH:mm")</td>
                 <td>
                     <a asp-action="Detalles" asp-route-id="@item.id_evaluacion" class="btn btn-info">Detalles</a>

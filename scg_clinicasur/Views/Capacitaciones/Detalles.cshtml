@@ -1,30 +1,54 @@
 ﻿@model scg_clinicasur.Models.Capacitacion
+
 @{
-    ViewData["Title"] = "Detalles de la Capacitacion";
+    ViewData["Title"] = "Detalles de Capacitación";
 }
 
-<h2>@Model.titulo</h2>
+<h1>Detalles de Capacitación</h1>
 
-<div>
-    <dl class="row">
-        <dt class="col-sm-2">Descripción</dt>
-        <dd class="col-sm-10">@Model.descripcion</dd>
-
-        <dt class="col-sm-2">Tiempo de Prueba</dt>
-        <dd class="col-sm-10">@Model.duracion</dd>
-
-        <dt class="col-sm-2">Archivo</dt>
-        <dd class="col-sm-10">@Model.archivo</dd>
-
-        <dt class="col-sm-2">Fecha de Creación</dt>
-        <dd class="col-sm-10">@Model.fecha_creacion</dd>
-
-        <dt class="col-sm-2">Estado de la capacitación</dt>
-        <dd class="col-sm-10">@Model.estado</dd>
-
-    </dl>
+<div class="form-group">
+    <label><strong>ID de Capacitación:</strong></label>
+    <p>@Model.id_capacitacion</p>
 </div>
 
-<a asp-action="Index" class="btn btn-primary">Volver al Listado</a>
-<a asp-action="Editar" asp-route-id="@Model.id_capacitacion" class="btn btn-warning">Editar</a>
-<a asp-action="Eliminar" asp-route-id="@Model.id_capacitacion" class="btn btn-danger">Eliminar</a>
+<div class="form-group">
+    <label><strong>Título:</strong></label>
+    <p>@Model.titulo</p>
+</div>
+
+<div class="form-group">
+    <label><strong>Descripción:</strong></label>
+    <p>@Model.descripcion</p>
+</div>
+
+<div class="form-group">
+    <label><strong>Duración:</strong></label>
+    <p>@(Model.duracion.HasValue ? Model.duracion.Value.ToString() : "No especificada")</p>
+</div>
+
+<div class="form-group">
+    <label><strong>Usuario Asignado:</strong></label>
+    <p>@(Model.Usuario != null ? Model.Usuario.nombre + " " + Model.Usuario.apellido : "No asignado")</p>
+</div>
+
+<div class="form-group">
+    <label><strong>Rol del Usuario:</strong></label>
+    <p>@(Model.Usuario != null && Model.Usuario.roles != null ? Model.Usuario.roles.nombre_rol : "No asignado")</p>
+</div>
+
+<div class="form-group">
+    <label><strong>Fecha de Creación:</strong></label>
+    <p>@Model.fecha_creacion.ToString("dd/MM/yyyy")</p>
+</div>
+
+<div class="form-group">
+    <label><strong>Archivo:</strong></label>
+    <p>@(string.IsNullOrEmpty(Model.archivo) ? "No especificado" : Model.archivo)</p>
+</div>
+
+<div class="form-group">
+    <label><strong>Estado:</strong></label>
+    <p>@(string.IsNullOrEmpty(Model.estado) ? "No especificado" : Model.estado)</p>
+</div>
+
+<a asp-action="Index" class="btn btn-secondary">Volver a la lista</a>
