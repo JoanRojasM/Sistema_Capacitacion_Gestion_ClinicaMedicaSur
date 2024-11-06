@@ -11,7 +11,9 @@
         <tr>
             <th>Titulo de la Capacitacion</th>
             <th>Descripción</th>
-            <th>Duracion de Capacitacion</th>
+            <th>Duración de Capacitacion</th>
+            <th>Archivo</th>
+            <th>Enlace</th>
             <th></th>
         </tr>
     </thead>
@@ -22,6 +24,26 @@
                 <td>@capacitacion.titulo</td>
                 <td>@capacitacion.descripcion</td>
                 <td>@capacitacion.duracion</td>
+                <td>
+                    @if (!string.IsNullOrEmpty(capacitacion.archivo))
+                    {
+                        <a href="@Url.Content("~/archivos/" + capacitacion.archivo)" target="_blank">Ver Archivo</a>
+                    }
+                    else
+                    {
+                        <span>No hay archivo</span>
+                    }
+                </td>
+                <td>
+                    @if (!string.IsNullOrEmpty(capacitacion.enlace))
+                    {
+                        <a href="@capacitacion.enlace" target="_blank">Ir al enlace</a>
+                    }
+                    else
+                    {
+                        <span>No hay enlace</span>
+                    }
+                </td>
             </tr>
         }
     </tbody>

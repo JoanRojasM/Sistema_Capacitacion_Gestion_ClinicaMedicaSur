@@ -50,19 +50,18 @@ namespace scg_clinicasur.Controllers
             return View(capacitacion);
         }
 
-        // GET: Capacitacion/Crear
         [HttpGet]
         public IActionResult Crear()
         {
             var usuarios = _context.Usuarios
                                    .Include(u => u.roles)
-                                   .Where(u => u.id_rol == 1 || u.id_rol == 2) // Filtrar por roles 1 y 2
+                                   .Where(u => u.id_rol == 1 || u.id_rol == 2)
                                    .ToList();
 
             var usuariosConRoles = usuarios.Select(u => new
             {
                 id_usuario = u.id_usuario,
-                DisplayText = u.nombre + " (" + u.roles.nombre_rol + ")" // Combina el nombre y el rol
+                DisplayText = u.nombre + " (" + u.roles.nombre_rol + ")"
             }).ToList();
 
             ViewBag.Usuarios = new SelectList(usuariosConRoles, "id_usuario", "DisplayText");
@@ -72,13 +71,26 @@ namespace scg_clinicasur.Controllers
         // POST: Capacitacion/Crear
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Crear(Capacitacion capacitacion)
+        public async Task<IActionResult> Crear(Capacitacion capacitacion, IFormFile archivo)
         {
             if (ModelState.IsValid)
             {
                 try
                 {
-                    capacitacion.fecha_creacion = DateTime.Now; // Asigna la fecha de creación actual
+                    // Guardar el archivo PDF si se adjuntó uno
+                    if (archivo != null && archivo.ContentType == "application/pdf")
+                    {
+                        var fileName = Path.GetFileName(archivo.FileName);
+                        var filePath = Path.Combine("wwwroot/archivos", fileName);
+
+                        using (var stream = new FileStream(filePath, FileMode.Create))
+                        {
+                            await archivo.CopyToAsync(stream);
+                        }
+                        capacitacion.archivo = fileName;
+                    }
+
+                    capacitacion.fecha_creacion = DateTime.Now;
                     _context.Add(capacitacion);
                     await _context.SaveChangesAsync();
                     return RedirectToAction(nameof(Index));
@@ -89,16 +101,15 @@ namespace scg_clinicasur.Controllers
                 }
             }
 
-            // Recargar la lista de usuarios en caso de error
             var usuarios = _context.Usuarios
                                    .Include(u => u.roles)
-                                   .Where(u => u.id_rol == 1 || u.id_rol == 2) // Filtrar por roles 1 y 2
+                                   .Where(u => u.id_rol == 1 || u.id_rol == 2)
                                    .ToList();
 
             var usuariosConRoles = usuarios.Select(u => new
             {
                 id_usuario = u.id_usuario,
-                DisplayText = u.nombre + " (" + u.roles.nombre_rol + ")" // Combina el nombre y el rol
+                DisplayText = u.nombre + " (" + u.roles.nombre_rol + ")"
             }).ToList();
 
             ViewBag.Usuarios = new SelectList(usuariosConRoles, "id_usuario", "DisplayText");
@@ -133,16 +144,16 @@ namespace scg_clinicasur.Controllers
             // Lista de opciones para el estado
             ViewData["Estados"] = new SelectList(new[]
             {
-                new { Value = "Pendiente", Text = "Pendiente" },
-                new { Value = "Completada", Text = "Completada" }
-            }, "Value", "Text", capacitacion.estado);
+        new { Value = "Pendiente", Text = "Pendiente" },
+        new { Value = "Completada", Text = "Completada" }
+    }, "Value", "Text", capacitacion.estado);
 
             return View(capacitacion);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Editar(int id, Capacitacion capacitacion)
+        public async Task<IActionResult> Editar(int id, Capacitacion capacitacion, IFormFile archivoPDF)
         {
             if (id != capacitacion.id_capacitacion)
             {
@@ -153,12 +164,25 @@ namespace scg_clinicasur.Controllers
             {
                 try
                 {
+                    // Si el archivo ha sido subido, se maneja la actualización del archivo
+                    if (archivoPDF != null)
+                    {
+                        // Actualizar el archivo solo si se ha subido uno nuevo
+                        capacitacion.archivo = archivoPDF.FileName; // O el procesamiento que necesites para el archivo
+                    }
+
                     // Adjuntar la entidad y modificar solo las propiedades necesarias
                     _context.Entry(capacitacion).Property(c => c.titulo).IsModified = true;
                     _context.Entry(capacitacion).Property(c => c.descripcion).IsModified = true;
                     _context.Entry(capacitacion).Property(c => c.duracion).IsModified = true;
                     _context.Entry(capacitacion).Property(c => c.id_usuario).IsModified = true;
-                    _context.Entry(capacitacion).Property(c => c.archivo).IsModified = true;
+
+                    // Si el archivo no es nulo, marcamos el archivo como modificado
+                    if (archivoPDF != null)
+                    {
+                        _context.Entry(capacitacion).Property(c => c.archivo).IsModified = true;
+                    }
+
                     _context.Entry(capacitacion).Property(c => c.estado).IsModified = true;
 
                     await _context.SaveChangesAsync();
@@ -189,9 +213,9 @@ namespace scg_clinicasur.Controllers
 
             ViewData["Estados"] = new SelectList(new[]
             {
-                new { Value = "Pendiente", Text = "Pendiente" },
-                new { Value = "Completada", Text = "Completada" }
-            }, "Value", "Text", capacitacion.estado);
+        new { Value = "Pendiente", Text = "Pendiente" },
+        new { Value = "Completada", Text = "Completada" }
+    }, "Value", "Text", capacitacion.estado);
 
             return View(capacitacion);
         }

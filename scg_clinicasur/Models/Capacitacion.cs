@@ -17,8 +17,8 @@ namespace scg_clinicasur.Models
         [StringLength(1000)]
         public string descripcion { get; set; }
 
-        // Duración no requerida para permitir NULL en la base de datos
-        public TimeSpan? duracion { get; set; }
+        [StringLength(255)]
+        public string duracion { get; set; }
 
         // id_usuario no requerido para permitir NULL en la base de datos
         [ForeignKey("Usuario")]
@@ -29,7 +29,10 @@ namespace scg_clinicasur.Models
         public DateTime fecha_creacion { get; set; }
 
         [StringLength(255)]
-        public string archivo { get; set; }
+        public string? archivo { get; set; }
+
+        [StringLength(500)]
+        public string? enlace { get; set; }
 
         // Estado permitido como NULL y sin inicialización por defecto
         [StringLength(10)]

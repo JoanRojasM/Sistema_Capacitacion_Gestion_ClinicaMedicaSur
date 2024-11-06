@@ -23,7 +23,8 @@
             <th>Descripción</th>
             <th>Duración de la Capacitación</th>
             <th>Usuario</th>
-            <th>Archivos</th>
+            <th>Archivo</th>
+            <th>Enlace</th>
             <th>Fecha de Creación</th>
             <th>Estado de la Capacitación</th>
             <th>Acciones</th>
@@ -37,7 +38,26 @@
                 <td>@item.descripcion</td>
                 <td>@item.duracion</td>
                 <td>@item.Usuario.nombre @item.Usuario.apellido</td>
-                <td>@item.archivo</td>
+                <td>
+                    @if (!string.IsNullOrEmpty(item.archivo))
+                    {
+                        <a href="@Url.Content("~/Archivos/" + item.archivo)" target="_blank">@item.archivo</a>
+                    }
+                    else
+                    {
+                        <span>No disponible</span>
+                    }
+                </td>
+                <td>
+                    @if (!string.IsNullOrEmpty(item.enlace))
+                    {
+                        <a href="@item.enlace" target="_blank">Ver enlace</a>
+                    }
+                    else
+                    {
+                        <span>No disponible</span>
+                    }
+                </td>
                 <td>@item.fecha_creacion.ToString("yyyy-MM-dd HH:mm")</td>
                 <td>@item.estado</td>
                 <td>
