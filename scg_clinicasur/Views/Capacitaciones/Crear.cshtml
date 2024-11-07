@@ -32,13 +32,13 @@
 
     <div class="form-group">
         <label asp-for="archivo" class="control-label">Archivo (PDF):</label>
-        <input asp-for="archivo" type="file" class="form-control" accept=".pdf" />
+        <input asp-for="archivo" type="file" class="form-control" accept=".pdf"/>
         <span asp-validation-for="archivo" class="text-danger"></span>
     </div>
 
     <div class="form-group">
         <label asp-for="enlace" class="control-label">Enlaces:</label>
-        <input asp-for="enlace" class="form-control" />
+        <input asp-for="enlace" class="form-control"/>
         <span asp-validation-for="enlace" class="text-danger"></span>
     </div>
 
@@ -52,7 +52,10 @@
         <span asp-validation-for="estado" class="text-danger"></span>
     </div>
 
-    <button type="submit" class="btn btn-primary">Guardar</button>
+    <div class="form-group">
+        <input type="submit" value="Guardar" class="btn btn-primary" />
+        <a asp-action="Index" class="btn btn-secondary">Cancelar</a>
+    </div>
 </form>
 
 @section Scripts {
