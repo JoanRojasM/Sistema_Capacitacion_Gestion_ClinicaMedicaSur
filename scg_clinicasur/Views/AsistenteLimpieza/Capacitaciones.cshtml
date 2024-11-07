@@ -4,17 +4,18 @@
     ViewData["Title"] = "Mis Capacitaciones";
 }
 
-<h2>Mis Capacitaciones</h2>
+<h2 class="mb-4">Mis Capacitaciones</h2>
 
-<table class="table">
-    <thead>
+<table class="table table-striped table-bordered table-hover">
+    <thead class="thead-dark">
         <tr>
-            <th>Titulo de la Capacitacion</th>
+            <th>Título de la Capacitación</th>
             <th>Descripción</th>
-            <th>Duración de Capacitacion</th>
+            <th>Duración</th>
             <th>Archivo</th>
             <th>Enlace</th>
-            <th></th>
+            <th>Estado</th>
+            <th>Acciones</th>
         </tr>
     </thead>
     <tbody>
@@ -27,22 +28,31 @@
                 <td>
                     @if (!string.IsNullOrEmpty(capacitacion.archivo))
                     {
-                        <a href="@Url.Content("~/archivos/" + capacitacion.archivo)" target="_blank">Ver Archivo</a>
+                        <a href="@Url.Content("~/archivos/" + capacitacion.archivo)" target="_blank" class="btn btn-link btn-sm">Ver Archivo</a>
                     }
                     else
                     {
-                        <span>No hay archivo</span>
+                        <span>No disponible</span>
                     }
                 </td>
                 <td>
                     @if (!string.IsNullOrEmpty(capacitacion.enlace))
                     {
-                        <a href="@capacitacion.enlace" target="_blank">Ir al enlace</a>
+                        <a href="@capacitacion.enlace" target="_blank" class="btn btn-link btn-sm">Ir al Enlace</a>
                     }
                     else
                     {
-                        <span>No hay enlace</span>
+                        <span>No disponible</span>
                     }
+                </td>
+                <td>@capacitacion.estado</td>
+                <td class="text-center">
+                    <form asp-action="SolicitarCancelacion" asp-controller="AsistenteLimpieza" method="post" class="d-inline">
+                        <input type="hidden" name="capacitacionId" value="@capacitacion.id_capacitacion" />
+                        <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('¿Estás seguro de que deseas solicitar la cancelación de esta capacitación?');">
+                            Solicitar Cancelación
+                        </button>
+                    </form>
                 </td>
             </tr>
         }
