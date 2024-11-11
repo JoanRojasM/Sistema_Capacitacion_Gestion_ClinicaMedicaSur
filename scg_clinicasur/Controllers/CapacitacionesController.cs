@@ -153,7 +153,7 @@ namespace scg_clinicasur.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Editar(int id, Capacitacion capacitacion, IFormFile archivoPDF)
+        public async Task<IActionResult> Editar(int id, Capacitacion capacitacion, IFormFile archivo)
         {
             if (id != capacitacion.id_capacitacion)
             {
@@ -165,10 +165,19 @@ namespace scg_clinicasur.Controllers
                 try
                 {
                     // Si el archivo ha sido subido, se maneja la actualización del archivo
-                    if (archivoPDF != null)
+                    if (archivo != null && archivo.ContentType == "application/pdf")
                     {
-                        // Actualizar el archivo solo si se ha subido uno nuevo
-                        capacitacion.archivo = archivoPDF.FileName; // O el procesamiento que necesites para el archivo
+                        var fileName = Path.GetFileName(archivo.FileName);
+                        var filePath = Path.Combine("wwwroot/archivos", fileName);
+
+                        // Guardar el archivo en el sistema
+                        using (var stream = new FileStream(filePath, FileMode.Create))
+                        {
+                            await archivo.CopyToAsync(stream);
+                        }
+
+                        // Asignar el nombre del archivo guardado a la propiedad de la capacitación
+                        capacitacion.archivo = fileName;
                     }
 
                     // Adjuntar la entidad y modificar solo las propiedades necesarias
@@ -178,7 +187,7 @@ namespace scg_clinicasur.Controllers
                     _context.Entry(capacitacion).Property(c => c.id_usuario).IsModified = true;
 
                     // Si el archivo no es nulo, marcamos el archivo como modificado
-                    if (archivoPDF != null)
+                    if (archivo != null)
                     {
                         _context.Entry(capacitacion).Property(c => c.archivo).IsModified = true;
                     }
