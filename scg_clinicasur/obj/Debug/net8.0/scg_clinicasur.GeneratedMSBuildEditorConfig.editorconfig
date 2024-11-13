@@ -94,12 +94,20 @@ build_metadata.AdditionalFiles.CssScope =
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ2l0YXNcQ3JlYXIuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
+[C:/Users/joand/OneDrive/Documentos/GitHub/Sistema_Capacitacion_Gestion_ClinicaMedicaSur/scg_clinicasur/Views/Citas/Detalles.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ2l0YXNcRGV0YWxsZXMuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
 [C:/Users/joand/OneDrive/Documentos/GitHub/Sistema_Capacitacion_Gestion_ClinicaMedicaSur/scg_clinicasur/Views/Citas/Editar.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ2l0YXNcRWRpdGFyLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
 [C:/Users/joand/OneDrive/Documentos/GitHub/Sistema_Capacitacion_Gestion_ClinicaMedicaSur/scg_clinicasur/Views/Citas/Eliminar.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ2l0YXNcRWxpbWluYXIuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/joand/OneDrive/Documentos/GitHub/Sistema_Capacitacion_Gestion_ClinicaMedicaSur/scg_clinicasur/Views/Citas/ErrorCita.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ2l0YXNcRXJyb3JDaXRhLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
 [C:/Users/joand/OneDrive/Documentos/GitHub/Sistema_Capacitacion_Gestion_ClinicaMedicaSur/scg_clinicasur/Views/Citas/Index.cshtml]

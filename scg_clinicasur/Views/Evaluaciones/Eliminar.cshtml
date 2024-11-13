@@ -20,18 +20,27 @@
         <dd class="col-sm-10">@Model.descripcion</dd>
 
         <dt class="col-sm-2">Tiempo de prueba</dt>
-        <dd class="col-sm-10">@Model.tiempo_prueba</dd>
+        <dd class="col-sm-10">@(Model.tiempo_prueba.HasValue ? Model.tiempo_prueba.Value.ToString(@"hh\:mm\:ss") : "No especificado")</dd>
 
         <dt class="col-sm-2">Archivo</dt>
         <dd class="col-sm-10">@Model.archivo</dd>
 
         <dt class="col-sm-2">Usuario Responsable</dt>
-        <dd class="col-sm-10">@Model.Usuario.nombre @Model.Usuario.apellido</dd>
+        <dd class="col-sm-10">
+            @if (Model.Usuario != null)
+            {
+                @($"{Model.Usuario.nombre} {Model.Usuario.apellido}")
+            }
+            else
+            {
+                <span class="text-muted">No asignado</span>
+            }
+        </dd>
     </dl>
 </div>
 
 <form asp-action="Eliminar" method="post">
-    <input type="hidden" asp-for="id_evaluacion" />
+    <input type="hidden" asp-for="id_evaluacion" value="@Model.id_evaluacion" />
     <div class="form-group">
         <input type="submit" value="Eliminar" class="btn btn-danger" />
         <a asp-action="Index" class="btn btn-secondary">Cancelar</a>

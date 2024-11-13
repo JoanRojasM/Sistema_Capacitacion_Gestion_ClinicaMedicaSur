@@ -7,6 +7,8 @@
 <h2>Editar Evaluación</h2>
 
 <form asp-action="Editar" method="post" enctype="multipart/form-data">
+    <input type="hidden" asp-for="id_evaluacion" />
+
     <div class="form-group">
         <label asp-for="nombre" class="control-label"></label>
         <input asp-for="nombre" class="form-control" />
@@ -21,13 +23,13 @@
 
     <div class="form-group">
         <label asp-for="tiempo_prueba" class="control-label"></label>
-        <input asp-for="tiempo_prueba" class="form-control" type="time" />
+        <input asp-for="tiempo_prueba" class="form-control" type="text" placeholder="HH:MM:SS" />
         <span asp-validation-for="tiempo_prueba" class="text-danger"></span>
     </div>
 
     <div class="form-group">
-        <label asp-for="archivo" class="control-label">Archivo Actual: @Model.archivo</label>
-        <input asp-for="archivo" class="form-control" type="file" />
+        <label class="control-label">Archivo Actual: @Model.archivo</label>
+        <input asp-for="archivo" class="form-control" type="text" />
         <span asp-validation-for="archivo" class="text-danger"></span>
     </div>
 

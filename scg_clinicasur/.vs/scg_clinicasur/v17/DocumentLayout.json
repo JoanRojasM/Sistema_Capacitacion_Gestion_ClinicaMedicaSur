@@ -3,24 +3,20 @@
   "WorkspaceRootPath": "C:\\Users\\joand\\OneDrive\\Documentos\\GitHub\\Sistema_Capacitacion_Gestion_ClinicaMedicaSur\\scg_clinicasur\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{725F065E-1652-4DC8-8AB2-3A6C4BFAB6C7}|scg_clinicasur.csproj|c:\\users\\joand\\onedrive\\documentos\\github\\sistema_capacitacion_gestion_clinicamedicasur\\scg_clinicasur\\models\\expediente.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{725F065E-1652-4DC8-8AB2-3A6C4BFAB6C7}|scg_clinicasur.csproj|solutionrelative:models\\expediente.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{725F065E-1652-4DC8-8AB2-3A6C4BFAB6C7}|scg_clinicasur.csproj|c:\\users\\joand\\onedrive\\documentos\\github\\sistema_capacitacion_gestion_clinicamedicasur\\scg_clinicasur\\migrations\\20241019083501_addfechacreaciontoevaluacion.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{725F065E-1652-4DC8-8AB2-3A6C4BFAB6C7}|scg_clinicasur.csproj|solutionrelative:migrations\\20241019083501_addfechacreaciontoevaluacion.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{725F065E-1652-4DC8-8AB2-3A6C4BFAB6C7}|scg_clinicasur.csproj|c:\\users\\joand\\onedrive\\documentos\\github\\sistema_capacitacion_gestion_clinicamedicasur\\scg_clinicasur\\views\\expedientes\\crearexpediente.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
-      "RelativeMoniker": "D:0:0:{725F065E-1652-4DC8-8AB2-3A6C4BFAB6C7}|scg_clinicasur.csproj|solutionrelative:views\\expedientes\\crearexpediente.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+      "AbsoluteMoniker": "D:0:0:{725F065E-1652-4DC8-8AB2-3A6C4BFAB6C7}|scg_clinicasur.csproj|c:\\users\\joand\\onedrive\\documentos\\github\\sistema_capacitacion_gestion_clinicamedicasur\\scg_clinicasur\\data\\applicationdbcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{725F065E-1652-4DC8-8AB2-3A6C4BFAB6C7}|scg_clinicasur.csproj|solutionrelative:data\\applicationdbcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{725F065E-1652-4DC8-8AB2-3A6C4BFAB6C7}|scg_clinicasur.csproj|c:\\users\\joand\\onedrive\\documentos\\github\\sistema_capacitacion_gestion_clinicamedicasur\\scg_clinicasur\\controllers\\expedientescontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{725F065E-1652-4DC8-8AB2-3A6C4BFAB6C7}|scg_clinicasur.csproj|solutionrelative:controllers\\expedientescontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{725F065E-1652-4DC8-8AB2-3A6C4BFAB6C7}|scg_clinicasur.csproj|c:\\users\\joand\\onedrive\\documentos\\github\\sistema_capacitacion_gestion_clinicamedicasur\\scg_clinicasur\\views\\citas\\eliminar.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{725F065E-1652-4DC8-8AB2-3A6C4BFAB6C7}|scg_clinicasur.csproj|solutionrelative:views\\citas\\eliminar.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{725F065E-1652-4DC8-8AB2-3A6C4BFAB6C7}|scg_clinicasur.csproj|c:\\users\\joand\\onedrive\\documentos\\github\\sistema_capacitacion_gestion_clinicamedicasur\\scg_clinicasur\\models\\usuario.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{725F065E-1652-4DC8-8AB2-3A6C4BFAB6C7}|scg_clinicasur.csproj|solutionrelative:models\\usuario.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{725F065E-1652-4DC8-8AB2-3A6C4BFAB6C7}|scg_clinicasur.csproj|c:\\users\\joand\\onedrive\\documentos\\github\\sistema_capacitacion_gestion_clinicamedicasur\\scg_clinicasur\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
-      "RelativeMoniker": "D:0:0:{725F065E-1652-4DC8-8AB2-3A6C4BFAB6C7}|scg_clinicasur.csproj|solutionrelative:appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
+      "AbsoluteMoniker": "D:0:0:{725F065E-1652-4DC8-8AB2-3A6C4BFAB6C7}|scg_clinicasur.csproj|c:\\users\\joand\\onedrive\\documentos\\github\\sistema_capacitacion_gestion_clinicamedicasur\\scg_clinicasur\\controllers\\citascontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{725F065E-1652-4DC8-8AB2-3A6C4BFAB6C7}|scg_clinicasur.csproj|solutionrelative:controllers\\citascontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -29,77 +25,139 @@
       "VerticalTabListWidth": 256,
       "DocumentGroups": [
         {
-          "DockedWidth": 200,
-          "SelectedChildIndex": 3,
+          "DockedWidth": 142,
+          "SelectedChildIndex": 10,
           "Children": [
             {
               "$type": "Bookmark",
               "Name": "ST:0:0:{1c4feeaa-4718-4aa9-859d-94ce25d182ba}"
             },
             {
+              "$type": "Bookmark",
+              "Name": "ST:129:0:{1fc202d4-d401-403c-9834-5b218574bb67}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:128:0:{1fc202d4-d401-403c-9834-5b218574bb67}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{aa2115a1-9712-457b-9047-dbb71ca2cdd2}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{d562c6a0-d2fe-4c19-a8b3-e5cbc09bf375}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{5c82a791-7c9f-441e-952b-8848655dd85e}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{5e929736-0e81-4d52-a78e-546a1649faca}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{3ae79031-e1bc-11d0-8f78-00a0c9110057}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{a34b1c5d-6d37-4a0c-a8b0-99f8e8158b48}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{b1e99781-ab81-11d0-b683-00aa00a3ee26}"
+            },
+            {
               "$type": "Document",
-              "DocumentIndex": 3,
-              "Title": "Usuario.cs",
-              "DocumentMoniker": "C:\\Users\\joand\\OneDrive\\Documentos\\GitHub\\Sistema_Capacitacion_Gestion_ClinicaMedicaSur\\scg_clinicasur\\Models\\Usuario.cs",
-              "RelativeDocumentMoniker": "Models\\Usuario.cs",
-              "ToolTip": "C:\\Users\\joand\\OneDrive\\Documentos\\GitHub\\Sistema_Capacitacion_Gestion_ClinicaMedicaSur\\scg_clinicasur\\Models\\Usuario.cs",
-              "RelativeToolTip": "Models\\Usuario.cs",
-              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+              "DocumentIndex": 0,
+              "Title": "20241019083501_AddFechaCreacionToEvaluacion.cs",
+              "DocumentMoniker": "C:\\Users\\joand\\OneDrive\\Documentos\\GitHub\\Sistema_Capacitacion_Gestion_ClinicaMedicaSur\\scg_clinicasur\\Migrations\\20241019083501_AddFechaCreacionToEvaluacion.cs",
+              "RelativeDocumentMoniker": "Migrations\\20241019083501_AddFechaCreacionToEvaluacion.cs",
+              "ToolTip": "C:\\Users\\joand\\OneDrive\\Documentos\\GitHub\\Sistema_Capacitacion_Gestion_ClinicaMedicaSur\\scg_clinicasur\\Migrations\\20241019083501_AddFechaCreacionToEvaluacion.cs",
+              "RelativeToolTip": "Migrations\\20241019083501_AddFechaCreacionToEvaluacion.cs",
+              "ViewState": "AQIAAEMAAAAAAAAAAAAgwAAAAAAAAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-10-08T21:13:04.478Z",
+              "WhenOpened": "2024-10-29T03:44:53.187Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
               "DocumentIndex": 1,
-              "Title": "CrearExpediente.cshtml",
-              "DocumentMoniker": "C:\\Users\\joand\\OneDrive\\Documentos\\GitHub\\Sistema_Capacitacion_Gestion_ClinicaMedicaSur\\scg_clinicasur\\Views\\Expedientes\\CrearExpediente.cshtml",
-              "RelativeDocumentMoniker": "Views\\Expedientes\\CrearExpediente.cshtml",
-              "ToolTip": "C:\\Users\\joand\\OneDrive\\Documentos\\GitHub\\Sistema_Capacitacion_Gestion_ClinicaMedicaSur\\scg_clinicasur\\Views\\Expedientes\\CrearExpediente.cshtml",
-              "RelativeToolTip": "Views\\Expedientes\\CrearExpediente.cshtml",
-              "ViewState": "AQIAAAAAAAAAAAAAAAAAABoAAAALAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2024-10-08T21:11:32.335Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 0,
-              "Title": "Expediente.cs",
-              "DocumentMoniker": "C:\\Users\\joand\\OneDrive\\Documentos\\GitHub\\Sistema_Capacitacion_Gestion_ClinicaMedicaSur\\scg_clinicasur\\Models\\Expediente.cs",
-              "RelativeDocumentMoniker": "Models\\Expediente.cs",
-              "ToolTip": "C:\\Users\\joand\\OneDrive\\Documentos\\GitHub\\Sistema_Capacitacion_Gestion_ClinicaMedicaSur\\scg_clinicasur\\Models\\Expediente.cs",
-              "RelativeToolTip": "Models\\Expediente.cs",
-              "ViewState": "AQIAABYAAAAAAAAAAAAqwDQAAAAKAAAA",
+              "Title": "ApplicationDbContext.cs",
+              "DocumentMoniker": "C:\\Users\\joand\\OneDrive\\Documentos\\GitHub\\Sistema_Capacitacion_Gestion_ClinicaMedicaSur\\scg_clinicasur\\Data\\ApplicationDbContext.cs",
+              "RelativeDocumentMoniker": "Data\\ApplicationDbContext.cs",
+              "ToolTip": "C:\\Users\\joand\\OneDrive\\Documentos\\GitHub\\Sistema_Capacitacion_Gestion_ClinicaMedicaSur\\scg_clinicasur\\Data\\ApplicationDbContext.cs",
+              "RelativeToolTip": "Data\\ApplicationDbContext.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-10-08T21:11:11.789Z",
+              "WhenOpened": "2024-10-29T03:44:43.023Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
               "DocumentIndex": 2,
-              "Title": "ExpedientesController.cs",
-              "DocumentMoniker": "C:\\Users\\joand\\OneDrive\\Documentos\\GitHub\\Sistema_Capacitacion_Gestion_ClinicaMedicaSur\\scg_clinicasur\\Controllers\\ExpedientesController.cs",
-              "RelativeDocumentMoniker": "Controllers\\ExpedientesController.cs",
-              "ToolTip": "C:\\Users\\joand\\OneDrive\\Documentos\\GitHub\\Sistema_Capacitacion_Gestion_ClinicaMedicaSur\\scg_clinicasur\\Controllers\\ExpedientesController.cs",
-              "RelativeToolTip": "Controllers\\ExpedientesController.cs",
-              "ViewState": "AQIAAC0AAAAAAAAAAAA5wD8AAAAMAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-10-08T21:08:44.169Z",
+              "Title": "Eliminar.cshtml",
+              "DocumentMoniker": "C:\\Users\\joand\\OneDrive\\Documentos\\GitHub\\Sistema_Capacitacion_Gestion_ClinicaMedicaSur\\scg_clinicasur\\Views\\Citas\\Eliminar.cshtml",
+              "RelativeDocumentMoniker": "Views\\Citas\\Eliminar.cshtml",
+              "ToolTip": "C:\\Users\\joand\\OneDrive\\Documentos\\GitHub\\Sistema_Capacitacion_Gestion_ClinicaMedicaSur\\scg_clinicasur\\Views\\Citas\\Eliminar.cshtml",
+              "RelativeToolTip": "Views\\Citas\\Eliminar.cshtml",
+              "ViewState": "AQIAAA8AAAAAAAAAAAAuwDIAAAAHAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2024-10-28T22:44:12.747Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 4,
-              "Title": "appsettings.json",
-              "DocumentMoniker": "C:\\Users\\joand\\OneDrive\\Documentos\\GitHub\\Sistema_Capacitacion_Gestion_ClinicaMedicaSur\\scg_clinicasur\\appsettings.json",
-              "RelativeDocumentMoniker": "appsettings.json",
-              "ToolTip": "C:\\Users\\joand\\OneDrive\\Documentos\\GitHub\\Sistema_Capacitacion_Gestion_ClinicaMedicaSur\\scg_clinicasur\\appsettings.json",
-              "RelativeToolTip": "appsettings.json",
-              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAwAAAAAAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
-              "WhenOpened": "2024-10-08T18:48:41.923Z",
-              "EditorCaption": ""
+              "DocumentIndex": 3,
+              "Title": "CitasController.cs",
+              "DocumentMoniker": "C:\\Users\\joand\\OneDrive\\Documentos\\GitHub\\Sistema_Capacitacion_Gestion_ClinicaMedicaSur\\scg_clinicasur\\Controllers\\CitasController.cs",
+              "RelativeDocumentMoniker": "Controllers\\CitasController.cs",
+              "ToolTip": "C:\\Users\\joand\\OneDrive\\Documentos\\GitHub\\Sistema_Capacitacion_Gestion_ClinicaMedicaSur\\scg_clinicasur\\Controllers\\CitasController.cs",
+              "RelativeToolTip": "Controllers\\CitasController.cs",
+              "ViewState": "AQIAAAwBAAAAAAAAAAAYwDcBAAAyAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-10-28T22:43:49.772Z"
+            }
+          ]
+        },
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": -1,
+          "Children": [
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{34e76e81-ee4a-11d0-ae2e-00a0c90fffc3}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{cdbdee54-b399-484b-b763-db2c3393d646}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{004be353-6879-467c-9d1e-9ac23cdf6d49}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{d98f7c4d-b652-422c-bcdf-3d0e2b2da2c1}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:18:0:{e8034f19-ab72-4f06-83fd-f6832b41aa63}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:1:0:{d212f56b-c48a-434c-a121-1c5d80b59b9f}"
+            }
+          ]
+        },
+        {
+          "DockedWidth": 150,
+          "SelectedChildIndex": -1,
+          "Children": [
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{d78612c7-9962-4b83-95d9-268046dad23a}"
             }
           ]
         }

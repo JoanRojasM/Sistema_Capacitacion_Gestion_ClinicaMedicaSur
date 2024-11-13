@@ -4,6 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace scg_clinicasur.Models
 {
+    [Table("capacitacion")]
     public class Capacitacion
     {
         [Key]
@@ -16,13 +17,13 @@ namespace scg_clinicasur.Models
         [StringLength(1000)]
         public string descripcion { get; set; }
 
-        [Required(ErrorMessage = "La duración es obligatoria")]
-        public TimeSpan duracion { get; set; }
+        // Duración no requerida para permitir NULL en la base de datos
+        public TimeSpan? duracion { get; set; }
 
-        [Required(ErrorMessage = "Debe seleccionar un usuario")]
+        // id_usuario no requerido para permitir NULL en la base de datos
         [ForeignKey("Usuario")]
-        public int id_usuario { get; set; }
-        public Usuario Usuario { get; set; }
+        public int? id_usuario { get; set; }
+        public Usuario? Usuario { get; set; }
 
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public DateTime fecha_creacion { get; set; }
@@ -30,10 +31,8 @@ namespace scg_clinicasur.Models
         [StringLength(255)]
         public string archivo { get; set; }
 
-        [Required]
+        // Estado permitido como NULL y sin inicialización por defecto
         [StringLength(10)]
-        [RegularExpression("(Pendiente|Completada)", ErrorMessage = "El estado debe ser 'Pendiente' o 'Completada'.")]
-        public string estado { get; set; } = "activo";
+        public string estado { get; set; }
     }
 }
-

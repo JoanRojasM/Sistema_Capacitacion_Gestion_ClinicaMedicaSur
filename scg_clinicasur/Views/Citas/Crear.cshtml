@@ -1,4 +1,6 @@
-﻿@{
+﻿@model scg_clinicasur.Models.Cita
+
+@{
     ViewData["Title"] = "Crear Cita";
 }
 
@@ -17,25 +19,63 @@
     </header>
     <main>
         <form method="post" asp-action="Crear">
-            <label for="paciente">Paciente:</label>
-            <input type="text" id="paciente" name="paciente" required>
+            <div class="form-group">
+                <label for="IdPaciente">Paciente:</label>
+                <select asp-for="IdPaciente" class="form-control">
+                    <option value="">Seleccionar Paciente</option>
+                    @foreach (var paciente in ViewBag.Pacientes)
+                    {
+                        <option value="@paciente.id_usuario">
+                            @paciente.nombre @paciente.apellido
+                        </option>
+                    }
+                </select>
+                <span asp-validation-for="IdPaciente" class="text-danger"></span>
+            </div>
 
-            <label for="fecha">Fecha:</label>
-            <input type="text" id="fecha" name="fecha" required>
+            <div class="form-group">
+                <label for="IdDoctor">Doctor:</label>
+                <select asp-for="IdDoctor" class="form-control">
+                    <option value="">Seleccionar Doctor</option>
+                    @foreach (var doctor in ViewBag.Doctores)
+                    {
+                        <option value="@doctor.id_usuario">
+                            @doctor.nombre @doctor.apellido
+                        </option>
+                    }
+                </select>
+                <span asp-validation-for="IdDoctor" class="text-danger"></span>
+            </div>
 
-            <label for="motivo">Motivo:</label>
-            <input type="text" id="motivo" name="motivo" required>
+            <div class="form-group">
+                <label for="FechaInicio">Fecha de Inicio:</label>
+                <input type="datetime-local" asp-for="FechaInicio" class="form-control" required />
+                <span asp-validation-for="FechaInicio" class="text-danger"></span>
+            </div>
 
-            <label for="estado">Estado:</label>
-            <select id="estado" name="estado">
-                <option value="activo">Activo</option>
-                <option value="cancelado">Cancelado</option>
-                <option value="presente">Presente</option>
-                <option value="proxima">Proxima</option>
-            </select>
+            <div class="form-group">
+                <label for="FechaFin">Fecha de Fin:</label>
+                <input type="datetime-local" asp-for="FechaFin" class="form-control" required />
+                <span asp-validation-for="FechaFin" class="text-danger"></span>
+            </div>
 
+            <div class="form-group">
+                <label for="MotivoCita">Motivo de la Cita:</label>
+                <input type="text" asp-for="MotivoCita" class="form-control" required />
+                <span asp-validation-for="MotivoCita" class="text-danger"></span>
+            </div>
 
-            <button type="submit" class="button">Guardar</button>
+            <div class="form-group">
+                <label for="IdEstadoCita">Estado de la Cita:</label>
+                <select asp-for="IdEstadoCita" class="form-control">
+                    <option value="1">Programada</option>
+                    <option value="2">Cancelada</option>
+                    <option value="3">Completada</option>
+                </select>
+                <span asp-validation-for="IdEstadoCita" class="text-danger"></span>
+            </div>
+
+            <button type="submit" class="btn btn-primary">Guardar</button>
         </form>
     </main>
 </body>

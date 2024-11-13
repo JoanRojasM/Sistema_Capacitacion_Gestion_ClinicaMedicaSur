@@ -1,215 +1,39 @@
-﻿@{
+﻿@model IEnumerable<scg_clinicasur.Models.Cita>
+
+@{
     ViewData["Title"] = "Calendario de Citas";
 }
 
 <!DOCTYPE html>
 <html>
 <head>
-    <link rel="stylesheet" href="~/css/site.css">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/5.3.0/css/bootstrap.min.css" integrity="sha384-9ndCyUaAM20u9KJdDRF8y70mcsntPIpg6zVf6Dykqjz4zssrztb1moM8unSxj6tG" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/5.11.0/main.min.css" integrity="sha512-KOp1D5rdrP2TjkNrm7BU4KDNRELTGiSkG+bOxVtBF7oLJ+xTBkBXbOwvMM7j/KoE+ZKXK5H3lAeLsPcPLDl8vQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-KyZXEAg3QhqLMpG8r+Knujsl5/1hbGfT0N5jQar5bDo=" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/5.11.0/main.min.js" integrity="sha512-7vfpERET0VddD+oKlCe9Iv6MwAk+GyBlRzD+GHQzjzZYmyDQgyfFppURFdAynLMmkrBt3R60esgSYTC3RJbsxA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <title>@ViewData["Title"]</title>
 </head>
 <body>
-    <header>
-        <h1>@ViewData["Title"]</h1>
-        <nav>
-            <a asp-action="Index" class="button">Volver al Listado</a>
+    <div class="container mt-5">
+        <h1 class="mb-4">@ViewData["Title"]</h1>
+
+        @if (!string.IsNullOrEmpty(ViewBag.ErrorMessage))
+        {
+            <div class="alert alert-danger">@ViewBag.ErrorMessage</div>
+        }
+
+        @if (!string.IsNullOrEmpty(ViewBag.WarningMessage))
+        {
+            <div class="alert alert-warning">@ViewBag.WarningMessage</div>
+        }
+
+        <nav class="mb-4">
+            <a asp-action="Index" class="btn btn-primary">Volver al Listado</a>
         </nav>
-    </header>
-    <main>
-        @*         <form method="post" asp-action="Calendario">
-        <label for="paciente">Paciente:</label>
-        <input type="text" id="paciente" name="paciente" required>
 
-        <label for="fecha">Fecha:</label>
-        <input type="text" id="fecha" name="fecha" required>
-
-        <label for="motivo">Motivo:</label>
-        <input type="text" id="motivo" name="motivo" required>
-
-        <label for="estado">Estado:</label>
-        <select id="estado" name="estado">
-        <option value="activo">Activo</option>
-        <option value="cancelado">Cancelado</option>
-        <option value="presente">Presente</option>
-        <option value="proxima">Proxima</option>
-        </select>
-
-
-        <button type="submit" class="button">Guardar</button>
-        </form> *@
-
-        <title>Calendario de Citas</title>
-
-
-
-        <div class="calendario">
-            <h1>Calendario de Citas</h1>
-            <table>
-                <thead>
-                    <tr>
-                        <th>Día</th>
-                        <th>Fecha</th>
-                        <th>Paciente</th>
-                        <th>Descripción</th>
-                    </tr>
-                </thead>
-
-
-
-
-                <tbody id="citas">
-
-                <tbody>
-                    <tr>
-                        <td>Lunes</td>
-                        <td>2023-03-06</td>
-                        <td>Juan Pérez</td>
-                        <td>Consulta médica</td>
-
-                    </tr>
-
-                    <tr>
-                        <td>Miércoles</td>
-                        <td>2024-08-28</td>
-                        <td>Juan Pérez</td>
-                        <td>Consulta médica</td>
-                    </tr>
-                    <tr>
-                        <td>Jueves</td>
-                        <td>2024-08-29</td>
-                        <td>María López</td>
-                        <td>Revisión dental</td>
-                    </tr>
-                    <tr>
-                        <td>Viernes</td>
-                        <td>2024-08-30</td>
-                        <td>Carlos Sánchez</td>
-                        <td>Examen de rutina</td>
-                    </tr>
-                    <tr>
-                        <td>Sábado</td>
-                        <td>2024-08-31</td>
-                        <td>Ana Gómez</td>
-                        <td>Consulta médica</td>
-                    </tr>
-                    <tr>
-                        <td>Domingo</td>
-                        <td>2024-09-01</td>
-                        <td>Pedro Ramírez</td>
-                        <td>Consulta médica</td>
-                    </tr>
-                    <tr>
-                        <td>Lunes</td>
-                        <td>2024-09-02</td>
-                        <td>Laura Fernández</td>
-                        <td>Revisión dental</td>
-                    </tr>
-                    <tr>
-                        <td>Martes</td>
-                        <td>2024-09-03</td>
-                        <td>José Torres</td>
-                        <td>Consulta médica</td>
-                    </tr>
-                    <tr>
-                        <td>Miércoles</td>
-                        <td>2024-09-04</td>
-                        <td>Elena Ruiz</td>
-                        <td>Examen de rutina</td>
-                    </tr>
-                    <tr>
-                        <td>Jueves</td>
-                        <td>2024-09-05</td>
-                        <td>Raúl Mendoza</td>
-                        <td>Revisión dental</td>
-                    </tr>
-                    <tr>
-                        <td>Viernes</td>
-                        <td>2024-09-06</td>
-                        <td>Claudia Morales</td>
-                        <td>Consulta médica</td>
-                    </tr>
-                    <tr>
-                        <td>Sábado</td>
-                        <td>2024-09-07</td>
-                        <td>Miguel Castro</td>
-                        <td>Consulta médica</td>
-                    </tr>
-                    <tr>
-                        <td>Domingo</td>
-                        <td>2024-09-08</td>
-                        <td>Andrea Ortiz</td>
-                        <td>Examen de rutina</td>
-                    </tr>
-                    <tr>
-                        <td>Lunes</td>
-                        <td>2024-09-09</td>
-                        <td>Fernando Silva</td>
-                        <td>Revisión dental</td>
-                    </tr>
-                    <tr>
-                        <td>Martes</td>
-                        <td>2024-09-10</td>
-                        <td>Sofía Rivera</td>
-                        <td>Consulta médica</td>
-                    </tr>
-                    <tr>
-                        <td>Miércoles</td>
-                        <td>2024-09-11</td>
-                        <td>Gustavo Vargas</td>
-                        <td>Examen de rutina</td>
-                    </tr>
-                    <tr>
-                        <td>Jueves</td>
-                        <td>2024-09-12</td>
-                        <td>Victoria Hernández</td>
-                        <td>Revisión dental</td>
-                    </tr>
-                    <tr>
-                        <td>Viernes</td>
-                        <td>2024-09-13</td>
-                        <td>Alberto Gutiérrez</td>
-                        <td>Consulta médica</td>
-                    </tr>
-                    <tr>
-                        <td>Sábado</td>
-                        <td>2024-09-14</td>
-                        <td>Camila Jiménez</td>
-                        <td>Consulta médica</td>
-                    </tr>
-                    <tr>
-                        <td>Domingo</td>
-                        <td>2024-09-15</td>
-                        <td>Mario Ramírez</td>
-                        <td>Examen de rutina</td>
-                    </tr>
-                    <tr>
-                        <td>Lunes</td>
-                        <td>2024-09-16</td>
-                        <td>Isabel Pérez</td>
-                        <td>Revisión dental</td>
-                    </tr>
-
-                </tbody>
-
-
-                    <!-- Aquí se mostrarán las citas -->
-
-                </tbody>
-            </table>
-            <div class="navegacion">
-                <button id="anterior">Anterior</button>
-                <button id="siguiente">Siguiente</button>
-            </div>
-        </div>
-
-        <script src="script.js"></script>
-
-
-
-    </main>
+        <!-- Calendario -->
+        <div id="calendar"></div>
+    </div>
 
 </body>
-
-
-
 </html>
