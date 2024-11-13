@@ -14,13 +14,14 @@ namespace scg_clinicasur.Models
         [StringLength(255)]
         public string titulo { get; set; }
 
+        [Required(ErrorMessage = "La descripción es obligatoria")]
         [StringLength(1000)]
         public string descripcion { get; set; }
 
-        // Duración no requerida para permitir NULL en la base de datos
-        public TimeSpan? duracion { get; set; }
+        [Required(ErrorMessage = "La duración es obligatoria")]
+        [StringLength(255)]
+        public string duracion { get; set; }
 
-        // id_usuario no requerido para permitir NULL en la base de datos
         [ForeignKey("Usuario")]
         public int? id_usuario { get; set; }
         public Usuario? Usuario { get; set; }
@@ -29,9 +30,12 @@ namespace scg_clinicasur.Models
         public DateTime fecha_creacion { get; set; }
 
         [StringLength(255)]
-        public string archivo { get; set; }
+        public string? archivo { get; set; }
 
-        // Estado permitido como NULL y sin inicialización por defecto
+        [StringLength(500)]
+        public string? enlace { get; set; }
+
+        [Required(ErrorMessage = "El estado es obligatorio")]
         [StringLength(10)]
         public string estado { get; set; }
     }
