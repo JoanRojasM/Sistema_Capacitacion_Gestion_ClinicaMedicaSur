@@ -7,276 +7,33 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Calendario de Citas</title>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
-    <style>
-        * {
-            box-sizing: border-box;
-        }
-
-        ul {
-            list-style-type: none;
-        }
-
-        body {
-            font-family: Verdana, sans-serif;
-        }
-
-        .month {
-            padding: 2px 3px;
-            width: 100%;
-            background: #a9e0d5;
-            text-align: center;
-        }
-
-            .month ul {
-                margin: 0;
-                padding: 0;
-            }
-
-                .month ul li {
-                    color: white;
-                    font-size: 20px;
-                    letter-spacing: 3px;
-                }
-
-        .weekdays {
-            margin: 0;
-            padding: 10px 0;
-            background-color: #ddd;
-        }
-
-            .weekdays li {
-                display: inline-block;
-                width: 13.6%;
-                color: #666;
-                text-align: center;
-            }
-
-        .days {
-            padding: 10px 0;
-            background: #eee;
-            margin: 0;
-        }
-
-            .days li {
-                list-style-type: none;
-                display: inline-block;
-                width: 13.6%;
-                text-align: center;
-                margin-bottom: 5px;
-                font-size: 12px;
-                color: #000;
-                font-weight: bold;
-                border: 1px solid #000;
-                height: 100px;
-                background: #fff;
-                overflow-y: auto;
-                position: relative;
-            }
-
-            .days .active {
-                color: #777;
-                background: #fff;
-                border: 1px solid #000;
-            }
-
-            .days .inactive {
-                color: #777;
-                background: #f2f2f2;
-                border: 1px solid #bfbfbf;
-            }
-
-            .days .dia_actual {
-                color: #777;
-                background: #D3F9F6;
-            }
-
-            .days :hover {
-                cursor: pointer;
-                background: #e6fffa;
-            }
-
-        .registro {
-            background-color: #a9e0d5;
-            color: #000;
-            padding: 5px;
-            margin-top: 5px;
-            font-size: 10px;
-            border-radius: 4px;
-            overflow-y: auto;
-        }
-
-        .detalle-cita {
-            display: none;
-            position: absolute;
-            top: 20px;
-            left: 20px;
-            background: #fff;
-            border: 1px solid #000;
-            padding: 10px;
-            width: 300px;
-            max-height: 200px;
-            overflow-y: auto;
-            z-index: 10;
-        }
-
-            .detalle-cita .close-btn {
-                cursor: pointer;
-                color: red;
-                float: right;
-                font-weight: bold;
-            }
-
-        .btn-detalles {
-            margin-top: 5px;
-            padding: 2px 5px;
-            font-size: 10px;
-            cursor: pointer;
-            background-color: #1abc9c;
-            color: #fff;
-            border: none;
-            border-radius: 3px;
-        }
-
-        .no-citas {
-            color: #777;
-            font-size: 10px;
-            margin-top: 5px;
-            display: block;
-        }
-    </style>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/5.3.0/css/bootstrap.min.css" integrity="sha384-9ndCyUaAM20u9KJdDRF8y70mcsntPIpg6zVf6Dykqjz4zssrztb1moM8unSxj6tG" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/5.11.0/main.min.css" integrity="sha512-KOp1D5rdrP2TjkNrm7BU4KDNRELTGiSkG+bOxVtBF7oLJ+xTBkBXbOwvMM7j/KoE+ZKXK5H3lAeLsPcPLDl8vQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-KyZXEAg3QhqLMpG8r+Knujsl5/1hbGfT0N5jQar5bDo=" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/5.11.0/main.min.js" integrity="sha512-7vfpERET0VddD+oKlCe9Iv6MwAk+GyBlRzD+GHQzjzZYmyDQgyfFppURFdAynLMmkrBt3R60esgSYTC3RJbsxA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <title>@ViewData["Title"]</title>
 </head>
 <body>
+    <div class="container mt-5">
+        <h1 class="mb-4">@ViewData["Title"]</h1>
 
-    <h1>Calendario de Citas</h1>
-
-    <div class="col">
-        <label for="fecha">Seleccionar mes</label>
-        <input type="month" name="fecha" id="fecha" class="form-control">
-    </div>
-
-    <div class="month">
-        <ul>
-            <li><span id="mes">Mes</span> <br><span id="anno" style="font-size:18px"></span></li>
-        </ul>
-    </div>
-
-    <ul class="weekdays">
-        <li>Lunes</li>
-        <li>Martes</li>
-        <li>Miércoles</li>
-        <li>Jueves</li>
-        <li>Viernes</li>
-        <li>Sábado</li>
-        <li>Domingo</li>
-    </ul>
-
-    <ul id="dias" class="days"></ul>
-
-    <!-- Div para mostrar detalles de las citas al hacer clic en un día -->
-    <div id="detalle-cita" class="detalle-cita">
-        <span class="close-btn" onclick="$('#detalle-cita').hide();">x</span>
-        <div id="detalle-contenido"></div>
-    </div>
-
-    <script>
-        $(document).ready(function () {
-            const fecha = get_anno_mes();
-            $('#fecha').val(fecha);
-            cargar_dias();
-
-            // Actualizar calendario al cambiar el mes
-            $('#fecha').change(function () {
-                cargar_dias();
-            });
-        });
-
-        function cargar_dias() {
-            const date = new Date($('#fecha').val() + '-10 08:00:00');
-            const anno = date.getFullYear();
-            const mes = date.getMonth();
-
-            $('#anno').text(anno);
-            $('#mes').text(mes_a_texto(mes));
-
-            // Obtener citas desde el servidor
-            $.ajax({
-                url: `/Calendario/ObtenerCitasPorMes?year=${anno}&month=${mes + 1}`,
-                method: 'GET',
-                success: function (citas) {
-                    mostrarCalendario(anno, mes, citas);
-                },
-                error: function () {
-                    alert("No se pudieron cargar las citas");
-                }
-            });
+        @if (!string.IsNullOrEmpty(ViewBag.ErrorMessage))
+        {
+            <div class="alert alert-danger">@ViewBag.ErrorMessage</div>
         }
 
-        function mostrarCalendario(anno, mes, citas) {
-            const PrimerDiaMes = new Date(anno, mes, 1);
-            const fecha_inicio = new Date(PrimerDiaMes);
-            fecha_inicio.setDate(1 - (PrimerDiaMes.getDay() + 6) % 7);
-
-            $('#dias').empty(); // Limpiar los días anteriores
-
-            for (let i = 0; i < 42; i++) {  // Mostrar 6 semanas (42 días)
-                const fecha_ciclo = new Date(fecha_inicio);
-                fecha_ciclo.setDate(fecha_inicio.getDate() + i);
-                const li = document.createElement('li');
-                li.innerHTML = fecha_ciclo.getDate();
-                li.classList.add(fecha_ciclo.getMonth() == mes ? 'active' : 'inactive');
-
-                // Agregar citas en el día correspondiente
-                const citasDia = citas.filter(c => new Date(c.fechaInicio).toDateString() === fecha_ciclo.toDateString());
-
-                // Si hay citas, mostrar botón "Detalles"; si no, mostrar "No hay citas para este día"
-                if (citasDia.length > 0) {
-                    const detallesBtn = document.createElement('button');
-                    detallesBtn.innerText = "Detalles";
-                    detallesBtn.classList.add('btn-detalles');
-                    detallesBtn.onclick = function () { mostrarDetallesCita(citasDia, fecha_ciclo); };
-                    li.appendChild(detallesBtn);
-                } else {
-                    const noCitasText = document.createElement('span');
-                    noCitasText.classList.add('no-citas');
-                    noCitasText.innerText = "No hay citas para este día";
-                    li.appendChild(noCitasText);
-                }
-
-                $('#dias').append(li);
-            }
+        @if (!string.IsNullOrEmpty(ViewBag.WarningMessage))
+        {
+            <div class="alert alert-warning">@ViewBag.WarningMessage</div>
         }
 
-        function mostrarDetallesCita(citasDia, fecha) {
-            const detalleCitaDiv = $('#detalle-cita');
-            const detalleContenido = $('#detalle-contenido');
-            detalleContenido.empty();
+        <nav class="mb-4">
+            <a asp-action="Index" class="btn btn-primary">Volver al Listado</a>
+        </nav>
 
-            if (citasDia.length > 0) {
-                citasDia.forEach(cita => {
-                    detalleContenido.append(`
-                        <div>
-                            <strong>Motivo:</strong> ${cita.motivoCita} <br>
-                            <strong>Paciente:</strong> ${cita.paciente} <br>
-                            <strong>Doctor:</strong> ${cita.doctor} <br>
-                            <strong>Hora:</strong> ${new Date(cita.fechaInicio).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })} - ${new Date(cita.fechaFin).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
-                        </div><hr>
-                    `);
-                });
-            } else {
-                detalleContenido.append("<p>No hay citas para este día.</p>");
-            }
-
-            // Posicionar el cuadro y mostrarlo
-            detalleCitaDiv.css({ top: event.clientY + 10, left: event.clientX + 10 });
-            detalleCitaDiv.show();
-        }
-
-        // Funciones auxiliares
-        function mes_a_texto(mes) { return ["enero", "febrero", "marzo", "abril", "mayo", "junio", "julio", "agosto", "septiembre", "octubre", "noviembre", "diciembre"][mes]; }
-        function get_anno_mes() { const e = new Date(); return e.getFullYear() + "-" + (e.getMonth() + 1).toString().padStart(2, '0'); }
-    </script>
+        <!-- Calendario -->
+        <div id="calendar"></div>
+    </div>
 
 </body>
 </html>

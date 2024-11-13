@@ -163,30 +163,8 @@ namespace scg_clinicasur.Controllers
         {
             if (ModelState.IsValid)
             {
-                // Validación de conflicto de horarios
-                bool existeConflicto = await _context.Citas
-                    .AnyAsync(c => c.IdDoctor == cita.IdDoctor
-                                && c.FechaInicio < cita.FechaFin
-                                && c.FechaFin > cita.FechaInicio);
-
-                if (existeConflicto)
-                {
-                    ModelState.AddModelError("", "No se puede programar la cita, ya que el doctor tiene un conflicto de horario.");
-                    // Recargar listas de pacientes y doctores para la vista en caso de conflicto
-                    ViewBag.Pacientes = await _context.Usuarios
-                        .Where(u => u.roles.nombre_rol == "paciente")
-                        .Select(u => new { u.id_usuario, u.nombre, u.apellido })
-                        .ToListAsync();
-
-                    ViewBag.Doctores = await _context.Usuarios
-                        .Where(u => u.roles.nombre_rol == "doctor")
-                        .Select(u => new { u.id_usuario, u.nombre, u.apellido })
-                        .ToListAsync();
-
-                    return View(cita); // Regresar a la vista de creación con el mensaje de error
-                }
-
                 cita.FechaCreacion = DateTime.Now;
+
                 _context.Citas.Add(cita);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
@@ -349,44 +327,5 @@ namespace scg_clinicasur.Controllers
             }
         }
 
-        [HttpGet]
-        public async Task<IActionResult> ObtenerHorasDisponibles(int idDoctor, DateTime fecha)
-        {
-            // Obtener el día de la semana en minúsculas para la comparación
-            var diaSemana = fecha.ToString("dddd", new System.Globalization.CultureInfo("es-ES")).ToLower();
-
-            // Obtener la disponibilidad del doctor en el día de la semana seleccionado
-            var disponibilidad = await _context.DisponibilidadDoctor
-                .Where(d => d.IdDoctor == idDoctor && d.DiaSemana.ToLower() == diaSemana)
-                .ToListAsync();
-
-            // Obtener las citas reservadas del doctor en la fecha seleccionada
-            var citasReservadas = await _context.Citas
-                .Where(c => c.IdDoctor == idDoctor && c.FechaInicio.Date == fecha.Date)
-                .Select(c => new { c.FechaInicio, c.FechaFin })
-                .ToListAsync();
-
-            // Crear una lista de bloques de tiempo disponibles
-            var horasDisponibles = new List<object>();
-
-            foreach (var disponibilidadBloque in disponibilidad)
-            {
-                bool bloqueLibre = !citasReservadas.Any(cita =>
-                    (cita.FechaInicio.TimeOfDay < disponibilidadBloque.HoraFin && cita.FechaFin.TimeOfDay > disponibilidadBloque.HoraInicio));
-
-                var horario = new
-                {
-                    HoraInicio = disponibilidadBloque.HoraInicio.ToString(@"hh\:mm"), // Formato correcto para TimeSpan
-                    HoraFin = disponibilidadBloque.HoraFin.ToString(@"hh\:mm"),       // Formato correcto para TimeSpan
-                    Ocupada = !bloqueLibre
-                };
-
-                Console.WriteLine($"HoraInicio: {horario.HoraInicio}, HoraFin: {horario.HoraFin}, Ocupada: {horario.Ocupada}");
-
-                horasDisponibles.Add(horario);
-            }
-
-            return Json(horasDisponibles);
-        }
     }
 }
