@@ -9,6 +9,33 @@
 <head>
     <link rel="stylesheet" href="~/css/site.css">
     <title>@ViewData["Title"]</title>
+    <style>
+        .hora-bloque {
+            margin: 5px;
+            padding: 10px 15px;
+            border: 1px solid #333; /* Borde gris oscuro */
+            background-color: #555; /* Fondo gris oscuro */
+            color: #fff;
+            cursor: pointer;
+            transition: background-color 0.3s ease; /* Efecto de transición */
+        }
+
+        .hora-bloque:hover {
+                background-color: #666; /* Un gris un poco más claro al pasar el cursor */
+        }
+
+        .hora-bloque.selected {
+                background-color: #28a745; /* Verde para el bloque seleccionado */
+                color: #fff;
+                border-color: #28a745;
+        }
+
+        .hora-bloque.disabled {
+                background-color: #ccc; /* Gris claro para los botones deshabilitados */
+                color: #666;
+                cursor: not-allowed;
+        }
+    </style>
 </head>
 <body>
     <header>
@@ -18,6 +45,18 @@
         </nav>
     </header>
     <main>
+        <!-- Sección para mostrar mensajes de error -->
+        @if (ViewData.ModelState.ContainsKey("") && ViewData.ModelState[""].Errors.Count > 0)
+        {
+            <div class="alert alert-danger">
+                @foreach (var error in ViewData.ModelState[""].Errors)
+                {
+                    <p>@error.ErrorMessage</p>
+                }
+            </div>
+        }
+
+        <!-- Formulario de creación de cita -->
         <form method="post" asp-action="Crear">
             <div class="form-group">
                 <label for="IdPaciente">Paciente:</label>
@@ -35,7 +74,7 @@
 
             <div class="form-group">
                 <label for="IdDoctor">Doctor:</label>
-                <select asp-for="IdDoctor" class="form-control">
+                <select asp-for="IdDoctor" id="doctorSelect" class="form-control">
                     <option value="">Seleccionar Doctor</option>
                     @foreach (var doctor in ViewBag.Doctores)
                     {
@@ -48,16 +87,21 @@
             </div>
 
             <div class="form-group">
-                <label for="FechaInicio">Fecha de Inicio:</label>
-                <input type="datetime-local" asp-for="FechaInicio" class="form-control" required />
-                <span asp-validation-for="FechaInicio" class="text-danger"></span>
+                <label for="fecha">Fecha de Cita:</label>
+                <input type="date" id="fechaCita" class="form-control" min="@DateTime.Now.ToString("yyyy-MM-dd")" />
             </div>
 
-            <div class="form-group">
-                <label for="FechaFin">Fecha de Fin:</label>
-                <input type="datetime-local" asp-for="FechaFin" class="form-control" required />
-                <span asp-validation-for="FechaFin" class="text-danger"></span>
+            <!-- Contenedor para las horas disponibles -->
+            <div id="horasDisponibles" class="form-group">
+                <label>Horas Disponibles:</label>
+                <div id="horasContainer">
+                    <!-- Las horas disponibles se cargarán aquí -->
+                </div>
             </div>
+
+            <!-- Campos ocultos para FechaInicio y FechaFin -->
+            <input type="hidden" id="FechaInicio" name="FechaInicio" />
+            <input type="hidden" id="FechaFin" name="FechaFin" />
 
             <div class="form-group">
                 <label for="MotivoCita">Motivo de la Cita:</label>
@@ -78,5 +122,63 @@
             <button type="submit" class="btn btn-primary">Guardar</button>
         </form>
     </main>
+
+    <script>
+        // Al cambiar el doctor o la fecha, cargar las horas disponibles
+        document.getElementById('doctorSelect').addEventListener('change', cargarHorasDisponibles);
+        document.getElementById('fechaCita').addEventListener('change', cargarHorasDisponibles);
+
+
+        function cargarHorasDisponibles() {
+            var idDoctor = document.getElementById('doctorSelect').value;
+            var fecha = document.getElementById('fechaCita').value;
+
+            // Convertir la fecha al formato yyyy-MM-dd
+            if (fecha) {
+                fecha = new Date(fecha).toISOString().split('T')[0];
+            }
+
+            if (idDoctor && fecha) {
+                fetch(`/Citas/ObtenerHorasDisponibles?idDoctor=${idDoctor}&fecha=${fecha}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        console.log("Datos de horas disponibles:", data);  // Verificar aquí los datos
+
+                        var horasContainer = document.getElementById('horasContainer');
+                        horasContainer.innerHTML = ''; // Limpiar las horas anteriores
+
+                        data.forEach(hora => {
+                            var horaBloque = document.createElement('button');
+                            horaBloque.classList.add('hora-bloque');
+                            horaBloque.innerText = `${hora.horaInicio} - ${hora.horaFin}`;
+                            horaBloque.type = 'button';
+
+                            if (hora.ocupada) {
+                                horaBloque.disabled = true;
+                                horaBloque.classList.add('disabled');
+                            } else {
+                                horaBloque.onclick = function () {
+                                    // Asignar la hora seleccionada a los campos FechaInicio y FechaFin
+                                    document.getElementById('FechaInicio').value = `${fecha}T${hora.horaInicio}`;
+                                    document.getElementById('FechaFin').value = `${fecha}T${hora.horaFin}`;
+
+                                    // Quitar la clase 'selected' de todos los botones
+                                    document.querySelectorAll('.hora-bloque').forEach(b => b.classList.remove('selected'));
+
+                                    // Aplicar la clase 'selected' al botón que se acaba de hacer clic
+                                    horaBloque.classList.add('selected');
+
+                                    // Verificación en consola
+                                    console.log("Botón seleccionado:", horaBloque.innerText, horaBloque.classList);
+                                };
+                            }
+
+                            horasContainer.appendChild(horaBloque);
+                        });
+                    })
+                    .catch(error => console.error('Error:', error));
+            }
+        }
+    </script>
 </body>
 </html>
