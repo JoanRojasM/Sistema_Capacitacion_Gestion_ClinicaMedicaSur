@@ -139,7 +139,7 @@ namespace scg_clinicasur.Controllers
                     var smtpClient = new SmtpClient("smtp.outlook.com")
                     {
                         Port = 587,
-                        Credentials = new NetworkCredential("jrojas30463@ufide.ac.cr", "QsEfT0809*"),
+                        Credentials = new NetworkCredential("jrojas30463@ufide.ac.cr", "####"),
                         EnableSsl = true,
                     };
 
@@ -274,7 +274,7 @@ namespace scg_clinicasur.Controllers
                     var smtpClient = new SmtpClient("smtp.outlook.com")
                     {
                         Port = 587,
-                        Credentials = new NetworkCredential("jrojas30463@ufide.ac.cr", "QsEfT0809*"),
+                        Credentials = new NetworkCredential("jrojas30463@ufide.ac.cr", "#####"),
                         EnableSsl = true,
                     };
 
