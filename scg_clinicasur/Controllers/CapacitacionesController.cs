@@ -3,22 +3,20 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using scg_clinicasur.Data;
 using scg_clinicasur.Models;
-using scg_clinicasur.Services;
+using System.Net.Mail;
+using System.Net;
 
 namespace scg_clinicasur.Controllers
 {
     public class CapacitacionesController : Controller
     {
         private readonly ApplicationDbContext _context;
-        private readonly EmailService _emailService;
 
-        public CapacitacionesController(ApplicationDbContext context, EmailService emailService)
+        public CapacitacionesController(ApplicationDbContext context)
         {
             _context = context;
-            _emailService = emailService;
         }
 
-        // GET: Capacitacion/Index
         public IActionResult Index(string searchString)
         {
             ViewData["CurrentFilter"] = searchString;
@@ -90,13 +88,39 @@ namespace scg_clinicasur.Controllers
                     _context.Add(capacitacion);
                     await _context.SaveChangesAsync();
 
-                    // Enviar correo
-                    var usuario = await _context.Usuarios.FindAsync(capacitacion.id_usuario);
-                    if (usuario != null)
+                    var smtpClient = new SmtpClient("smtp.outlook.com")
                     {
-                        string asunto = "Capacitación próxima, prepárese";
-                        string cuerpo = $"Hola {usuario.nombre},<br><br>Se ha programado la capacitación <strong>{capacitacion.titulo}</strong>. Prepárese para asistir.";
-                        await _emailService.EnviarCorreoAsync(usuario.correo, asunto, cuerpo);
+                        Port = 587,
+                        Credentials = new NetworkCredential("daharoni90459@ufide.ac.cr", "###"), // Cambiar ###
+                        EnableSsl = true,
+                    };
+
+                    var mailMessage = new MailMessage
+                    {
+                        From = new MailAddress("daharoni90459@ufide.ac.cr"),
+                        Subject = $"Nueva Capacitación Creada: {capacitacion.titulo}",
+                        Body = $"Estimado usuario,<br/><br/>" +
+                           $"Se te ha asignado una nueva capacitación en el sistema.<br/><br/>" +
+                           $"Detalles de la capacitación:<br/>" +
+                           $"<strong>Título:</strong> {capacitacion.titulo}<br/>" +
+                           $"<strong>Descripción:</strong> {capacitacion.descripcion}<br/>" +
+                           $"<strong>Duración:</strong> {capacitacion.duracion}<br/>" +
+                           $"<strong>Fecha de Creación:</strong> {capacitacion.fecha_creacion.ToShortDateString()}<br/><br/>" +
+                           $"Por favor, ingresa al sistema para más detalles.<br/><br/>" +
+                           $"Gracias.",
+                        IsBodyHtml = true,
+                    };
+
+                    mailMessage.To.Add("daharoni90459@ufide.ac.cr");
+
+                    try
+                    {
+                        await smtpClient.SendMailAsync(mailMessage);
+                        ViewBag.Message = "Correo de notificación enviado correctamente.";
+                    }
+                    catch (Exception ex)
+                    {
+                        ViewBag.Message = $"Error al enviar el correo: {ex.Message}";
                     }
 
                     return RedirectToAction(nameof(Index));
@@ -122,6 +146,7 @@ namespace scg_clinicasur.Controllers
 
             return View(capacitacion);
         }
+
 
         [HttpGet]
         public async Task<IActionResult> Editar(int id)
@@ -151,7 +176,7 @@ namespace scg_clinicasur.Controllers
                 new { Value = "Pendiente", Text = "Pendiente" },
                 new { Value = "Completada", Text = "Completada" }
             }, "Value", "Text", capacitacion.estado);
-
+                        
             return View(capacitacion);
         }
 
@@ -175,6 +200,37 @@ namespace scg_clinicasur.Controllers
                     _context.Entry(capacitacion).Property(c => c.estado).IsModified = true;
 
                     await _context.SaveChangesAsync();
+
+                    var smtpClient = new SmtpClient("smtp.outlook.com")
+                    {
+                        Port = 587,
+                        Credentials = new NetworkCredential("daharoni90459@ufide.ac.cr", "###"), // Cambiar ###
+                        EnableSsl = true,
+                    };
+
+                    var mailMessage = new MailMessage
+                    {
+                        From = new MailAddress("daharoni90459@ufide.ac.cr"),
+                        Subject = $"Capacitación Editada: {capacitacion.titulo}",
+                        Body = $"Estimado usuario,<br/><br/>" +
+                           $"Se han realizado modificaciones en la capacitacion: {capacitacion.titulo}<br/><br/>" +
+                           $"Por favor, ingresa al sistema para revisar los detalles.<br/><br/>" +
+                           $"Gracias.",
+                        IsBodyHtml = true,
+                    };
+
+                    mailMessage.To.Add("daharoni90459@ufide.ac.cr");
+
+                    try
+                    {
+                        await smtpClient.SendMailAsync(mailMessage);
+                        ViewBag.Message = "Correo de notificación enviado correctamente.";
+                    }
+                    catch (Exception ex)
+                    {
+                        ViewBag.Message = $"Error al enviar el correo: {ex.Message}";
+                    }
+
                     return RedirectToAction("Index", "Capacitaciones");
                 }
                 catch (DbUpdateException ex)
@@ -242,12 +298,33 @@ namespace scg_clinicasur.Controllers
             _context.Capacitaciones.Remove(capacitacion);
             await _context.SaveChangesAsync();
 
-            // Enviar correo
-            if (usuario != null)
+            var smtpClient = new SmtpClient("smtp.outlook.com")
             {
-                string asunto = "Capacitación cancelada";
-                string cuerpo = $"Hola {usuario.nombre},<br><br>La capacitación <strong>{capacitacion.titulo}</strong> ha sido cancelada.";
-                await _emailService.EnviarCorreoAsync(usuario.correo, asunto, cuerpo);
+                Port = 587,
+                Credentials = new NetworkCredential("daharoni90459@ufide.ac.cr", "###"), // Cambiar ###
+                EnableSsl = true,
+            };
+
+            var mailMessage = new MailMessage
+            {
+                From = new MailAddress("daharoni90459@ufide.ac.cr"),
+                Subject = $"Capacitación Eliminada: {capacitacion.titulo}",
+                Body = $"Estimado usuario,<br/><br/>" +
+                   $"Se ha eliminado la capacitacion: {capacitacion.titulo}<br/><br/>" +
+                   $"Gracias por su atención.",
+                IsBodyHtml = true,
+            };
+
+            mailMessage.To.Add("daharoni90459@ufide.ac.cr");
+
+            try
+            {
+                await smtpClient.SendMailAsync(mailMessage);
+                ViewBag.Message = "Correo de notificación enviado correctamente.";
+            }
+            catch (Exception ex)
+            {
+                ViewBag.Message = $"Error al enviar el correo: {ex.Message}";
             }
 
             return RedirectToAction(nameof(Index));
@@ -258,13 +335,11 @@ namespace scg_clinicasur.Controllers
                                               .Include(c => c.Usuario)
                                               .FirstOrDefaultAsync(c => c.id_capacitacion == id);
 
-            // Verificar si la capacitación existe
             if (capacitacion == null)
             {
                 return NotFound();
             }
 
-            // Obtener los recursos asociados a esa capacitación
             var recursos = await _context.RecursosAprendizaje
                                          .Where(r => r.id_capacitacion == id)
                                          .ToListAsync();
@@ -274,17 +349,14 @@ namespace scg_clinicasur.Controllers
         }
         public IActionResult CrearRecurso()
         {
-            // Obtén las capacitaciones disponibles
             var capacitaciones = _context.Capacitaciones.ToList();
 
-            // Crea un SelectList con las capacitaciones (solo nombre y id)
             var capacitacionesList = capacitaciones.Select(c => new
             {
                 id_capacitacion = c.id_capacitacion,
-                DisplayText = c.titulo // Asumiendo que el nombre es un campo en la tabla
+                DisplayText = c.titulo
             }).ToList();
 
-            // Pasa el SelectList a la vista
             ViewBag.Capacitaciones = new SelectList(capacitacionesList, "id_capacitacion", "DisplayText");
 
             return View();
@@ -298,14 +370,12 @@ namespace scg_clinicasur.Controllers
             {
                 try
                 {
-                    // Validación: se debe seleccionar una capacitación
                     if (recurso.id_capacitacion == 0)
                     {
                         ModelState.AddModelError("id_capacitacion", "Debe seleccionar una capacitación.");
                         return View(recurso);
                     }
 
-                    // Validación: archivo o enlace
                     if (archivo == null && string.IsNullOrEmpty(enlace))
                     {
                         ModelState.AddModelError("", "Debe proporcionar un archivo o un enlace.");
@@ -314,7 +384,6 @@ namespace scg_clinicasur.Controllers
 
                     recurso.fecha_creacion = DateTime.Now;
 
-                    // Procesar archivo
                     if (archivo != null)
                     {
                         var carpetaDestino = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "archivos");
@@ -349,7 +418,6 @@ namespace scg_clinicasur.Controllers
                 }
             }
 
-            // Recargamos la lista de capacitaciones si ocurre un error
             var capacitaciones = _context.Capacitaciones
                 .Select(c => new { c.id_capacitacion, c.titulo })
                 .ToList();

@@ -1,10 +1,8 @@
 using Microsoft.EntityFrameworkCore;
 using scg_clinicasur.Models;
 using scg_clinicasur.Data;
-using scg_clinicasur.Services;
 
 var builder = WebApplication.CreateBuilder(args);
-builder.Services.AddTransient<EmailService>();
 
 
 // Configuración de la cadena de conexión con el nombre "DefaultConnection"
