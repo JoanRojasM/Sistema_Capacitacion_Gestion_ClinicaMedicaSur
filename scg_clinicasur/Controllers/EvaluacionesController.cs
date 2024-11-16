@@ -3,6 +3,8 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using scg_clinicasur.Data;
 using scg_clinicasur.Models;
+using System.Net.Mail;
+using System.Net;
 
 namespace scg_clinicasur.Controllers
 {
@@ -66,6 +68,42 @@ namespace scg_clinicasur.Controllers
 
                 _context.Add(evaluacion);
                 await _context.SaveChangesAsync();
+
+                var smtpClient = new SmtpClient("smtp.outlook.com")
+                {
+                    Port = 587,
+                    Credentials = new NetworkCredential("daharoni90459@ufide.ac.cr", "###"), // Cambiar ###
+                    EnableSsl = true,
+                };
+
+                var mailMessage = new MailMessage
+                {
+                    From = new MailAddress("daharoni90459@ufide.ac.cr"),
+                    Subject = $"Nueva Evaluación Disponible: {evaluacion.nombre}",
+                    Body = $"Estimado usuario,<br/><br/>" +
+                       $"Se te ha asignado una nueva evaluación en el sistema.<br/><br/>" +
+                       $"Detalles de la capacitación:<br/>" +
+                       $"<strong>Título:</strong> {evaluacion.nombre}<br/>" +
+                       $"<strong>Descripción:</strong> {evaluacion.descripcion}<br/>" +
+                       $"<strong>Duración:</strong> {evaluacion.tiempo_prueba}<br/>" +
+                       $"<strong>Fecha de Creación:</strong> {evaluacion.fecha_creacion.ToShortDateString()}<br/><br/>" +
+                       $"Por favor, ingresa al sistema para más detalles.<br/><br/>" +
+                       $"Gracias.",
+                    IsBodyHtml = true,
+                };
+
+                mailMessage.To.Add("daharoni90459@ufide.ac.cr");
+
+                try
+                {
+                    await smtpClient.SendMailAsync(mailMessage);
+                    ViewBag.Message = "Correo de notificación enviado correctamente.";
+                }
+                catch (Exception ex)
+                {
+                    ViewBag.Message = $"Error al enviar el correo: {ex.Message}";
+                }
+
                 return RedirectToAction(nameof(Index));
             }
 
@@ -87,7 +125,6 @@ namespace scg_clinicasur.Controllers
                 return NotFound();
             }
 
-            // Cargar la lista de capacitaciones y usuarios para el dropdown
             ViewData["Usuarios"] = new SelectList(_context.Usuarios, "id_usuario", "Nombre", evaluacion.id_usuario);
             ViewData["Capacitaciones"] = new SelectList(_context.Capacitaciones, "id_capacitacion", "Nombre", evaluacion.id_capacitacion);
 
@@ -133,6 +170,37 @@ namespace scg_clinicasur.Controllers
                         throw;
                     }
                 }
+
+                var smtpClient = new SmtpClient("smtp.outlook.com")
+                {
+                    Port = 587,
+                    Credentials = new NetworkCredential("daharoni90459@ufide.ac.cr", "###"), // Cambiar ###
+                    EnableSsl = true,
+                };
+
+                var mailMessage = new MailMessage
+                {
+                    From = new MailAddress("daharoni90459@ufide.ac.cr"),
+                    Subject = $"Evaluación Editada: {evaluacion.nombre}",
+                    Body = $"Estimado usuario,<br/><br/>" +
+                       $"Se han realizado modificaciones en la evaluación: {evaluacion.nombre}<br/><br/>" +
+                       $"Por favor, ingresa al sistema para revisar los detalles.<br/><br/>" +
+                       $"Gracias.",
+                    IsBodyHtml = true,
+                };
+
+                mailMessage.To.Add("daharoni90459@ufide.ac.cr");
+
+                try
+                {
+                    await smtpClient.SendMailAsync(mailMessage);
+                    ViewBag.Message = "Correo de notificación enviado correctamente.";
+                }
+                catch (Exception ex)
+                {
+                    ViewBag.Message = $"Error al enviar el correo: {ex.Message}";
+                }
+
                 return RedirectToAction(nameof(Index));
             }
 
@@ -187,6 +255,36 @@ namespace scg_clinicasur.Controllers
                 _context.Evaluaciones.Remove(evaluacion);
                 await _context.SaveChangesAsync();
             }
+
+            var smtpClient = new SmtpClient("smtp.outlook.com")
+            {
+                Port = 587,
+                Credentials = new NetworkCredential("daharoni90459@ufide.ac.cr", "###"), // Cambiar ###
+                EnableSsl = true,
+            };
+
+            var mailMessage = new MailMessage
+            {
+                From = new MailAddress("daharoni90459@ufide.ac.cr"),
+                Subject = $"Evaluación Eliminada: {evaluacion.nombre}",
+                Body = $"Estimado usuario,<br/><br/>" +
+                   $"Se ha eliminado la evaluación: {evaluacion.nombre}<br/><br/>" +
+                   $"Gracias por su atención.",
+                IsBodyHtml = true,
+            };
+
+            mailMessage.To.Add("daharoni90459@ufide.ac.cr");
+
+            try
+            {
+                await smtpClient.SendMailAsync(mailMessage);
+                ViewBag.Message = "Correo de notificación enviado correctamente.";
+            }
+            catch (Exception ex)
+            {
+                ViewBag.Message = $"Error al enviar el correo: {ex.Message}";
+            }
+
             return RedirectToAction(nameof(Index));
         }
 

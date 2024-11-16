@@ -98,7 +98,7 @@ namespace scg_clinicasur.Controllers
                     var mailMessage = new MailMessage
                     {
                         From = new MailAddress("daharoni90459@ufide.ac.cr"),
-                        Subject = $"Nueva Capacitación Creada: {capacitacion.titulo}",
+                        Subject = $"Nueva Capacitación Disponible: {capacitacion.titulo}",
                         Body = $"Estimado usuario,<br/><br/>" +
                            $"Se te ha asignado una nueva capacitación en el sistema.<br/><br/>" +
                            $"Detalles de la capacitación:<br/>" +
