@@ -1,0 +1,97 @@
+﻿@model scg_clinicasur.Models.GestionarAlergiasViewModel
+
+@{
+    ViewData["Title"] = "Gestionar Alergias de " + Model.Paciente.nombre + " " + Model.Paciente.apellido;
+}
+
+<h1>@ViewData["Title"]</h1>
+
+<div class="alert alert-info">
+    <h4>Alergias Actuales del Paciente</h4>
+    @if (Model.AlergiasPaciente != null && Model.AlergiasPaciente.Any())
+    {
+        <ul>
+            @foreach (var idAlergia in Model.AlergiasPaciente)
+            {
+                var alergia = Model.TodasAlergias.FirstOrDefault(a => a.id_alergia == idAlergia);
+                if (alergia != null)
+                {
+                    <li>@alergia.nombre_alergia</li>
+                }
+            }
+        </ul>
+    }
+    else
+    {
+        <p>No se han registrado alergias para este paciente.</p>
+    }
+</div>
+
+<button class="btn btn-secondary" type="button" onclick="toggleHistorial()">Ver Historial de Alergias</button>
+
+<div id="historialAlergias" style="display: none; margin-top: 20px;">
+    <h3>Historial de Alergias</h3>
+    <table class="table table-bordered table-striped">
+        <thead>
+            <tr>
+                <th>Alergia</th>
+                <th>Fecha de Registro</th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model.HistorialAlergias != null && Model.HistorialAlergias.Any())
+            {
+                @foreach (var entry in Model.HistorialAlergias)
+                {
+                    <tr>
+                        <td>@entry.nombre_alergia</td>
+                        <td>@entry.fechaRegistro.ToString("dd/MM/yyyy HH:mm:ss")</td>
+                    </tr>
+                }
+            }
+            else
+            {
+                <tr>
+                    <td colspan="2">No hay historial de alergias para este paciente.</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+<form asp-action="GuardarAlergias" method="post" style="margin-top: 20px;">
+    <input type="hidden" name="id_paciente" value="@Model.Paciente.id_usuario" />
+
+    <button type="button" class="btn btn-primary" onclick="toggleAlergiasForm()">Gestionar Alergias</button>
+
+    <div id="alergiasForm" style="display: none; margin-top: 20px;">
+        <h3>Seleccionar Alergias</h3>
+        <ul>
+            @foreach (var alergia in Model.TodasAlergias)
+            {
+                <li>
+                    <input type="checkbox" name="alergiasSeleccionadas" value="@alergia.id_alergia"
+                    @(Model.AlergiasPaciente != null && Model.AlergiasPaciente.Contains(alergia.id_alergia) ? "checked" : "") />
+                    @alergia.nombre_alergia
+                </li>
+            }
+        </ul>
+        <button type="submit" class="btn btn-primary">Guardar Alergias</button>
+    </div>
+</form>
+
+<a href="@Url.Action("ListadoPacientes", "Paciente")" class="btn btn-secondary mt-3">Volver a Pacientes</a>
+
+@section Scripts {
+    <script>
+        function toggleHistorial() {
+            var historialDiv = document.getElementById("historialAlergias");
+            historialDiv.style.display = historialDiv.style.display === "none" ? "block" : "none";
+        }
+
+        function toggleAlergiasForm() {
+            var alergiasForm = document.getElementById("alergiasForm");
+            alergiasForm.style.display = alergiasForm.style.display === "none" ? "block" : "none";
+        }
+    </script>
+}

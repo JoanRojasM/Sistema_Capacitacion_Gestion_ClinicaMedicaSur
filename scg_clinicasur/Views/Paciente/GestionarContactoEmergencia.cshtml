@@ -1,0 +1,114 @@
+﻿@model scg_clinicasur.Models.GestionarContactoEmergenciaViewModel
+
+<h1>Gestionar Contacto de Emergencia</h1>
+
+@if (Model.ContactoEmergenciaActual != null)
+{
+    <div class="alert alert-info">
+        <h4>Contacto de Emergencia Actual</h4>
+        <p><strong>Nombre:</strong> @Model.ContactoEmergenciaActual.NombreContacto</p>
+        <p><strong>Relación:</strong> @Model.ContactoEmergenciaActual.Relacion</p>
+        <p><strong>Teléfono:</strong> @Model.ContactoEmergenciaActual.TelefonoContacto</p>
+        <p><strong>Fecha de Registro:</strong> @Model.ContactoEmergenciaActual.FechaRegistro.ToString("dd/MM/yyyy HH:mm:ss")</p>
+
+        <button class="btn btn-warning mt-3" onclick="toggleEditForm()">Editar Contacto de Emergencia</button>
+    </div>
+}
+else
+{
+    <p>No se ha registrado un contacto de emergencia para este paciente.</p>
+}
+
+<h3>Historial de Contacto de Emergencia</h3>
+@if (Model.HistorialContactoEmergencia != null && Model.HistorialContactoEmergencia.Any())
+{
+    <table class="table table-bordered table-striped">
+        <thead>
+            <tr>
+                <th>Nombre</th>
+                <th>Relación</th>
+                <th>Teléfono</th>
+                <th>Fecha de Registro</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var contacto in Model.HistorialContactoEmergencia)
+            {
+                <tr>
+                    <td>@contacto.NombreContacto</td>
+                    <td>@contacto.Relacion</td>
+                    <td>@contacto.TelefonoContacto</td>
+                    <td>@contacto.FechaRegistro.ToString("dd/MM/yyyy HH:mm:ss")</td>
+                    <td>
+                        <form asp-action="EliminarContactoEmergencia" method="post" class="d-inline">
+                            <input type="hidden" name="id_contacto" value="@contacto.Id" />
+                            <input type="hidden" name="id_paciente" value="@Model.Paciente.id_usuario" />
+                            <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('¿Está seguro de que desea eliminar este contacto de emergencia?')">Eliminar</button>
+                        </form>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    <p>No hay historial de contactos de emergencia.</p>
+}
+
+<!-- Sección para agregar un nuevo contacto de emergencia -->
+<h3>Agregar Contacto de Emergencia</h3>
+<form asp-action="GuardarContactoEmergencia" method="post" id="addContactForm">
+    <input type="hidden" name="id_paciente" value="@Model.Paciente.id_usuario" />
+    <div class="form-group">
+        <label>Nombre del Contacto</label>
+        <input type="text" name="nombreContacto" class="form-control" required />
+    </div>
+    <div class="form-group">
+        <label>Relación</label>
+        <input type="text" name="relacion" class="form-control" required />
+    </div>
+    <div class="form-group">
+        <label>Teléfono</label>
+        <input type="text" name="telefono" class="form-control" required />
+    </div>
+    <button type="submit" class="btn btn-primary">Guardar Contacto de Emergencia</button>
+</form>
+
+<!-- Sección para editar el contacto de emergencia actual, oculta por defecto -->
+<div id="editContactForm" style="display: none; margin-top: 20px;">
+    <h3>Editar Contacto de Emergencia</h3>
+    <form asp-action="GuardarContactoEmergencia" method="post">
+        <input type="hidden" name="id_paciente" value="@Model.Paciente.id_usuario" />
+        <input type="hidden" name="id_contacto" value="@Model.ContactoEmergenciaActual?.Id" />
+        <div class="form-group">
+            <label>Nombre del Contacto</label>
+            <input type="text" name="nombreContacto" class="form-control" required
+                   value="@Model.ContactoEmergenciaActual?.NombreContacto" />
+        </div>
+        <div class="form-group">
+            <label>Relación</label>
+            <input type="text" name="relacion" class="form-control" required
+                   value="@Model.ContactoEmergenciaActual?.Relacion" />
+        </div>
+        <div class="form-group">
+            <label>Teléfono</label>
+            <input type="text" name="telefono" class="form-control" required
+                   value="@Model.ContactoEmergenciaActual?.TelefonoContacto" />
+        </div>
+        <button type="submit" class="btn btn-primary">Guardar Cambios</button>
+    </form>
+</div>
+
+<a href="@Url.Action("ListadoPacientes", "Paciente")" class="btn btn-secondary mt-3">Volver a Pacientes</a>
+
+@section Scripts {
+    <script>
+        function toggleEditForm() {
+            var editForm = document.getElementById("editContactForm");
+            editForm.style.display = editForm.style.display === "none" ? "block" : "none";
+            editForm.scrollIntoView({ behavior: "smooth" });
+        }
+    </script>
+}

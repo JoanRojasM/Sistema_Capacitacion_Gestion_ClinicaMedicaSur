@@ -28,12 +28,12 @@
 <a href="@Url.Action("Index", "Expedientes")" class="btn btn-secondary">Volver al Listado</a>
 
 <h4>Resultados de Laboratorio</h4>
-<a href="@Url.Action("VerResultadosRecientes", "Expedientes", new { idExpediente = Model.idExpediente })" class="btn btn-primary">
-    Ver Resultados Recientes
+<!-- Nuevo botón para crear un resultado de laboratorio -->
+<a href="@Url.Action("CrearResultadosLaboratorio", "Expedientes", new { idExpediente = Model.idExpediente })" class="btn btn-success">
+    Crear Resultado de Laboratorio
 </a>
 
-<!-- Aquí también puedes agregar otros botones, como ver el historial completo -->
-<a href="@Url.Action("VerHistorialResultados", "Expedientes", new { idExpediente = Model.idExpediente })" class="btn btn-secondary">
+<a href="@Url.Action("VerHistorialResultados", "Expedientes", new { idExpediente = Model.idExpediente })" class="btn btn-primary">
     Ver Historial de Resultados
 </a>
 

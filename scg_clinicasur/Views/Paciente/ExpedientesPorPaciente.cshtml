@@ -1,0 +1,54 @@
+﻿@model IEnumerable<scg_clinicasur.Models.Expediente>
+
+@{
+    ViewData["Title"] = "Expedientes del Paciente";
+}
+
+@if (TempData["ErrorMessage"] != null)
+{
+    <div class="alert alert-danger">
+        @TempData["ErrorMessage"]
+    </div>
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>@ViewData["Title"]</title>
+</head>
+<body>
+    <header>
+        <h1>Expedientes de @ViewBag.NombrePaciente</h1>
+    </header>
+
+    <main>
+        <table class="table table-bordered table-striped">
+            <thead>
+                <tr>
+                    <th>ID Expediente</th>
+                    <th>Fecha de Creación</th>
+                    <th>Última Consulta</th>
+                    <th>Diagnóstico</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var expediente in Model)
+                {
+                    <tr>
+                        <td>@expediente.idExpediente</td>
+                        <td>@expediente.fechaCreacion.ToString("dd/MM/yyyy")</td>
+                        <td>@expediente.ultimaConsulta.ToString("dd/MM/yyyy")</td>
+                        <td>@expediente.diagnostico</td>
+                        <td>
+                            <a asp-controller="Expedientes" asp-action="DetallesConsulta" asp-route-id="@expediente.idExpediente" class="btn btn-info btn-sm">Ver Detalles</a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </main>
+
+    <a href="@Url.Action("ListadoPacientes", "Paciente")" class="btn btn-secondary mt-3">Volver a Pacientes</a>
+</body>
+</html>

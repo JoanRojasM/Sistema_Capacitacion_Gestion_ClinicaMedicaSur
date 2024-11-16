@@ -1,0 +1,77 @@
+﻿@model scg_clinicasur.Models.GestionarMedicamentosViewModel
+
+<h1>Gestionar Medicamentos Prescritos</h1>
+
+@if (Model.MedicamentosActivos != null && Model.MedicamentosActivos.Any())
+{
+    <h4>Medicamentos Activos</h4>
+    <table class="table table-bordered table-striped">
+        <thead>
+            <tr>
+                <th>Medicamento</th>
+                <th>Dosis</th>
+                <th>Fecha de Prescripción</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var medicamento in Model.MedicamentosActivos)
+            {
+                <tr>
+                    <td>@medicamento.NombreMedicamento</td>
+                    <td>@medicamento.Dosis</td>
+                    <td>@medicamento.FechaPrescripcion.ToString("dd/MM/yyyy HH:mm:ss")</td>
+                    <td>
+                        <form asp-action="DescontinuarMedicamento" method="post" class="d-inline">
+                            <input type="hidden" name="id_medicamento" value="@medicamento.IdMedicamento" />
+                            <button type="submit" class="btn btn-danger btn-sm">Descontinuar</button>
+                        </form>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    <p>No hay medicamentos activos para este paciente.</p>
+}
+
+<h4>Historial de Medicamentos</h4>
+<table class="table table-bordered table-striped">
+    <thead>
+        <tr>
+            <th>Medicamento</th>
+            <th>Dosis</th>
+            <th>Fecha de Prescripción</th>
+            <th>Estado</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var medicamento in Model.HistorialMedicamentos)
+        {
+            <tr>
+                <td>@medicamento.NombreMedicamento</td>
+                <td>@medicamento.Dosis</td>
+                <td>@medicamento.FechaPrescripcion.ToString("dd/MM/yyyy HH:mm:ss")</td>
+                <td>@medicamento.Estado</td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<h3>Prescribir Nuevo Medicamento</h3>
+<form asp-action="PrescribirMedicamento" method="post">
+    <input type="hidden" name="id_paciente" value="@Model.Paciente.id_usuario" />
+    <div class="form-group">
+        <label>Nombre del Medicamento</label>
+        <input type="text" name="nombreMedicamento" class="form-control" required />
+    </div>
+    <div class="form-group">
+        <label>Dosis</label>
+        <input type="text" name="dosis" class="form-control" required />
+    </div>
+    <button type="submit" class="btn btn-primary mt-3">Prescribir Medicamento</button>
+</form>
+
+<a href="@Url.Action("ListadoPacientes", "Paciente")" class="btn btn-secondary mt-3">Volver a Pacientes</a>

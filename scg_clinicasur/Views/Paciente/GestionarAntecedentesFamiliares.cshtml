@@ -1,0 +1,62 @@
+﻿@model scg_clinicasur.Models.GestionarAntecedentesFamiliaresViewModel
+
+<h1>Gestionar Antecedentes Familiares</h1>
+
+@if (Model.UltimoAntecedente != null)
+{
+    <div class="alert alert-info">
+        <h4>Último Antecedente Familiar</h4>
+        <p>@Model.UltimoAntecedente.Descripcion</p>
+        <p><strong>Fecha de Registro:</strong> @Model.UltimoAntecedente.FechaRegistro.ToString("dd/MM/yyyy HH:mm:ss")</p>
+    </div>
+}
+else
+{
+    <p>No se han registrado antecedentes familiares para este paciente.</p>
+}
+
+<h3>Historial de Antecedentes Familiares</h3>
+@if (Model.AntecedentesFamiliares != null && Model.AntecedentesFamiliares.Any())
+{
+    <table class="table table-bordered table-striped">
+        <thead>
+            <tr>
+                <th>Descripción</th>
+                <th>Fecha de Registro</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var antecedente in Model.AntecedentesFamiliares)
+            {
+                <tr>
+                    <td>@antecedente.Descripcion</td>
+                    <td>@antecedente.FechaRegistro.ToString("dd/MM/yyyy HH:mm:ss")</td>
+                    <td>
+                        <form asp-action="EliminarAntecedenteFamiliar" method="post" class="d-inline">
+                            <input type="hidden" name="id_antecedente" value="@antecedente.IdAntecedente" />
+                            <input type="hidden" name="id_paciente" value="@Model.Paciente.id_usuario" />
+                            <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('¿Está seguro de que desea eliminar este antecedente?')">Eliminar</button>
+                        </form>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    <p>No hay historial de antecedentes familiares.</p>
+}
+
+<h3>Registrar Nuevo Antecedente Familiar</h3>
+<form asp-action="GuardarAntecedenteFamiliar" method="post">
+    <input type="hidden" name="id_paciente" value="@Model.Paciente.id_usuario" />
+    <div class="form-group">
+        <label>Descripción del Antecedente Familiar</label>
+        <textarea name="descripcion" class="form-control" rows="3" required></textarea>
+    </div>
+    <button type="submit" class="btn btn-primary mt-3">Guardar Antecedente Familiar</button>
+</form>
+
+<a href="@Url.Action("ListadoPacientes", "Paciente")" class="btn btn-secondary mt-3">Volver a Pacientes</a>

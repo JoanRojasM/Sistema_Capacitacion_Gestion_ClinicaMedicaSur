@@ -25,9 +25,8 @@
 <table class="table">
     <thead>
         <tr>
-            <th>ID</th>
+            <th>ID Expediente</th>
             <th>Nombre del Paciente</th>
-            <th>ID del Paciente</th>
             <th>Fecha de Nacimiento</th>
             <th>Última Consulta</th>
             <th>Acciones</th>
@@ -41,7 +40,6 @@
                 <tr>
                     <td>@expediente.idExpediente</td>
                     <td>@expediente.nombrePaciente</td> <!-- Aquí usamos NombrePaciente en lugar de nombrePaciente -->
-                    <td>@expediente.idPaciente</td>
                     <td>@expediente.fechaNacimiento.ToString("yyyy-MM-dd")</td>
                     <td>@expediente.ultimaConsulta.ToString("yyyy-MM-dd")</td>
                     <td>

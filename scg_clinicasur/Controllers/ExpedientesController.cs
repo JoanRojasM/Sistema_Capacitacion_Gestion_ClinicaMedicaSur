@@ -37,6 +37,12 @@ namespace scg_clinicasur.Controllers
         [HttpGet]
         public IActionResult CrearExpediente()
         {
+            // Consulta para obtener solo los usuarios con el rol de 'paciente'
+            ViewBag.Pacientes = _context.Usuarios
+                .Where(u => u.id_rol == _context.Roles.FirstOrDefault(r => r.nombre_rol == "paciente").id_rol)
+                .Select(u => new { u.id_usuario, NombreCompleto = u.nombre + " " + u.apellido })
+                .ToList();
+
             return View();
         }
 
@@ -175,6 +181,136 @@ namespace scg_clinicasur.Controllers
                 .ToList();
 
             return View(historialResultados);
+        }
+
+        // GET: CrearResultadosLaboratorio
+        [HttpGet]
+        public IActionResult CrearResultadosLaboratorio(int idExpediente)
+        {
+            // Pasa el id del expediente al ViewBag para usarlo en la vista
+            ViewBag.IdExpediente = idExpediente;
+            return View();
+        }
+
+        // POST: CrearResultadosLaboratorio
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> CrearResultadosLaboratorio(int idExpediente, IFormFile archivoPDF)
+        {
+            if (archivoPDF == null || archivoPDF.Length == 0)
+            {
+                ModelState.AddModelError("archivoPDF", "Debe cargar un archivo PDF.");
+                return View();
+            }
+
+            // Convierte el archivo PDF a un arreglo de bytes
+            byte[] archivoData;
+            using (var memoryStream = new MemoryStream())
+            {
+                await archivoPDF.CopyToAsync(memoryStream);
+                archivoData = memoryStream.ToArray();
+            }
+
+            // Obtener el id del paciente a partir del expediente
+            var expediente = _context.Expedientes.FirstOrDefault(e => e.idExpediente == idExpediente);
+            if (expediente == null)
+            {
+                return NotFound("No se encontró el expediente especificado.");
+            }
+
+            // Crear un nuevo resultado de laboratorio
+            var resultadoLaboratorio = new ResultadosLaboratorio
+            {
+                IdExpediente = idExpediente,
+                IdPaciente = expediente.idPaciente,  // Asigna el id del paciente del expediente
+                FechaPrueba = DateTime.Now,
+                ArchivoPDF = archivoData
+            };
+
+            // Añadir el resultado al contexto de la base de datos
+            _context.ResultadosLaboratorio.Add(resultadoLaboratorio);
+            await _context.SaveChangesAsync();
+
+            // Redirigir a la vista de historial de resultados
+            return RedirectToAction("VerHistorialResultados", new { idExpediente });
+        }
+
+        // GET: DescargarPDF
+        [HttpGet]
+        public IActionResult DescargarPDF(int id)
+        {
+            // Buscar el resultado de laboratorio por su IdResultado
+            var resultado = _context.ResultadosLaboratorio.FirstOrDefault(r => r.IdResultado == id);
+
+            if (resultado == null || resultado.ArchivoPDF == null)
+            {
+                return NotFound("El archivo PDF no se encontró.");
+            }
+
+            // Retornar el archivo PDF como un archivo descargable
+            return File(resultado.ArchivoPDF, "application/pdf", $"Resultado_{id}.pdf");
+        }
+
+        // GET: EditarResultado
+        [HttpGet]
+        public IActionResult EditarResultado(int id)
+        {
+            var resultado = _context.ResultadosLaboratorio.FirstOrDefault(r => r.IdResultado == id);
+            if (resultado == null)
+            {
+                return NotFound("Resultado de laboratorio no encontrado.");
+            }
+
+            ViewBag.IdExpediente = resultado.IdExpediente;
+            return View(resultado);
+        }
+
+        // POST: EditarResultado
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> EditarResultado(int id, IFormFile archivoPDF)
+        {
+            var resultado = _context.ResultadosLaboratorio.FirstOrDefault(r => r.IdResultado == id);
+            if (resultado == null)
+            {
+                return NotFound("Resultado de laboratorio no encontrado.");
+            }
+
+            if (archivoPDF != null && archivoPDF.Length > 0)
+            {
+                using (var memoryStream = new MemoryStream())
+                {
+                    await archivoPDF.CopyToAsync(memoryStream);
+                    resultado.ArchivoPDF = memoryStream.ToArray();
+                }
+
+                resultado.FechaPrueba = DateTime.Now; // Actualiza la fecha de la prueba si es necesario
+
+                _context.Update(resultado);
+                await _context.SaveChangesAsync();
+
+                return RedirectToAction("VerHistorialResultados", "Expedientes", new { idExpediente = resultado.IdExpediente });
+            }
+
+            ModelState.AddModelError("archivoPDF", "Debe cargar un archivo PDF.");
+            return View(resultado);
+        }
+
+        // POST: EliminarResultado
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> EliminarResultado(int id)
+        {
+            var resultado = await _context.ResultadosLaboratorio.FindAsync(id);
+            if (resultado == null)
+            {
+                return NotFound("Resultado de laboratorio no encontrado.");
+            }
+
+            _context.ResultadosLaboratorio.Remove(resultado);
+            await _context.SaveChangesAsync();
+
+            return RedirectToAction("VerHistorialResultados", new { idExpediente = resultado.IdExpediente });
         }
     }
 }

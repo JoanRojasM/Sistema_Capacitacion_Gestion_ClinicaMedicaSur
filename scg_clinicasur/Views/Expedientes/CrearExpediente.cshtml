@@ -5,13 +5,17 @@
 <form asp-action="CrearExpediente" method="post">
     <div class="form-group">
         <label for="nombrePaciente">Nombre del Paciente</label>
-        <input type="text" class="form-control" id="nombrePaciente" name="nombrePaciente" required />
+        <select class="form-control" id="nombrePaciente" name="nombrePaciente" onchange="setPacienteId()">
+            <option value="">Seleccione un paciente</option>
+            @foreach (var paciente in ViewBag.Pacientes)
+            {
+                <option value="@paciente.NombreCompleto" data-id="@paciente.id_usuario">@paciente.NombreCompleto</option>
+            }
+        </select>
     </div>
 
-    <div class="form-group">
-        <label for="idPaciente">ID del Paciente</label>
-        <input type="number" class="form-control" id="idPaciente" name="idPaciente" required />
-    </div>
+    <!-- Campo oculto para el ID del Paciente -->
+    <input type="hidden" id="idPaciente" name="idPaciente" />
 
     <div class="form-group">
         <label for="fechaNacimiento">Fecha de Nacimiento</label>
@@ -41,3 +45,12 @@
     <button type="submit" class="btn btn-primary">Guardar</button>
     <a href="@Url.Action("Index", "Expedientes")" class="btn btn-secondary">Cancelar</a>
 </form>
+
+<script>
+    function setPacienteId() {
+        var select = document.getElementById("nombrePaciente");
+        var selectedOption = select.options[select.selectedIndex];
+        var pacienteId = selectedOption.getAttribute("data-id");
+        document.getElementById("idPaciente").value = pacienteId;
+    }
+</script>

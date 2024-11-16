@@ -18,6 +18,12 @@ namespace scg_clinicasur.Data
         public DbSet<scg_clinicasur.Models.Capacitacion> Capacitaciones { get; set; }
         public DbSet<scg_clinicasur.Models.EstadoCita> EstadoCitas { get; set; }
         public DbSet<scg_clinicasur.Models.Cita> Citas { get; set; }
-        public DbSet<scg_clinicasur.Models.DisponibilidadDoctor> DisponibilidadDoctor { get; set; } 
+        public DbSet<scg_clinicasur.Models.DisponibilidadDoctor> DisponibilidadDoctor { get; set; }
+        public DbSet<scg_clinicasur.Models.Alergia> Alergias { get; set; }
+        public DbSet<scg_clinicasur.Models.PacienteAlergia> PacienteAlergias { get; set; }
+        public DbSet<scg_clinicasur.Models.ContactoEmergencia> ContactosEmergencia { get; set; }
+        public DbSet<scg_clinicasur.Models.AntecedenteFamiliar> AntecedentesFamiliares { get; set; }
+        public DbSet<scg_clinicasur.Models.HabitoVida> HabitosVida { get; set; }
+        public DbSet<scg_clinicasur.Models.MedicamentoPrescrito> MedicamentosPrescritos { get; set; }
     }
 }

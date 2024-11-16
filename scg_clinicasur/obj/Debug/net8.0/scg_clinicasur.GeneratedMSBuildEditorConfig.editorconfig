@@ -166,12 +166,20 @@ build_metadata.AdditionalFiles.CssScope =
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcRXhwZWRpZW50ZXNcQ3JlYXJFeHBlZGllbnRlLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
+[C:/Users/joand/OneDrive/Documentos/GitHub/Sistema_Capacitacion_Gestion_ClinicaMedicaSur/scg_clinicasur/Views/Expedientes/CrearResultadosLaboratorio.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcRXhwZWRpZW50ZXNcQ3JlYXJSZXN1bHRhZG9zTGFib3JhdG9yaW8uY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
 [C:/Users/joand/OneDrive/Documentos/GitHub/Sistema_Capacitacion_Gestion_ClinicaMedicaSur/scg_clinicasur/Views/Expedientes/DetallesConsulta.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcRXhwZWRpZW50ZXNcRGV0YWxsZXNDb25zdWx0YS5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
 [C:/Users/joand/OneDrive/Documentos/GitHub/Sistema_Capacitacion_Gestion_ClinicaMedicaSur/scg_clinicasur/Views/Expedientes/EditarExpediente.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcRXhwZWRpZW50ZXNcRWRpdGFyRXhwZWRpZW50ZS5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/joand/OneDrive/Documentos/GitHub/Sistema_Capacitacion_Gestion_ClinicaMedicaSur/scg_clinicasur/Views/Expedientes/EditarResultado.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcRXhwZWRpZW50ZXNcRWRpdGFyUmVzdWx0YWRvLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
 [C:/Users/joand/OneDrive/Documentos/GitHub/Sistema_Capacitacion_Gestion_ClinicaMedicaSur/scg_clinicasur/Views/Expedientes/Historial.cshtml]
@@ -210,8 +218,36 @@ build_metadata.AdditionalFiles.CssScope =
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcTm90aWZpY2FjaW9uZXNcSW5kZXguY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
+[C:/Users/joand/OneDrive/Documentos/GitHub/Sistema_Capacitacion_Gestion_ClinicaMedicaSur/scg_clinicasur/Views/Paciente/ExpedientesPorPaciente.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUGFjaWVudGVcRXhwZWRpZW50ZXNQb3JQYWNpZW50ZS5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/joand/OneDrive/Documentos/GitHub/Sistema_Capacitacion_Gestion_ClinicaMedicaSur/scg_clinicasur/Views/Paciente/GestionarAlergias.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUGFjaWVudGVcR2VzdGlvbmFyQWxlcmdpYXMuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/joand/OneDrive/Documentos/GitHub/Sistema_Capacitacion_Gestion_ClinicaMedicaSur/scg_clinicasur/Views/Paciente/GestionarAntecedentesFamiliares.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUGFjaWVudGVcR2VzdGlvbmFyQW50ZWNlZGVudGVzRmFtaWxpYXJlcy5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/joand/OneDrive/Documentos/GitHub/Sistema_Capacitacion_Gestion_ClinicaMedicaSur/scg_clinicasur/Views/Paciente/GestionarContactoEmergencia.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUGFjaWVudGVcR2VzdGlvbmFyQ29udGFjdG9FbWVyZ2VuY2lhLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/joand/OneDrive/Documentos/GitHub/Sistema_Capacitacion_Gestion_ClinicaMedicaSur/scg_clinicasur/Views/Paciente/GestionarHabitosVida.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUGFjaWVudGVcR2VzdGlvbmFySGFiaXRvc1ZpZGEuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/joand/OneDrive/Documentos/GitHub/Sistema_Capacitacion_Gestion_ClinicaMedicaSur/scg_clinicasur/Views/Paciente/GestionarMedicamentos.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUGFjaWVudGVcR2VzdGlvbmFyTWVkaWNhbWVudG9zLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
 [C:/Users/joand/OneDrive/Documentos/GitHub/Sistema_Capacitacion_Gestion_ClinicaMedicaSur/scg_clinicasur/Views/Paciente/Index.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUGFjaWVudGVcSW5kZXguY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/joand/OneDrive/Documentos/GitHub/Sistema_Capacitacion_Gestion_ClinicaMedicaSur/scg_clinicasur/Views/Paciente/ListadoPacientes.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUGFjaWVudGVcTGlzdGFkb1BhY2llbnRlcy5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
 [C:/Users/joand/OneDrive/Documentos/GitHub/Sistema_Capacitacion_Gestion_ClinicaMedicaSur/scg_clinicasur/Views/Shared/Error.cshtml]

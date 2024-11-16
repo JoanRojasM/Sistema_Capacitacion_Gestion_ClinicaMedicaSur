@@ -40,6 +40,12 @@ namespace scg_clinicasur.Models
         [StringLength(10)]
         [RegularExpression("(activo|inactivo)", ErrorMessage = "El estado debe ser 'activo' o 'inactivo'.")]
         public string estado { get; set; } = "activo";
+
+        //Relacion de Pacientes y Alergias
+        public ICollection<scg_clinicasur.Models.PacienteAlergia> PacienteAlergias { get; set; }
+        //Relación Contacto de Emergencia
+        public ICollection<ContactoEmergencia> ContactosEmergencia { get; set; }
+
     }
 
     public class Roles

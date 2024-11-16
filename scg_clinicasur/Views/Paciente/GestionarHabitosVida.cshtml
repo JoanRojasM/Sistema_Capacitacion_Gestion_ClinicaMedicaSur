@@ -1,0 +1,62 @@
+﻿@model scg_clinicasur.Models.GestionarHabitosVidaViewModel
+
+<h1>Gestionar Hábitos de Vida</h1>
+
+@if (Model.UltimoHabito != null)
+{
+    <div class="alert alert-info">
+        <h4>Último Hábito de Vida Registrado</h4>
+        <p>@Model.UltimoHabito.Descripcion</p>
+        <p><strong>Fecha de Registro:</strong> @Model.UltimoHabito.FechaRegistro.ToString("dd/MM/yyyy HH:mm:ss")</p>
+    </div>
+}
+else
+{
+    <p>No se han registrado hábitos de vida para este paciente.</p>
+}
+
+<h3>Historial de Hábitos de Vida</h3>
+@if (Model.HabitosVida != null && Model.HabitosVida.Any())
+{
+    <table class="table table-bordered table-striped">
+        <thead>
+            <tr>
+                <th>Descripción</th>
+                <th>Fecha de Registro</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var habito in Model.HabitosVida)
+            {
+                <tr>
+                    <td>@habito.Descripcion</td>
+                    <td>@habito.FechaRegistro.ToString("dd/MM/yyyy HH:mm:ss")</td>
+                    <td>
+                        <form asp-action="EliminarHabitoVida" method="post" class="d-inline">
+                            <input type="hidden" name="id_habito" value="@habito.IdHabito" />
+                            <input type="hidden" name="id_paciente" value="@Model.Paciente.id_usuario" />
+                            <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('¿Está seguro de que desea eliminar este hábito de vida?')">Eliminar</button>
+                        </form>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    <p>No hay historial de hábitos de vida.</p>
+}
+
+<h3>Registrar Nuevo Hábito de Vida</h3>
+<form asp-action="GuardarHabitoVida" method="post">
+    <input type="hidden" name="id_paciente" value="@Model.Paciente.id_usuario" />
+    <div class="form-group">
+        <label>Descripción del Hábito de Vida</label>
+        <textarea name="descripcion" class="form-control" rows="3" required></textarea>
+    </div>
+    <button type="submit" class="btn btn-primary mt-3">Guardar Hábito de Vida</button>
+</form>
+
+<a href="@Url.Action("ListadoPacientes", "Paciente")" class="btn btn-secondary mt-3">Volver a Pacientes</a>

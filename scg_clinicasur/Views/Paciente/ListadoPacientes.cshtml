@@ -1,0 +1,72 @@
+﻿@model IEnumerable<scg_clinicasur.Models.Usuario>
+
+@{
+    ViewData["Title"] = "Listado de Pacientes";
+}
+
+@if (TempData["SuccessMessage"] != null)
+{
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+        @TempData["SuccessMessage"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+}
+
+@if (TempData["ErrorMessage"] != null)
+{
+    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+        @TempData["ErrorMessage"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="stylesheet" href="~/css/site.css">
+    <title>@ViewData["Title"]</title>
+</head>
+<body>
+    <header>
+        <h1>@ViewData["Title"]</h1>
+
+        <!-- Campo de búsqueda -->
+        <form method="get" action="@Url.Action("ListadoPacientes")" class="d-flex">
+            <input type="text" name="searchName" class="form-control me-2" placeholder="Buscar por nombre" value="@ViewData["searchName"]">
+            <button type="submit" class="btn btn-outline-success">Buscar</button>
+            <a href="@Url.Action("ListadoPacientes")" class="btn btn-outline-danger">Resetear</a>
+        </form>
+    </header>
+
+    <main>
+        <table class="table table-bordered table-striped">
+            <thead>
+                <tr>
+                    <th>Nombre</th>
+                    <th>Correo</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var paciente in Model)
+                {
+                    <tr>
+                        <td>@paciente.nombre @paciente.apellido</td>
+                        <td>@paciente.correo</td>
+                        <td>
+                            <a asp-action="ExpedientesPorPaciente" asp-route-id_usuario="@paciente.id_usuario" class="btn btn-primary btn-sm">Ver Expediente</a>
+                            <a asp-action="GestionarAlergias" asp-route-id_paciente="@paciente.id_usuario" class="btn btn-secondary btn-sm">Gestionar Alergias</a>
+                            <a asp-action="GestionarContactoEmergencia" asp-route-id_paciente="@paciente.id_usuario" class="btn btn-warning btn-sm">Contacto de Emergencia</a>
+                            <a asp-action="GestionarAntecedentesFamiliares" asp-route-id_paciente="@paciente.id_usuario" class="btn btn-primary btn-sm">Antecedentes Familiares</a>
+                            <a asp-action="GestionarHabitosVida" asp-route-id_paciente="@paciente.id_usuario" class="btn btn-primary btn-sm">Hábitos de Vida</a>
+                            <a asp-action="GestionarMedicamentos" asp-route-id_paciente="@paciente.id_usuario" class="btn btn-primary btn-sm">Medicamentos</a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </main>
+
+    <a href="@Url.Action("Index", "Usuarios")" class="btn btn-secondary mt-3">Volver a Usuarios</a>
+</body>
+</html>

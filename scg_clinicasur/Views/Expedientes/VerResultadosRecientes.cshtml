@@ -1,40 +1,46 @@
-﻿@model scg_clinicasur.Models.ResultadosLaboratorio
+﻿@model IEnumerable<scg_clinicasur.Models.ResultadosLaboratorio>
 
 <!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Resultados de Laboratorio Recientes</title>
+    <title>Historial de Resultados de Laboratorio</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
 </head>
 <body>
     <div class="container mt-5">
-        <h2>Resultados de Laboratorio Recientes</h2>
+        <h2>Historial de Resultados de Laboratorio</h2>
 
-        @if (Model != null)
+        @if (Model.Any())
         {
             <table class="table table-bordered table-striped">
                 <thead>
                     <tr>
                         <th>Fecha de Prueba</th>
-                        <th>Tipo de Prueba</th>
-                        <th>Resultado</th>
+                        <th>Archivo PDF</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <tr>
-                        <td>@Model.FechaPrueba.ToString("yyyy-MM-dd")</td>
-                        <td>@Model.TipoPrueba</td>
-                        <td>@Model.Resultado</td>
-                    </tr>
+                    @foreach (var resultado in Model)
+                    {
+                        <tr>
+                            <td>@resultado.FechaPrueba.ToString("yyyy-MM-dd")</td>
+                            <td>
+                                <a href="@Url.Action("DescargarPDF", "ResultadosLaboratorio", new { id = resultado.IdResultado })"
+                                   class="btn btn-primary btn-sm" target="_blank">
+                                    Descargar PDF
+                                </a>
+                            </td>
+                        </tr>
+                    }
                 </tbody>
             </table>
         }
         else
         {
             <div class="alert alert-warning">
-                No se encontraron resultados recientes de laboratorio.
+                No se encontraron resultados de laboratorio para este paciente.
             </div>
         }
 
