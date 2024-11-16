@@ -4,29 +4,39 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace scg_clinicasur.Models
 {
-    [Table("evaluacion")] // Especificar el nombre de la tabla
+    [Table("evaluacion")]
     public class Evaluacion
     {
         [Key]
         public int id_evaluacion { get; set; }
 
-        [StringLength(100)] // Coincide con VARCHAR(100) en la tabla
+        [Required(ErrorMessage = "Selecciona una capacitación")]
+        [ForeignKey("Capacitacion")]
+        [Column("id_capacitacion")]
+        public int id_capacitacion { get; set; }
+
+        [Required(ErrorMessage = "El nombre es obligatorio")]
+        [StringLength(100)]
         public string nombre { get; set; }
 
-        [Column(TypeName = "TEXT")] // Definir como tipo TEXT
+        [Required(ErrorMessage = "La descripción es obligatoria")]
+        [Column(TypeName = "TEXT")]
         public string descripcion { get; set; }
 
-        // Permitir null para 'tiempo_prueba' si es necesario
-        public TimeSpan? tiempo_prueba { get; set; }
+        [Required(ErrorMessage = "El tiempo de prueba es obligatorio")]
+        [StringLength(255)]
+        public string tiempo_prueba { get; set; }
 
+        [Required(ErrorMessage = "El archivo es obligatorio")]
         [StringLength(255)]
         public string archivo { get; set; }
 
         [ForeignKey("Usuario")]
-        public int? id_usuario { get; set; } // Permitir null para la clave foránea
+        public int? id_usuario { get; set; }
         public Usuario? Usuario { get; set; }
+        public virtual Capacitacion? Capacitacion { get; set; }
 
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public DateTime fecha_creacion { get; set; } // Fecha de creación automática
+        public DateTime fecha_creacion { get; set; }
     }
 }

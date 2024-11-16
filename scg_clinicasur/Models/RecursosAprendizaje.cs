@@ -11,7 +11,11 @@ namespace scg_clinicasur.Models
         [Column("id_recurso")]
         public int id_recurso { get; set; }
 
-        [Required]
+        [Required(ErrorMessage = "El título es obligatorio")]
+        [StringLength(255)]
+        public string titulo { get; set; }
+
+        [Required(ErrorMessage = "Selecciona una capacitación")]
         [ForeignKey("Capacitacion")]
         [Column("id_capacitacion")]
         public int id_capacitacion { get; set; }

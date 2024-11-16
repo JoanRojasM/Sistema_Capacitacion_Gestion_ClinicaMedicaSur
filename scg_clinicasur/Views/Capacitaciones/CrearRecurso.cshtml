@@ -7,6 +7,11 @@
 
 <form asp-action="CrearRecurso" method="post" enctype="multipart/form-data">
     <div class="form-group">
+        <label asp-for="titulo" class="control-label">Título:</label>
+        <input asp-for="titulo" class="form-control" />
+        <span asp-validation-for="titulo" class="text-danger"></span>
+    </div>
+    <div class="form-group">
         <label asp-for="id_capacitacion" class="control-label">Capacitación:</label>
         <select asp-for="id_capacitacion" class="form-control" asp-items="ViewBag.Capacitaciones">
             <option value="">Seleccione una capacitación</option>

@@ -13,6 +13,7 @@
 <table class="table">
     <thead>
         <tr>
+            <th>Título</th>
             <th>Video</th>
             <th>Archivo</th>
             <th>Fecha de Creación</th>
@@ -22,6 +23,7 @@
         @foreach (var recurso in Model)
         {
             <tr>
+                <td>@recurso.titulo</td>
                 <td>
                     @if (!string.IsNullOrEmpty(recurso.enlace))
                     {

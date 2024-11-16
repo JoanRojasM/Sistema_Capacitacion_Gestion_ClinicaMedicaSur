@@ -14,181 +14,148 @@ namespace scg_clinicasur.Controllers
         {
             _context = context;
         }
-
-        // GET: Evaluacion/Index
-        public IActionResult Index(string searchString)
-        {
-            ViewData["CurrentFilter"] = searchString;
-
-            // Consultar las evaluaciones con el usuario y roles relacionados
-            var query = _context.Evaluaciones
-                                .Include(e => e.Usuario)
-                                .ThenInclude(u => u.roles)
-                                .AsQueryable();
-
-            // Aplicar filtro de búsqueda si se proporciona
-            if (!string.IsNullOrEmpty(searchString))
-            {
-                query = query.Where(e => e.Usuario != null &&
-                                         (e.Usuario.nombre.Contains(searchString) ||
-                                          e.Usuario.apellido.Contains(searchString)));
-            }
-
-            var evaluaciones = query.ToList();
-            return View(evaluaciones);
-        }
-
-        public async Task<IActionResult> Detalles(int id)
-        {
-            var evaluacion = await _context.Evaluaciones
-                                           .Include(e => e.Usuario)
-                                           .ThenInclude(u => u.roles) // Incluir la relación con roles
-                                           .FirstOrDefaultAsync(e => e.id_evaluacion == id);
-
-            if (evaluacion == null)
-            {
-                return NotFound();
-            }
-
-            return View(evaluacion);
-        }
-
-        [HttpGet]
         public IActionResult Crear()
         {
-            // Obtener usuarios con roles 1 y 2
             var usuarios = _context.Usuarios
                                    .Include(u => u.roles)
                                    .Where(u => u.id_rol == 1 || u.id_rol == 2)
                                    .ToList();
 
-            // Crear una lista de usuarios con nombre y rol
             var usuariosConRoles = usuarios.Select(u => new
             {
                 id_usuario = u.id_usuario,
                 DisplayText = u.nombre + " (" + u.roles.nombre_rol + ")"
             }).ToList();
 
-            // Pasar la lista de usuarios a la vista
             ViewBag.Usuarios = new SelectList(usuariosConRoles, "id_usuario", "DisplayText");
+
+            var capacitaciones = _context.Capacitaciones.ToList();
+            ViewBag.Capacitaciones = new SelectList(capacitaciones, "id_capacitacion", "Nombre");
 
             return View();
         }
 
-        // POST: Crear una nueva evaluación
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Crear(Evaluacion evaluacion)
+        public async Task<IActionResult> Crear([Bind("nombre,descripcion,tiempo_prueba,id_usuario, id_capacitacion")] Evaluacion evaluacion, IFormFile archivo)
         {
-            if (evaluacion.id_usuario == null)
-            {
-                ModelState.AddModelError("id_usuario", "Debe seleccionar un usuario responsable.");
-            }
-
             if (ModelState.IsValid)
             {
-                // Asignar la fecha de creación actual
-                evaluacion.fecha_creacion = DateTime.Now;
+                if (archivo != null)
+                {
+                    var carpetaDestino = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "archivos");
+                    if (!Directory.Exists(carpetaDestino))
+                    {
+                        Directory.CreateDirectory(carpetaDestino);
+                    }
 
-                // Agregar la evaluación a la base de datos
+                    var nombreArchivo = Path.GetFileName(archivo.FileName);
+                    var rutaArchivo = Path.Combine(carpetaDestino, nombreArchivo);
+
+                    using (var stream = new FileStream(rutaArchivo, FileMode.Create))
+                    {
+                        await archivo.CopyToAsync(stream);
+                    }
+
+                    evaluacion.archivo = Path.Combine("/archivos", nombreArchivo);
+                }
+
                 _context.Add(evaluacion);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
 
-            // Si el modelo no es válido, recargar la lista de usuarios
-            var usuarios = _context.Usuarios
-                                   .Include(u => u.roles)
-                                   .Where(u => u.id_rol == 1 || u.id_rol == 2)
-                                   .ToList();
-
-            var usuariosConRoles = usuarios.Select(u => new
-            {
-                id_usuario = u.id_usuario,
-                DisplayText = u.nombre + " (" + u.roles.nombre_rol + ")"
-            }).ToList();
-
-            ViewBag.Usuarios = new SelectList(usuariosConRoles, "id_usuario", "DisplayText");
-
+            ViewData["Capacitaciones"] = _context.Capacitaciones.ToList();
             return View(evaluacion);
         }
 
-        [HttpGet]
-        public async Task<IActionResult> Editar(int id)
+        public async Task<IActionResult> Editar(int? id)
         {
-            var evaluacion = await _context.Evaluaciones
-                                           .Include(e => e.Usuario) // Incluir la relación con el usuario
-                                           .FirstOrDefaultAsync(e => e.id_evaluacion == id);
+            if (id == null)
+            {
+                return NotFound();
+            }
 
+            var evaluacion = await _context.Evaluaciones
+                                           .Include(e => e.Capacitacion)
+                                           .FirstOrDefaultAsync(m => m.id_evaluacion == id);
             if (evaluacion == null)
             {
                 return NotFound();
             }
 
-            // Cargar la lista de usuarios con roles 1 y 2
-            ViewData["Usuarios"] = new SelectList(
-                _context.Usuarios
-                        .Include(u => u.roles)
-                        .Where(u => u.id_rol == 1 || u.id_rol == 2)
-                        .ToList()
-                        .Select(u => new
-                        {
-                            id_usuario = u.id_usuario,
-                            DisplayText = u.nombre + " (" + u.roles.nombre_rol + ")"
-                        }),
-                "id_usuario", "DisplayText", evaluacion.id_usuario);
+            // Cargar la lista de capacitaciones y usuarios para el dropdown
+            ViewData["Usuarios"] = new SelectList(_context.Usuarios, "id_usuario", "Nombre", evaluacion.id_usuario);
+            ViewData["Capacitaciones"] = new SelectList(_context.Capacitaciones, "id_capacitacion", "Nombre", evaluacion.id_capacitacion);
 
             return View(evaluacion);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Editar(int id, Evaluacion evaluacion)
+        public async Task<IActionResult> Editar(int id, [Bind("id_evaluacion,id_capacitacion,nombre,descripcion,tiempo_prueba,archivo,id_usuario,fecha_creacion")] Evaluacion evaluacion, IFormFile archivo)
         {
             if (id != evaluacion.id_evaluacion)
             {
                 return NotFound();
             }
 
-            // Verificar si el modelo es válido
             if (ModelState.IsValid)
             {
-                // Buscar la evaluación existente para actualizar
-                var evaluacionExistente = await _context.Evaluaciones.FindAsync(id);
-                if (evaluacionExistente == null)
+                try
                 {
-                    return NotFound();
+                    if (archivo != null && archivo.Length > 0)
+                    {
+                        var rutaArchivo = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "archivos", archivo.FileName);
+
+                        using (var stream = new FileStream(rutaArchivo, FileMode.Create))
+                        {
+                            await archivo.CopyToAsync(stream);
+                        }
+
+                        evaluacion.archivo = archivo.FileName;
+                    }
+
+                    _context.Update(evaluacion);
+                    await _context.SaveChangesAsync();
                 }
-
-                // Actualizar los campos de la evaluación existente
-                evaluacionExistente.nombre = evaluacion.nombre;
-                evaluacionExistente.descripcion = evaluacion.descripcion;
-                evaluacionExistente.tiempo_prueba = evaluacion.tiempo_prueba;
-                evaluacionExistente.id_usuario = evaluacion.id_usuario;
-
-                // Guardar los cambios en la base de datos
-                _context.Update(evaluacionExistente);
-                await _context.SaveChangesAsync();
+                catch (DbUpdateConcurrencyException)
+                {
+                    if (!EvaluacionExists(evaluacion.id_evaluacion))
+                    {
+                        return NotFound();
+                    }
+                    else
+                    {
+                        throw;
+                    }
+                }
                 return RedirectToAction(nameof(Index));
             }
 
-            // Recargar la lista de usuarios en caso de error de validación
-            ViewData["Usuarios"] = new SelectList(
-                _context.Usuarios
-                        .Include(u => u.roles)
-                        .Where(u => u.id_rol == 1 || u.id_rol == 2)
-                        .ToList()
-                        .Select(u => new
-                        {
-                            id_usuario = u.id_usuario,
-                            DisplayText = u.nombre + " (" + u.roles.nombre_rol + ")"
-                        }),
-                "id_usuario", "DisplayText", evaluacion.id_usuario);
+            ViewData["Usuarios"] = new SelectList(_context.Usuarios, "id_usuario", "nombre", evaluacion.id_usuario);
+            ViewData["Capacitaciones"] = new SelectList(_context.Capacitaciones, "id_capacitacion", "titulo", evaluacion.id_capacitacion);
+
+            return View(evaluacion);
+        }
+        public async Task<IActionResult> Detalles(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var evaluacion = await _context.Evaluaciones
+                .Include(e => e.Usuario)
+                .FirstOrDefaultAsync(m => m.id_evaluacion == id);
+            if (evaluacion == null)
+            {
+                return NotFound();
+            }
 
             return View(evaluacion);
         }
 
-        [HttpGet]
         public async Task<IActionResult> Eliminar(int? id)
         {
             if (id == null)
@@ -196,11 +163,9 @@ namespace scg_clinicasur.Controllers
                 return NotFound();
             }
 
-            // Cargar la evaluación con el usuario relacionado
             var evaluacion = await _context.Evaluaciones
                 .Include(e => e.Usuario)
-                .FirstOrDefaultAsync(e => e.id_evaluacion == id);
-
+                .FirstOrDefaultAsync(m => m.id_evaluacion == id);
             if (evaluacion == null)
             {
                 return NotFound();
@@ -209,29 +174,22 @@ namespace scg_clinicasur.Controllers
             return View(evaluacion);
         }
 
-        // Eliminar evaluación (POST)
         [HttpPost, ActionName("Eliminar")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> EliminarConfirmado(int id)
         {
             var evaluacion = await _context.Evaluaciones.FindAsync(id);
-
-            if (evaluacion == null)
-            {
-                return NotFound();
-            }
-
-            try
+            if (evaluacion != null)
             {
                 _context.Evaluaciones.Remove(evaluacion);
                 await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
             }
-            catch (Exception ex)
-            {
-                ModelState.AddModelError("", $"Error al eliminar la evaluación: {ex.Message}");
-                return View(evaluacion);
-            }
+            return RedirectToAction(nameof(Index));
+        }
+
+        private bool EvaluacionExists(int id)
+        {
+            return _context.Evaluaciones.Any(e => e.id_evaluacion == id);
         }
     }
 }

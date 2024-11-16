@@ -1,50 +1,33 @@
 ﻿@model scg_clinicasur.Models.Evaluacion
 
-@{
-    ViewData["Title"] = "Crear Evaluación";
-}
-
-<h1>@ViewData["Title"]</h1>
+<h1>Crear Evaluación</h1>
 
 <form asp-action="Crear" method="post" enctype="multipart/form-data">
     <div class="form-group">
-        <label asp-for="nombre">Nombre:</label>
-        <input asp-for="nombre" class="form-control" />
-        <span asp-validation-for="nombre" class="text-danger"></span>
+        <label for="nombre">Nombre</label>
+        <input type="text" class="form-control" id="nombre" name="nombre" required />
     </div>
-
     <div class="form-group">
-        <label asp-for="descripcion">Descripción:</label>
-        <textarea asp-for="descripcion" class="form-control"></textarea>
-        <span asp-validation-for="descripcion" class="text-danger"></span>
+        <label for="descripcion">Descripción</label>
+        <textarea class="form-control" id="descripcion" name="descripcion" required></textarea>
     </div>
-
     <div class="form-group">
-        <label asp-for="tiempo_prueba">Tiempo de Prueba:</label>
-        <input asp-for="tiempo_prueba" type="text" class="form-control" placeholder="HH:MM:SS" />
-        <span asp-validation-for="tiempo_prueba" class="text-danger"></span>
+        <label for="tiempo_prueba">Tiempo de prueba</label>
+        <input type="text" class="form-control" id="tiempo_prueba" name="tiempo_prueba" required />
     </div>
-
     <div class="form-group">
-        <label asp-for="archivo">Archivo:</label>
-        <input asp-for="archivo" class="form-control" />
-        <span asp-validation-for="archivo" class="text-danger"></span>
+        <label for="archivo">Archivo</label>
+        <input type="file" class="form-control" id="archivo" name="archivo" />
     </div>
-
     <div class="form-group">
-        <label asp-for="id_usuario" class="control-label">Usuario Responsable</label>
-        <select asp-for="id_usuario" class="form-control" asp-items="ViewBag.Usuarios">
-            <option value="">Seleccione un usuario</option> 
-        </select>
-        <span asp-validation-for="id_usuario" class="text-danger"></span>
+        <label for="id_usuario">Usuario</label>
+        <select asp-for="id_usuario" class="form-control" asp-items="ViewBag.Usuarios"></select>
     </div>
-
-    <button type="submit" class="btn btn-primary">Guardar</button>
-    <a asp-action="Index" class="btn btn-secondary">Cancelar</a>
+    <div class="form-group">
+        <label for="id_capacitacion">Capacitación</label>
+        <select asp-for="id_capacitacion" class="form-control" asp-items="ViewBag.Capacitaciones"></select>
+    </div>
+    <div class="form-group">
+        <button type="submit" class="btn btn-primary">Crear Evaluación</button>
+    </div>
 </form>
-
-@section Scripts {
-    @{
-        await Html.RenderPartialAsync("_ValidationScriptsPartial");
-    }
-}
