@@ -24,30 +24,6 @@
 
         <dt class="col-sm-2">Usuario Responsable</dt>
         <dd class="col-sm-10">@Model.Usuario.nombre @Model.Usuario.apellido</dd>
-
-        <dt class="col-sm-2">Archivo</dt>
-        <dd class="col-sm-10">
-            @if (!string.IsNullOrEmpty(Model.archivo))
-            {
-                <a href="@Url.Content("~/uploads/" + Model.archivo)" target="_blank">Ver archivo</a>
-            }
-            else
-            {
-                <p>No disponible</p>
-            }
-        </dd>
-
-        <dt class="col-sm-2">Enlace</dt>
-        <dd class="col-sm-10">
-            @if (!string.IsNullOrEmpty(Model.enlace))
-            {
-                <a href="@Model.enlace" target="_blank">Ir al enlace</a>
-            }
-            else
-            {
-                <p>No disponible</p>
-            }
-        </dd>
     </dl>
 </div>
 

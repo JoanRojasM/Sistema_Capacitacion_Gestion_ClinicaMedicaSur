@@ -18,6 +18,8 @@ namespace scg_clinicasur.Data
         public DbSet<scg_clinicasur.Models.Capacitacion> Capacitaciones { get; set; }
         public DbSet<scg_clinicasur.Models.EstadoCita> EstadoCitas { get; set; }
         public DbSet<scg_clinicasur.Models.Cita> Citas { get; set; }
-        public DbSet<scg_clinicasur.Models.DisponibilidadDoctor> DisponibilidadDoctor { get; set; } 
+        public DbSet<scg_clinicasur.Models.DisponibilidadDoctor> DisponibilidadDoctor { get; set; }
+        public DbSet<scg_clinicasur.Models.RecursosAprendizaje> RecursosAprendizaje { get; set; }
+
     }
 }

@@ -24,7 +24,6 @@ namespace scg_clinicasur.Controllers
                                 .Include(c => c.Usuario)
                                 .AsQueryable();
 
-            // Aplicar filtro de búsqueda si se ha proporcionado
             if (!string.IsNullOrEmpty(searchString))
             {
                 query = query.Where(c => c.Usuario.nombre.Contains(searchString) ||
@@ -65,32 +64,26 @@ namespace scg_clinicasur.Controllers
             }).ToList();
 
             ViewBag.Usuarios = new SelectList(usuariosConRoles, "id_usuario", "DisplayText");
+
             return View();
         }
 
-        // POST: Capacitacion/Crear
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Crear(Capacitacion capacitacion, IFormFile archivo)
+        public async Task<IActionResult> Crear(Capacitacion capacitacion)
         {
             if (ModelState.IsValid)
             {
                 try
                 {
-                    // Guardar el archivo PDF si se adjuntó uno
-                    if (archivo != null && archivo.ContentType == "application/pdf")
+                    if (capacitacion.id_usuario == null)
                     {
-                        var fileName = Path.GetFileName(archivo.FileName);
-                        var filePath = Path.Combine("wwwroot/archivos", fileName);
-
-                        using (var stream = new FileStream(filePath, FileMode.Create))
-                        {
-                            await archivo.CopyToAsync(stream);
-                        }
-                        capacitacion.archivo = fileName;
+                        ModelState.AddModelError("", "El usuario es obligatorio.");
+                        return View(capacitacion);
                     }
 
                     capacitacion.fecha_creacion = DateTime.Now;
+
                     _context.Add(capacitacion);
                     await _context.SaveChangesAsync();
                     return RedirectToAction(nameof(Index));
@@ -113,6 +106,7 @@ namespace scg_clinicasur.Controllers
             }).ToList();
 
             ViewBag.Usuarios = new SelectList(usuariosConRoles, "id_usuario", "DisplayText");
+
             return View(capacitacion);
         }
 
@@ -120,7 +114,7 @@ namespace scg_clinicasur.Controllers
         public async Task<IActionResult> Editar(int id)
         {
             var capacitacion = await _context.Capacitaciones
-                                             .Include(c => c.Usuario) // Incluir el usuario
+                                             .Include(c => c.Usuario)
                                              .FirstOrDefaultAsync(e => e.id_capacitacion == id);
 
             if (capacitacion == null)
@@ -128,7 +122,6 @@ namespace scg_clinicasur.Controllers
                 return NotFound();
             }
 
-            // Cargar usuarios con roles 1 y 2
             ViewData["Usuarios"] = new SelectList(
                 _context.Usuarios
                     .Include(u => u.roles)
@@ -141,19 +134,17 @@ namespace scg_clinicasur.Controllers
                     }),
                 "id_usuario", "DisplayText", capacitacion.id_usuario);
 
-            // Lista de opciones para el estado
-            ViewData["Estados"] = new SelectList(new[]
-            {
-        new { Value = "Pendiente", Text = "Pendiente" },
-        new { Value = "Completada", Text = "Completada" }
-    }, "Value", "Text", capacitacion.estado);
+            ViewData["Estados"] = new SelectList(new[] {
+                new { Value = "Pendiente", Text = "Pendiente" },
+                new { Value = "Completada", Text = "Completada" }
+            }, "Value", "Text", capacitacion.estado);
 
             return View(capacitacion);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Editar(int id, Capacitacion capacitacion, IFormFile archivo)
+        public async Task<IActionResult> Editar(int id, Capacitacion capacitacion)
         {
             if (id != capacitacion.id_capacitacion)
             {
@@ -164,34 +155,10 @@ namespace scg_clinicasur.Controllers
             {
                 try
                 {
-                    // Si el archivo ha sido subido, se maneja la actualización del archivo
-                    if (archivo != null && archivo.ContentType == "application/pdf")
-                    {
-                        var fileName = Path.GetFileName(archivo.FileName);
-                        var filePath = Path.Combine("wwwroot/archivos", fileName);
-
-                        // Guardar el archivo en el sistema
-                        using (var stream = new FileStream(filePath, FileMode.Create))
-                        {
-                            await archivo.CopyToAsync(stream);
-                        }
-
-                        // Asignar el nombre del archivo guardado a la propiedad de la capacitación
-                        capacitacion.archivo = fileName;
-                    }
-
-                    // Adjuntar la entidad y modificar solo las propiedades necesarias
                     _context.Entry(capacitacion).Property(c => c.titulo).IsModified = true;
                     _context.Entry(capacitacion).Property(c => c.descripcion).IsModified = true;
                     _context.Entry(capacitacion).Property(c => c.duracion).IsModified = true;
                     _context.Entry(capacitacion).Property(c => c.id_usuario).IsModified = true;
-
-                    // Si el archivo no es nulo, marcamos el archivo como modificado
-                    if (archivo != null)
-                    {
-                        _context.Entry(capacitacion).Property(c => c.archivo).IsModified = true;
-                    }
-
                     _context.Entry(capacitacion).Property(c => c.estado).IsModified = true;
 
                     await _context.SaveChangesAsync();
@@ -207,7 +174,6 @@ namespace scg_clinicasur.Controllers
                 }
             }
 
-            // Recargar la lista de usuarios y estados en caso de error de validación
             ViewData["Usuarios"] = new SelectList(
                 _context.Usuarios
                     .Include(u => u.roles)
@@ -220,11 +186,10 @@ namespace scg_clinicasur.Controllers
                     }),
                 "id_usuario", "DisplayText", capacitacion.id_usuario);
 
-            ViewData["Estados"] = new SelectList(new[]
-            {
-        new { Value = "Pendiente", Text = "Pendiente" },
-        new { Value = "Completada", Text = "Completada" }
-    }, "Value", "Text", capacitacion.estado);
+            ViewData["Estados"] = new SelectList(new[] {
+                new { Value = "Pendiente", Text = "Pendiente" },
+                new { Value = "Completada", Text = "Completada" }
+            }, "Value", "Text", capacitacion.estado);
 
             return View(capacitacion);
         }
@@ -237,7 +202,6 @@ namespace scg_clinicasur.Controllers
                 return NotFound();
             }
 
-            // Cargar la capacitación con el usuario relacionado
             var capacitacion = await _context.Capacitaciones
                                              .Include(e => e.Usuario)
                                              .FirstOrDefaultAsync(m => m.id_capacitacion == id);
@@ -250,25 +214,126 @@ namespace scg_clinicasur.Controllers
             return View(capacitacion);
         }
 
-        // POST: Eliminar Confirmado
         [HttpPost, ActionName("Eliminar")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> EliminarConfirmado(int id)
         {
-            // Buscar la capacitación por ID
             var capacitacion = await _context.Capacitaciones.FindAsync(id);
 
-            // Validar si la entidad existe antes de eliminar
             if (capacitacion == null)
             {
                 return NotFound();
             }
 
-            // Eliminar la capacitación de la base de datos
             _context.Capacitaciones.Remove(capacitacion);
             await _context.SaveChangesAsync();
 
             return RedirectToAction(nameof(Index));
+        }
+        public async Task<IActionResult> Recursos(int id)
+        {
+            var capacitacion = await _context.Capacitaciones
+                                              .Include(c => c.Usuario)
+                                              .FirstOrDefaultAsync(c => c.id_capacitacion == id);
+
+            // Verificar si la capacitación existe
+            if (capacitacion == null)
+            {
+                return NotFound();
+            }
+
+            // Obtener los recursos asociados a esa capacitación
+            var recursos = await _context.RecursosAprendizaje
+                                         .Where(r => r.id_capacitacion == id)
+                                         .ToListAsync();
+
+            ViewData["Capacitacion"] = capacitacion;
+            return View(recursos);
+        }
+        public IActionResult CrearRecurso()
+        {
+            // Obtén las capacitaciones disponibles
+            var capacitaciones = _context.Capacitaciones.ToList();
+
+            // Crea un SelectList con las capacitaciones (solo nombre y id)
+            var capacitacionesList = capacitaciones.Select(c => new
+            {
+                id_capacitacion = c.id_capacitacion,
+                DisplayText = c.titulo // Asumiendo que el nombre es un campo en la tabla
+            }).ToList();
+
+            // Pasa el SelectList a la vista
+            ViewBag.Capacitaciones = new SelectList(capacitacionesList, "id_capacitacion", "DisplayText");
+
+            return View();
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> CrearRecurso(RecursosAprendizaje recurso, IFormFile? archivo, string? enlace)
+        {
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    // Validación: se debe seleccionar una capacitación
+                    if (recurso.id_capacitacion == 0)
+                    {
+                        ModelState.AddModelError("id_capacitacion", "Debe seleccionar una capacitación.");
+                        return View(recurso);
+                    }
+
+                    // Validación: archivo o enlace
+                    if (archivo == null && string.IsNullOrEmpty(enlace))
+                    {
+                        ModelState.AddModelError("", "Debe proporcionar un archivo o un enlace.");
+                        return View(recurso);
+                    }
+
+                    recurso.fecha_creacion = DateTime.Now;
+
+                    // Procesar archivo
+                    if (archivo != null)
+                    {
+                        var carpetaDestino = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "archivos");
+                        if (!Directory.Exists(carpetaDestino))
+                        {
+                            Directory.CreateDirectory(carpetaDestino);
+                        }
+
+                        var nombreArchivo = Path.GetFileName(archivo.FileName);
+                        var rutaArchivo = Path.Combine(carpetaDestino, nombreArchivo);
+
+                        using (var stream = new FileStream(rutaArchivo, FileMode.Create))
+                        {
+                            await archivo.CopyToAsync(stream);
+                        }
+
+                        recurso.archivo = Path.Combine("/archivos", nombreArchivo);
+                    }
+                    else if (!string.IsNullOrEmpty(enlace))
+                    {
+                        recurso.enlace = enlace;
+                    }
+
+                    _context.RecursosAprendizaje.Add(recurso);
+                    await _context.SaveChangesAsync();
+
+                    return RedirectToAction("Recursos", new { id = recurso.id_capacitacion });
+                }
+                catch (Exception ex)
+                {
+                    ModelState.AddModelError("", $"Error al guardar el recurso: {ex.Message}");
+                }
+            }
+
+            // Recargamos la lista de capacitaciones si ocurre un error
+            var capacitaciones = _context.Capacitaciones
+                .Select(c => new { c.id_capacitacion, c.titulo })
+                .ToList();
+            ViewBag.Capacitaciones = new SelectList(capacitaciones, "id_capacitacion", "titulo");
+
+            return View(recurso);
         }
     }
 }
