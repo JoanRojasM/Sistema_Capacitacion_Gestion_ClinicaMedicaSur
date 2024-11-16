@@ -3,16 +3,19 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using scg_clinicasur.Data;
 using scg_clinicasur.Models;
+using scg_clinicasur.Services;
 
 namespace scg_clinicasur.Controllers
 {
     public class CapacitacionesController : Controller
     {
         private readonly ApplicationDbContext _context;
+        private readonly EmailService _emailService;
 
-        public CapacitacionesController(ApplicationDbContext context)
+        public CapacitacionesController(ApplicationDbContext context, EmailService emailService)
         {
             _context = context;
+            _emailService = emailService;
         }
 
         // GET: Capacitacion/Index
@@ -86,6 +89,16 @@ namespace scg_clinicasur.Controllers
 
                     _context.Add(capacitacion);
                     await _context.SaveChangesAsync();
+
+                    // Enviar correo
+                    var usuario = await _context.Usuarios.FindAsync(capacitacion.id_usuario);
+                    if (usuario != null)
+                    {
+                        string asunto = "Capacitación próxima, prepárese";
+                        string cuerpo = $"Hola {usuario.nombre},<br><br>Se ha programado la capacitación <strong>{capacitacion.titulo}</strong>. Prepárese para asistir.";
+                        await _emailService.EnviarCorreoAsync(usuario.correo, asunto, cuerpo);
+                    }
+
                     return RedirectToAction(nameof(Index));
                 }
                 catch (Exception ex)
@@ -225,8 +238,17 @@ namespace scg_clinicasur.Controllers
                 return NotFound();
             }
 
+            var usuario = capacitacion.Usuario;
             _context.Capacitaciones.Remove(capacitacion);
             await _context.SaveChangesAsync();
+
+            // Enviar correo
+            if (usuario != null)
+            {
+                string asunto = "Capacitación cancelada";
+                string cuerpo = $"Hola {usuario.nombre},<br><br>La capacitación <strong>{capacitacion.titulo}</strong> ha sido cancelada.";
+                await _emailService.EnviarCorreoAsync(usuario.correo, asunto, cuerpo);
+            }
 
             return RedirectToAction(nameof(Index));
         }
