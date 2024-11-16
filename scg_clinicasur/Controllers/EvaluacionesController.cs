@@ -14,23 +14,27 @@ namespace scg_clinicasur.Controllers
         {
             _context = context;
         }
+        public async Task<IActionResult> Index()
+        {
+            var evaluaciones = await _context.Evaluaciones
+                                             .Include(e => e.Usuario)
+                                             .ThenInclude(u => u.roles)
+                                             .ToListAsync();
+
+            return View(evaluaciones);
+        }
         public IActionResult Crear()
         {
-            var usuarios = _context.Usuarios
-                                   .Include(u => u.roles)
-                                   .Where(u => u.id_rol == 1 || u.id_rol == 2)
-                                   .ToList();
-
-            var usuariosConRoles = usuarios.Select(u => new
-            {
-                id_usuario = u.id_usuario,
-                DisplayText = u.nombre + " (" + u.roles.nombre_rol + ")"
-            }).ToList();
-
-            ViewBag.Usuarios = new SelectList(usuariosConRoles, "id_usuario", "DisplayText");
-
+            var usuarios = _context.Usuarios.ToList();
             var capacitaciones = _context.Capacitaciones.ToList();
-            ViewBag.Capacitaciones = new SelectList(capacitaciones, "id_capacitacion", "Nombre");
+
+            if (usuarios == null || capacitaciones == null)
+            {
+                return RedirectToAction("Error");
+            }
+
+            ViewData["Usuarios"] = usuarios;
+            ViewData["Capacitaciones"] = capacitaciones;
 
             return View();
         }
@@ -68,7 +72,6 @@ namespace scg_clinicasur.Controllers
             ViewData["Capacitaciones"] = _context.Capacitaciones.ToList();
             return View(evaluacion);
         }
-
         public async Task<IActionResult> Editar(int? id)
         {
             if (id == null)
