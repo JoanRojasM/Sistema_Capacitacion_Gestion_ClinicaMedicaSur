@@ -1,22 +1,26 @@
-﻿@{
-    ViewData["Title"] = "Agregar Entrada Contable";
+﻿@model scg_clinicasur.Models.Contabilidad
+
+@{
+    ViewData["Title"] = "Agregar Ingreso";
 }
 
 <h1>@ViewData["Title"]</h1>
 
-<form>
-    <div class="mb-3">
-        <label for="descripcion" class="form-label">Descripción</label>
-        <input type="text" class="form-control" id="descripcion" />
+<form asp-action="AgregarEntrada" method="post">
+    <div class="form-group">
+        <label for="Concepto">Concepto</label>
+        <input asp-for="Concepto" class="form-control" />
+        <span asp-validation-for="Concepto" class="text-danger"></span>
     </div>
-    <div class="mb-3">
-        <label for="monto" class="form-label">Monto (₡)</label>
-        <input type="number" class="form-control" id="monto" />
+    <div class="form-group">
+        <label for="Monto">Monto</label>
+        <input asp-for="Monto" type="number" step="0.01" class="form-control" />
+        <span asp-validation-for="Monto" class="text-danger"></span>
     </div>
-    <div class="mb-3">
-        <label for="fecha" class="form-label">Fecha</label>
-        <input type="date" class="form-control" id="fecha" />
-    </div>
-    <button type="submit" class="btn btn-success">Guardar</button>
-    <a class="btn btn-secondary" href="@Url.Action("Historial")">Cancelar</a>
+
+    <!-- Campo oculto para forzar que el Tipo sea siempre "Ingreso" -->
+    <input asp-for="Tipo" type="hidden" value="Ingreso" />
+
+    <button type="submit" class="btn btn-primary">Guardar</button>
+    <a asp-action="Historial" class="btn btn-secondary">Cancelar</a>
 </form>
