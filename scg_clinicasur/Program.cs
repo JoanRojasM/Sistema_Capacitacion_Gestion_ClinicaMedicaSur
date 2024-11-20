@@ -4,6 +4,7 @@ using scg_clinicasur.Data;
 
 var builder = WebApplication.CreateBuilder(args);
 
+
 // Configuración de la cadena de conexión con el nombre "DefaultConnection"
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));

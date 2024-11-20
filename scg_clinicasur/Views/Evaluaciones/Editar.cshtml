@@ -1,52 +1,54 @@
 ﻿@model scg_clinicasur.Models.Evaluacion
 
-@{
-    ViewData["Title"] = "Editar Evaluación";
-}
-
-<h2>Editar Evaluación</h2>
+<h1>Editar Evaluación</h1>
 
 <form asp-action="Editar" method="post" enctype="multipart/form-data">
-    <input type="hidden" asp-for="id_evaluacion" />
-
     <div class="form-group">
-        <label asp-for="nombre" class="control-label"></label>
+        <label for="nombre">Nombre</label>
         <input asp-for="nombre" class="form-control" />
         <span asp-validation-for="nombre" class="text-danger"></span>
     </div>
 
     <div class="form-group">
-        <label asp-for="descripcion" class="control-label"></label>
+        <label for="descripcion">Descripción</label>
         <textarea asp-for="descripcion" class="form-control"></textarea>
         <span asp-validation-for="descripcion" class="text-danger"></span>
     </div>
 
     <div class="form-group">
-        <label asp-for="tiempo_prueba" class="control-label"></label>
-        <input asp-for="tiempo_prueba" class="form-control" type="text" placeholder="HH:MM:SS" />
+        <label for="tiempo_prueba">Tiempo de la Prueba</label>
+        <input asp-for="tiempo_prueba" class="form-control" />
         <span asp-validation-for="tiempo_prueba" class="text-danger"></span>
     </div>
 
     <div class="form-group">
-        <label class="control-label">Archivo Actual: @Model.archivo</label>
-        <input asp-for="archivo" class="form-control" type="text" />
+        <label for="archivo">Archivo</label>
+        <input type="file" name="archivo" class="form-control" />
         <span asp-validation-for="archivo" class="text-danger"></span>
     </div>
 
     <div class="form-group">
-        <label asp-for="id_usuario" class="control-label">Usuario Responsable</label>
-        <select asp-for="id_usuario" class="form-control" asp-items="ViewBag.Usuarios"></select>
-        <span asp-validation-for="id_usuario" class="text-danger"></span>
+        <label for="id_capacitacion">Capacitación</label>
+        <select asp-for="id_capacitacion" class="form-control">
+            <option value="">Seleccione una capacitación</option>
+            @foreach (var capacitacion in ViewData["Capacitaciones"] as IEnumerable<scg_clinicasur.Models.Capacitacion>)
+            {
+                <option value="@capacitacion.id_capacitacion">@capacitacion.titulo</option>
+            }
+        </select>
+        <span asp-validation-for="id_capacitacion" class="text-danger"></span>
     </div>
 
     <div class="form-group">
-        <input type="submit" value="Guardar" class="btn btn-primary" />
-        <a asp-action="Index" class="btn btn-secondary">Cancelar</a>
+        <label for="id_usuario">Usuario</label>
+        <select asp-for="id_usuario" class="form-control">
+            @foreach (var usuario in ViewData["Usuarios"] as IEnumerable<scg_clinicasur.Models.Usuario>)
+            {
+                <option value="@usuario.id_usuario">@usuario.nombre</option>
+            }
+        </select>
+        <span asp-validation-for="id_usuario" class="text-danger"></span>
     </div>
-</form>
 
-@section Scripts {
-    @{
-        await Html.RenderPartialAsync("_ValidationScriptsPartial");
-    }
-}
+    <button type="submit" class="btn btn-primary">Guardar</button>
+</form>

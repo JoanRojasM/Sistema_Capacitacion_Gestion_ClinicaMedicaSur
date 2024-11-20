@@ -1,0 +1,51 @@
+﻿@model IEnumerable<scg_clinicasur.Models.RecursosAprendizaje>
+@{
+    var capacitacion = ViewData["Capacitacion"] as scg_clinicasur.Models.Capacitacion;
+}
+
+<h2>Recursos de Capacitación: @capacitacion.titulo</h2>
+
+<p><strong>Descripción:</strong> @capacitacion.descripcion</p>
+<p><strong>Duración:</strong> @capacitacion.duracion</p>
+
+<h3>Recursos de Aprendizaje</h3>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Título</th>
+            <th>Video</th>
+            <th>Archivo</th>
+            <th>Fecha de Creación</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var recurso in Model)
+        {
+            <tr>
+                <td>@recurso.titulo</td>
+                <td>
+                    @if (!string.IsNullOrEmpty(recurso.enlace))
+                    {
+                        <a href="@recurso.enlace" target="_blank">Ver Video</a>
+                    }
+                    else
+                    {
+                        <span>No disponible</span>
+                    }
+                </td>
+                <td>
+                    @if (!string.IsNullOrEmpty(recurso.archivo))
+                    {
+                        <a href="@Url.Content(recurso.archivo)" target="_blank">Ver Archivo</a>
+                    }
+                    else
+                    {
+                        <span>No disponible</span>
+                    }
+                </td>
+                <td>@recurso.fecha_creacion.ToString("dd/MM/yyyy")</td>
+            </tr>
+        }
+    </tbody>
+</table>

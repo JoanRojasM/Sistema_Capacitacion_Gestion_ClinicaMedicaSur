@@ -12,8 +12,6 @@
             <th>Título de la Capacitación</th>
             <th>Descripción</th>
             <th>Duración</th>
-            <th>Archivo</th>
-            <th>Enlace</th>
             <th>Estado</th>
             <th>Acciones</th>
         </tr>
@@ -25,26 +23,6 @@
                 <td>@capacitacion.titulo</td>
                 <td>@capacitacion.descripcion</td>
                 <td>@capacitacion.duracion</td>
-                <td>
-                    @if (!string.IsNullOrEmpty(capacitacion.archivo))
-                    {
-                        <a href="@Url.Content("~/archivos/" + capacitacion.archivo)" target="_blank" class="btn btn-link btn-sm">Ver Archivo</a>
-                    }
-                    else
-                    {
-                        <span>No disponible</span>
-                    }
-                </td>
-                <td>
-                    @if (!string.IsNullOrEmpty(capacitacion.enlace))
-                    {
-                        <a href="@capacitacion.enlace" target="_blank" class="btn btn-link btn-sm">Ir al Enlace</a>
-                    }
-                    else
-                    {
-                        <span>No disponible</span>
-                    }
-                </td>
                 <td>@capacitacion.estado</td>
                 <td class="text-center">
                     <form asp-action="SolicitarCancelacion" asp-controller="AsistenteLimpieza" method="post" class="d-inline">
@@ -53,6 +31,7 @@
                             Solicitar Cancelación
                         </button>
                     </form>
+                    <a asp-controller="Capacitaciones" asp-action="Recursos" asp-route-id="@capacitacion.id_capacitacion" class="btn btn-info">Recursos de Aprendizaje</a>
                 </td>
             </tr>
         }

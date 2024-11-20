@@ -29,12 +29,6 @@ namespace scg_clinicasur.Models
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public DateTime fecha_creacion { get; set; }
 
-        [StringLength(255)]
-        public string? archivo { get; set; }
-
-        [StringLength(500)]
-        public string? enlace { get; set; }
-
         [Required(ErrorMessage = "El estado es obligatorio")]
         [StringLength(10)]
         public string estado { get; set; }

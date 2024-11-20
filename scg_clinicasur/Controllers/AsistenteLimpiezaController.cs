@@ -17,62 +17,49 @@ namespace scg_clinicasur.Controllers
         {
             _context = context;
         }
-
         public IActionResult Index()
         {
             return View();
         }
-
-        // Método para mostrar las evaluaciones del usuario actual
         public async Task<IActionResult> Evaluaciones()
         {
-            // Obtener el nombre del usuario de la sesión
-            var userName = HttpContext.Session.GetString("UserName");
-            // Obtener el ID del usuario actual desde la sesión
             var userId = int.Parse(HttpContext.Session.GetString("UserId"));
 
-            // Filtrar las evaluaciones por el ID del usuario actual
             var evaluaciones = await _context.Evaluaciones
                                              .Where(e => e.id_usuario == userId)
                                              .ToListAsync();
+
             return View(evaluaciones);
         }
 
         public async Task<IActionResult> Capacitaciones()
         {
-            // Obtener el nombre del usuario de la sesión
-            var userName = HttpContext.Session.GetString("UserName");
-            // Obtener el ID del usuario actual desde la sesión
             var userId = int.Parse(HttpContext.Session.GetString("UserId"));
 
-            // Filtrar las evaluaciones por el ID del usuario actual
             var capacitaciones = await _context.Capacitaciones
                                              .Where(e => e.id_usuario == userId)
                                              .ToListAsync();
+
             return View(capacitaciones);
         }
 
         [HttpPost]
         public async Task<IActionResult> SolicitarCancelacion(int capacitacionId)
         {
-            // Obtener el ID del usuario actual desde la sesión
             var userId = int.Parse(HttpContext.Session.GetString("UserId"));
 
-            // Obtener los detalles del usuario
             var usuario = await _context.Usuarios.FindAsync(userId);
             if (usuario == null)
             {
                 return NotFound("Usuario no encontrado.");
             }
 
-            // Obtener los detalles de la capacitación
             var capacitacion = await _context.Capacitaciones.FindAsync(capacitacionId);
             if (capacitacion == null)
             {
                 return NotFound("Capacitación no encontrada.");
             }
 
-            // Configuración del cliente SMTP
             var smtpClient = new SmtpClient("smtp.outlook.com")
             {
                 Port = 587,
@@ -80,7 +67,6 @@ namespace scg_clinicasur.Controllers
                 EnableSsl = true,
             };
 
-            // Construcción del mensaje de correo electrónico
             var mailMessage = new MailMessage
             {
                 From = new MailAddress("daharoni90459@ufide.ac.cr"),
@@ -97,10 +83,8 @@ namespace scg_clinicasur.Controllers
                 IsBodyHtml = true,
             };
 
-            // Dirección de correo del administrador
             mailMessage.To.Add("daharoni90459@ufide.ac.cr");
 
-            // Enviar el correo electrónico
             try
             {
                 await smtpClient.SendMailAsync(mailMessage);
@@ -111,7 +95,6 @@ namespace scg_clinicasur.Controllers
                 ViewBag.Message = $"Error al enviar el correo: {ex.Message}";
             }
 
-            // Redirigir a la vista de capacitaciones con un mensaje de éxito o error
             return RedirectToAction("Capacitaciones");
         }
     }

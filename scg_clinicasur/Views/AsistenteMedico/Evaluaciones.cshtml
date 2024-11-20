@@ -26,7 +26,7 @@
                 <td>
                     @if (!string.IsNullOrEmpty(evaluacion.archivo))
                     {
-                        <a href="@Url.Content($"~/uploads/{evaluacion.archivo}")" target="_blank">Ver archivo</a>
+                        <a href="@Url.Content($"~/archivos/{evaluacion.archivo}")" target="_blank">Ver archivo</a>
                     }
                     else
                     {
@@ -37,4 +37,3 @@
         }
     </tbody>
 </table>
-
