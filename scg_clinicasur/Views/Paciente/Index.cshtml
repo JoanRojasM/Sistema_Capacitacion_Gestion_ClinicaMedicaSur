@@ -1,7 +1,23 @@
 ﻿@{
-    ViewData["Title"] = "Paciente";
+    ViewBag.Title = "Paciente";
+    Layout = "~/Views/Shared/_Layout.cshtml";
 }
+<header>
+    <nav class="navbar navbar-expand-lg bg-body-tertiary">
+        <div class="container-fluid">
+                <div class="navbar-nav">
+                    <ul class="navbar-nav">
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Paciente" asp-action="Citas">Ver Citas</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </nav>
+</header>
 <body>
     <div class="col-12 text-center">
         <h1 class="display-5 mt-4">Bienvenido, Paciente</h1>
+        </div>
 </body>

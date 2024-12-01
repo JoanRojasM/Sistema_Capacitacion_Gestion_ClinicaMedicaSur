@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using scg_clinicasur.Data;
 using scg_clinicasur.Models;
 using System.Diagnostics;
+using System.Security.Claims;
 
 namespace scg_clinicasur.Controllers
 {
@@ -14,6 +15,39 @@ namespace scg_clinicasur.Controllers
         public PacienteController(ApplicationDbContext context)
         {
             _context = context;
+        }
+
+        public IActionResult Index()
+        {
+            return View();
+        }
+
+        public async Task<IActionResult> Citas()
+        {
+            // Obtiene el ID del usuario autenticado
+            var userId = int.Parse(HttpContext.Session.GetString("UserId"));
+
+            // Obtiene las citas asociadas al paciente
+            var citas = await _context.Citas
+                .Where(c => c.IdPaciente == userId)
+                .ToListAsync();
+
+            return View(citas);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> EliminarCita(int id)
+        {
+            var cita = await _context.Citas.FindAsync(id);
+            if (cita == null)
+            {
+                return NotFound();
+            }
+
+            _context.Citas.Remove(cita);
+            await _context.SaveChangesAsync();
+
+            return RedirectToAction(nameof(Citas));
         }
         public IActionResult ListadoPacientes(string searchName)
         {

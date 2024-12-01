@@ -210,6 +210,12 @@ namespace scg_clinicasur.Controllers
         [HttpGet]
         public async Task<IActionResult> Editar(int id)
         {
+            var userIdString = HttpContext.Session.GetString("UserId");
+            if (!int.TryParse(userIdString, out int userId))
+            {
+                return RedirectToAction("Login", "Account");
+            }
+
             var cita = await _context.Citas
                 .Include(c => c.Paciente)
                 .Include(c => c.Doctor)

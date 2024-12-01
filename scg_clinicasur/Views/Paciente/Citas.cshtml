@@ -1,0 +1,29 @@
+﻿@model IEnumerable<scg_clinicasur.Models.Cita>
+@{
+    ViewData["Title"] = "Mis Citas";
+}
+
+<h2>Mis Citas</h2>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Fecha de inicio de la cita</th>
+            <th>Motivo de la cita</th>
+            <th>Acciones</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var cita in Model)
+        {
+            <tr>
+                <td>@cita.FechaInicio</td>
+                <td>@cita.MotivoCita</td>
+                <td>
+                    <a asp-action="Editar" asp-route-id="@cita.IdCita" class="btn btn-warning">Editar</a>
+                    <a asp-action="Eliminar" asp-route-id="@cita.IdCita" class="btn btn-danger">Eliminar</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
