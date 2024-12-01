@@ -329,7 +329,7 @@ namespace scg_clinicasur.Controllers
 
             return RedirectToAction(nameof(Index));
         }
-        public async Task<IActionResult> Recursos(int id)
+        public async Task<IActionResult> Recursos(int id, string? buscarTitulo)
         {
             var capacitacion = await _context.Capacitaciones
                                               .Include(c => c.Usuario)
@@ -340,13 +340,23 @@ namespace scg_clinicasur.Controllers
                 return NotFound();
             }
 
-            var recursos = await _context.RecursosAprendizaje
-                                         .Where(r => r.id_capacitacion == id)
-                                         .ToListAsync();
+            var recursosQuery = _context.RecursosAprendizaje
+                                        .Where(r => r.id_capacitacion == id);
+
+            if (!string.IsNullOrEmpty(buscarTitulo))
+            {
+                var lowerBuscarTitulo = buscarTitulo.ToLower();
+                recursosQuery = recursosQuery.Where(r => r.titulo.ToLower().Contains(lowerBuscarTitulo));
+            }
+
+            var recursos = await recursosQuery.ToListAsync();
 
             ViewData["Capacitacion"] = capacitacion;
+            ViewData["buscarTitulo"] = buscarTitulo;
+
             return View(recursos);
         }
+
         public IActionResult CrearRecurso()
         {
             var capacitaciones = _context.Capacitaciones.ToList();

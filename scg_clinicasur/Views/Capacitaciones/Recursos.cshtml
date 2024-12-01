@@ -8,6 +8,15 @@
 <p><strong>Descripción:</strong> @capacitacion.descripcion</p>
 <p><strong>Duración:</strong> @capacitacion.duracion</p>
 
+<form asp-action="Recursos" method="get" class="form-inline mb-3">
+    <input type="hidden" name="id" value="@capacitacion?.id_capacitacion" />
+    <div class="form-group">
+        <input type="text" name="buscarTitulo" value="@ViewData["buscarTitulo"]" class="form-control" placeholder="Buscar por título..." />
+    </div>
+    <button type="submit" class="btn btn-primary ml-2">Buscar</button>
+    <a asp-action="Recursos" asp-route-id="@capacitacion?.id_capacitacion" class="btn btn-secondary ml-2">Limpiar</a>
+</form>
+
 <h3>Recursos de Aprendizaje</h3>
 
 <table class="table">
