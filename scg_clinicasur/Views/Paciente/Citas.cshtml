@@ -2,28 +2,101 @@
 @{
     ViewData["Title"] = "Mis Citas";
 }
-
 <h2>Mis Citas</h2>
-
+<nav>
+    <div class="header-buttons">
+        <!-- Dropdown de filtrado por estado de cita -->
+        <div class="dropdown">
+            <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
+                Estado de Cita
+            </button>
+            <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                <li>
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" id="checkProgramada" name="estado" value="programada">
+                        <label class="form-check-label" for="checkProgramada">
+                            Programada
+                        </label>
+                    </div>
+                </li>
+                <li>
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" id="checkCancelada" name="estado" value="cancelada">
+                        <label class="form-check-label" for="checkCancelada">
+                            Cancelada
+                        </label>
+                    </div>
+                </li>
+                <li>
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" id="checkCompletada" name="estado" value="completada">
+                        <label class="form-check-label" for="checkCompletada">
+                            Completada
+                        </label>
+                    </div>
+                </li>
+                <li><hr class="dropdown-divider"></li>
+                <li>
+                    <!-- Botón para confirmar la selección -->
+                    <button class="btn btn-secondary w-100" id="confirmFilter" onclick="applyFilter()">Confirmar</button>
+                </li>
+                <li>
+                    <!-- Botón para resetear el filtro -->
+                    <button class="btn btn-secondary w-100" id="resetFilter" onclick="resetFilter()">Resetear Filtro</button>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
 <table class="table">
     <thead>
         <tr>
-            <th>Fecha de inicio de la cita</th>
-            <th>Motivo de la cita</th>
-            <th>Acciones</th>
+            <th>Paciente</th>
+            <th>Doctor</th>
+            <th>Fecha de Inicio</th>
+            <th>Fecha de Fin</th>
+            <th>Motivo</th>
+            <th>Estado</th>
         </tr>
     </thead>
     <tbody>
         @foreach (var cita in Model)
         {
             <tr>
-                <td>@cita.FechaInicio</td>
+                <td>@cita.Paciente.nombre @cita.Paciente.apellido</td>
+                <td>@cita.Doctor.nombre @cita.Doctor.apellido</td>
+                <td>@cita.FechaInicio.ToString("dd/MM/yyyy HH:mm")</td>
+                <td>@cita.FechaFin.ToString("dd/MM/yyyy HH:mm")</td>
                 <td>@cita.MotivoCita</td>
+                <td>@cita.EstadoCita.EstadoNombre</td>
                 <td>
-                    <a asp-action="Editar" asp-route-id="@cita.IdCita" class="btn btn-warning">Editar</a>
-                    <a asp-action="Eliminar" asp-route-id="@cita.IdCita" class="btn btn-danger">Eliminar</a>
+                <td>
+                    <a asp-action="Detalles" asp-route-id="@cita.IdCita" class="btn btn-info">Detalles</a>
+                    <a asp-action="Editar" asp-route-id="@cita.IdCita" class="btn btn-primary">Editar Cita</a>
+                    <a asp-action="Eliminar" asp-route-id="@cita.IdCita" class="btn btn-danger">Eliminar Cita</a>
+                </td>
                 </td>
             </tr>
         }
+        <script>
+            function applyFilter() {
+                const selectedStates = [];
+                if (document.getElementById('checkProgramada').checked) selectedStates.push('programada');
+                if (document.getElementById('checkCancelada').checked) selectedStates.push('cancelada');
+                if (document.getElementById('checkCompletada').checked) selectedStates.push('completada');
+
+                // Redirigir con los estados seleccionados como parámetros de consulta
+                const queryString = selectedStates.map(state => `estado=${state}`).join('&');
+                window.location.href = `?${queryString}`;
+            }
+
+            function resetFilter() {
+                // Desmarcar todos los checkboxes y recargar la página
+                document.getElementById('checkProgramada').checked = false;
+                document.getElementById('checkCancelada').checked = false;
+                document.getElementById('checkCompletada').checked = false;
+                window.location.href = '?';
+            }
+        </script>
     </tbody>
 </table>

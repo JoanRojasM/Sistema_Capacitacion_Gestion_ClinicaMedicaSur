@@ -1,0 +1,47 @@
+﻿@model scg_clinicasur.Models.Cita
+
+@{
+    ViewData["Title"] = "Confirmar Eliminación de Cita";
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="stylesheet" href="~/css/site.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <title>@ViewData["Title"]</title>
+</head>
+<body>
+    <header>
+        <h1>@ViewData["Title"]</h1>
+        <nav>
+            <a asp-action="Citas" class="button">Volver al Listado</a>
+        </nav>
+    </header>
+    <main>
+        <p>¿Estás seguro de que deseas eliminar la cita de @Model.Paciente.nombre @Model.Paciente.apellido?</p>
+        <button id="btnEliminar" class="btn btn-danger">Sí, Eliminar Cita</button>
+        <a href="@Url.Action("Citas")" class="button">No, Cancelar</a>
+
+        <!-- Script para cuadro de confirmación de eliminación -->
+        <script>
+            document.getElementById('btnEliminar').addEventListener('click', function () {
+                Swal.fire({
+                    title: '¿Estás seguro?',
+                    text: "No podrás revertir esto.",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#d33',
+                    cancelButtonColor: '#3085d6',
+                    confirmButtonText: 'Sí, Eliminar Cita',
+                    cancelButtonText: 'No, Cancelar'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        document.getElementById('formEliminar').submit();
+                    }
+                });
+            });
+        </script>
+    </main>
+</body>
+</html>

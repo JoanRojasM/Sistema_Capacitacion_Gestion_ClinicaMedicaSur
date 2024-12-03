@@ -1,0 +1,91 @@
+﻿@model scg_clinicasur.Models.Cita
+
+@{
+    ViewData["Title"] = "Editar Cita";
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="stylesheet" href="~/css/site.css">
+    <title>@ViewData["Title"]</title>
+</head>
+<body>
+    <header>
+        <h1>@ViewData["Title"]</h1>
+        <nav>
+            <a asp-action="Index" class="button">Volver al Listado</a>
+        </nav>
+    </header>
+    <main>
+        @if (!string.IsNullOrEmpty(ViewBag.ErrorMessage))
+        {
+            <div class="alert alert-danger">@ViewBag.ErrorMessage</div>
+        }
+        @if (TempData["SuccessMessage"] != null)
+        {
+            <div class="alert alert-success">@TempData["SuccessMessage"]</div>
+        }
+
+        <form method="post" asp-action="Editar">
+            <input type="hidden" asp-for="IdCita" />
+
+            <div class="form-group">
+                <label for="IdPaciente">Paciente:</label>
+                <select asp-for="IdPaciente" class="form-control" disabled>
+                    <option value="">Seleccionar Paciente</option>
+                    @foreach (var paciente in ViewBag.Pacientes)
+                    {
+                        <option value="@paciente.id_usuario"
+                                selected="@(Model.IdPaciente == paciente.id_usuario)">
+                            @paciente.nombre @paciente.apellido
+                        </option>
+                    }
+                </select>
+                <span asp-validation-for="IdPaciente" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label for="IdDoctor">Doctor:</label>
+                <select asp-for="IdDoctor" class="form-control" disabled>
+                    <option value="">Seleccionar Doctor</option>
+                    @foreach (var doctor in ViewBag.Doctores)
+                    {
+                        <option value="@doctor.id_usuario"
+                                selected="@(Model.IdDoctor == doctor.id_usuario)">
+                            @doctor.nombre @doctor.apellido
+                        </option>
+                    }
+                </select>
+                <span asp-validation-for="IdDoctor" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label for="FechaInicio">Fecha de Inicio:</label>
+                <input type="datetime-local" asp-for="FechaInicio" class="form-control" disabled />
+                <span asp-validation-for="FechaInicio" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label for="FechaFin">Fecha de Fin:</label>
+                <input type="datetime-local" asp-for="FechaFin" class="form-control" disabled />
+                <span asp-validation-for="FechaFin" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label for="MotivoCita">Motivo de la Cita:</label>
+                <input type="text" asp-for="MotivoCita" class="form-control" />
+                <span asp-validation-for="MotivoCita" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label for="IdEstadoCita">Estado de la Cita:</label>
+                <select asp-for="IdEstadoCita" asp-items="ViewBag.EstadosCita" class="form-control"></select>
+                <span asp-validation-for="IdEstadoCita" class="text-danger"></span>
+            </div>
+
+            <button type="submit" class="btn btn-primary">Guardar Cambios</button>
+        </form>
+    </main>
+</body>
+</html>

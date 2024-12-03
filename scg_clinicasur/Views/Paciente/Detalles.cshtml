@@ -1,0 +1,40 @@
+﻿@model scg_clinicasur.Models.Cita
+
+@{
+    ViewData["Title"] = "Detalles de la Cita";
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="stylesheet" href="~/css/site.css">
+    <title>@ViewData["Title"]</title>
+</head>
+<body>
+    <div class="container mt-5">
+        <h1>@ViewData["Title"]</h1>
+
+        @if (!string.IsNullOrEmpty(ViewBag.ErrorMessage))
+        {
+            <div class="alert alert-danger">@ViewBag.ErrorMessage</div>
+        }
+        else
+        {
+            <div class="card">
+                <div class="card-header">
+                    Información de la Cita
+                </div>
+                <div class="card-body">
+                    <h5 class="card-title"><strong>Paciente:</strong> @Model.Paciente.nombre @Model.Paciente.apellido</h5>
+                    <h5 class="card-title"><strong>Doctor:</strong> @Model.Doctor.nombre @Model.Doctor.apellido</h5>
+                    <h5 class="card-text"><strong>Fecha de Inicio:</strong> @Model.FechaInicio.ToString("dd/MM/yyyy HH:mm")</h5>
+                    <h5 class="card-text"><strong>Fecha de Fin:</strong> @Model.FechaFin.ToString("dd/MM/yyyy HH:mm")</h5>
+                    <h5 class="card-text"><strong>Motivo de la Cita:</strong> @Model.MotivoCita</h5>
+                    <h5 class="card-text"><strong>Estado de la Cita:</strong> @Model.EstadoCita.EstadoNombre</h5>
+                    <a asp-action="Index" class="btn btn-primary mt-3">Volver al Listado</a>
+                </div>
+            </div>
+        }
+    </div>
+</body>
+</html>
