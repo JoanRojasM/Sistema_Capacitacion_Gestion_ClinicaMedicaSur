@@ -14,7 +14,7 @@
     <header>
         <h1>@ViewData["Title"]</h1>
         <nav>
-            <a asp-action="Index" class="button">Volver al Listado</a>
+            <a asp-action="Citas" class="button">Volver al Listado</a>
         </nav>
     </header>
     <main>
@@ -32,7 +32,7 @@
 
             <div class="form-group">
                 <label for="IdPaciente">Paciente:</label>
-                <select asp-for="IdPaciente" class="form-control" disabled>
+                <select asp-for="IdPaciente" class="form-control">
                     <option value="">Seleccionar Paciente</option>
                     @foreach (var paciente in ViewBag.Pacientes)
                     {
@@ -47,7 +47,7 @@
 
             <div class="form-group">
                 <label for="IdDoctor">Doctor:</label>
-                <select asp-for="IdDoctor" class="form-control" disabled>
+                <select asp-for="IdDoctor" class="form-control">
                     <option value="">Seleccionar Doctor</option>
                     @foreach (var doctor in ViewBag.Doctores)
                     {
@@ -62,13 +62,13 @@
 
             <div class="form-group">
                 <label for="FechaInicio">Fecha de Inicio:</label>
-                <input type="datetime-local" asp-for="FechaInicio" class="form-control" disabled />
+                <input type="datetime-local" asp-for="FechaInicio" class="form-control"/>
                 <span asp-validation-for="FechaInicio" class="text-danger"></span>
             </div>
 
             <div class="form-group">
                 <label for="FechaFin">Fecha de Fin:</label>
-                <input type="datetime-local" asp-for="FechaFin" class="form-control" disabled />
+                <input type="datetime-local" asp-for="FechaFin" class="form-control"/>
                 <span asp-validation-for="FechaFin" class="text-danger"></span>
             </div>
 

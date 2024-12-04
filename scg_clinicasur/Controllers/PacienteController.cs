@@ -131,7 +131,8 @@ namespace scg_clinicasur.Controllers
             ViewBag.EstadosCita = new SelectList(new List<SelectListItem>
             {
                 new SelectListItem { Value = "1", Text = "Programada" },
-                new SelectListItem { Value = "2", Text = "Cancelada" }
+                new SelectListItem { Value = "2", Text = "Cancelada" },
+                new SelectListItem { Value = "3", Text = "Completada" }
             }, "Value", "Text", idEstadoSeleccionado);
         }
 
