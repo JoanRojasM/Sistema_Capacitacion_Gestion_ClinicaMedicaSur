@@ -1,28 +1,48 @@
-body {
-    font-family: Arial, sans-serif;
-    background-color: #fafafa;
-    color: #1f1f1f;
+/* Aseguramos que no haya márgenes innecesarios */
+html, body {
     margin: 0;
     padding: 0;
+    height: 100%;
 }
 
 header {
-    color: #054DC5;
-    padding: 10px 0;
+    flex-shrink: 0;
+    color: #00B0B5;
     text-align: center;
 }
 
-nav {
-    margin-bottom: 20px;
+main {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center; /* Centra el contenido verticalmente */
+    align-items: center; /* Centra el contenido horizontalmente */
+    padding: 20px; /* Ajusta el espacio interno */
+}
+
+.content-wrapper {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+/* Ajuste del footer al final */
+footer {
+    background-color: #007A7E;
+    color: white;
+    padding: 10px 0;
+    text-align: center;
+    position: relative;
+    width: 100%;
 }
 
 .navbar {
-    background-color: #054DC5;
+    background-color: ##00B0B5;
     border-bottom: 2px solid #003366;
 }
 
     .navbar .navbar-brand {
-        color: #ffffff;
+        color: #ffffff !important;
     }
 
     .navbar .navbar-toggler {
@@ -30,7 +50,7 @@ nav {
     }
 
     .navbar .navbar-nav .nav-link {
-        color: #ffffff;
+        color: #ffffff !important;
         padding: 10px 15px;
     }
 
@@ -153,7 +173,7 @@ th, td {
 }
 
 thead {
-    background-color: #054DC5;
+    background-color: #054FC0;
     color: #fafafa;
 }
 
@@ -184,4 +204,3 @@ tbody tr:hover {
     .notification-item p {
         margin-bottom: 0;
     }
-

@@ -42,9 +42,9 @@ namespace scg_clinicasur.Models
         public string estado { get; set; } = "activo";
 
         //Relacion de Pacientes y Alergias
-        public ICollection<scg_clinicasur.Models.PacienteAlergia> PacienteAlergias { get; set; }
+        public ICollection<scg_clinicasur.Models.PacienteAlergia>? PacienteAlergias { get; set; }
         //Relación Contacto de Emergencia
-        public ICollection<ContactoEmergencia> ContactosEmergencia { get; set; }
+        public ICollection<ContactoEmergencia>? ContactosEmergencia { get; set; }
 
     }
 

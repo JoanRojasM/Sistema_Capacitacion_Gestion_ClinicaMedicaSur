@@ -28,35 +28,26 @@ namespace scg_clinicasur.Controllers
         [HttpPost]
         public IActionResult Login(string correo, string contraseña)
         {
-            // Buscar el usuario en la base de datos con el correo proporcionado e incluir su rol (ignorar mayúsculas y minúsculas)
             var user = _context.Usuarios
-                               .Include(u => u.roles) // Cargar el rol asociado al usuario
+                               .Include(u => u.roles)
                                .SingleOrDefault(u => u.correo.ToLower() == correo.ToLower());
 
             if (user == null)
             {
-                // Si el usuario no existe, mostrar un mensaje de error
                 ViewBag.ErrorMessage = "El usuario no existe. Por favor, verifica tu correo electrónico.";
                 return View();
             }
 
-            // Si el usuario existe, validar la contraseña
-            if (user.contraseña != contraseña)
+            if (!PasswordHelper.VerifyPassword(contraseña, user.contraseña)) // Verificar contraseña cifrada
             {
-                // Si la contraseña es incorrecta, mostrar un mensaje de error
                 ViewBag.ErrorMessage = "Contraseña incorrecta.";
                 return View();
             }
-            // Guardar el ID del usuario en la sesión
+
             HttpContext.Session.SetString("UserId", user.id_usuario.ToString());
-
-            // Guardar el rol en la sesión
             HttpContext.Session.SetString("UserRole", user.roles.nombre_rol);
-
-            // Guardar el nombre del usuario en la sesión
             HttpContext.Session.SetString("UserName", user.nombre);
 
-            // Validar el rol y redirigir según corresponda
             if (user.roles != null)
             {
                 switch (user.roles.nombre_rol.ToLower())
@@ -72,7 +63,7 @@ namespace scg_clinicasur.Controllers
                     case "paciente":
                         return RedirectToAction("Index", "Paciente");
                     default:
-                        return RedirectToAction("Index", "Home"); // Redirigir a una página por defecto
+                        return RedirectToAction("Index", "Home");
                 }
             }
             else
@@ -175,8 +166,10 @@ namespace scg_clinicasur.Controllers
                 return View(model);
             }
 
-            // Actualizar la contraseña del usuario
-            user.contraseña = model.NuevaContraseña; // En un entorno real, asegúrate de hashear la contraseña
+            // Cifrar la nueva contraseña
+            user.contraseña = PasswordHelper.HashPassword(model.NuevaContraseña);
+
+            // Guardar los cambios en la base de datos
             await _context.SaveChangesAsync();
 
             ViewBag.SuccessMessage = "Contraseña restablecida con éxito. Ahora puedes iniciar sesión con tu nueva contraseña.";

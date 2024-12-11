@@ -31,7 +31,7 @@
         <label for="id_capacitacion">Capacitación</label>
         <select asp-for="id_capacitacion" class="form-control">
             <option value="">Seleccione una capacitación</option>
-            @foreach (var capacitacion in ViewData["Capacitaciones"] as IEnumerable<scg_clinicasur.Models.Capacitacion>)
+            @foreach (var capacitacion in (IEnumerable<scg_clinicasur.Models.Capacitacion>)ViewData["Capacitaciones"])
             {
                 <option value="@capacitacion.id_capacitacion">@capacitacion.titulo</option>
             }
@@ -42,7 +42,8 @@
     <div class="form-group">
         <label for="id_usuario">Usuario</label>
         <select asp-for="id_usuario" class="form-control">
-            @foreach (var usuario in ViewData["Usuarios"] as IEnumerable<scg_clinicasur.Models.Usuario>)
+            <option value="">Seleccione un usuario</option>
+            @foreach (var usuario in (IEnumerable<scg_clinicasur.Models.Usuario>)ViewData["Usuarios"])
             {
                 <option value="@usuario.id_usuario">@usuario.nombre</option>
             }

@@ -15,8 +15,26 @@ namespace scg_clinicasur.Controllers
             _context = context;
         }
 
+        private bool EsAdministrador()
+        {
+            var userRole = HttpContext.Session.GetString("UserRole");
+            return userRole == "administrador";
+        }
+
+        private IActionResult VerificarAcceso()
+        {
+            if (!EsAdministrador())
+            {
+                return RedirectToAction("AccessDenied", "Home");
+            }
+            return null;
+        }
+
         public IActionResult Historial()
         {
+            var accesoDenegado = VerificarAcceso();
+            if (accesoDenegado != null) return accesoDenegado;
+
             var historial = _context.Contabilidades.ToList();
             return View(historial);
         }
@@ -24,12 +42,18 @@ namespace scg_clinicasur.Controllers
         [HttpGet]
         public IActionResult AgregarEntrada()
         {
+            var accesoDenegado = VerificarAcceso();
+            if (accesoDenegado != null) return accesoDenegado;
+
             return View();
         }
 
         [HttpPost]
         public IActionResult AgregarEntrada(Contabilidad contabilidad)
         {
+            var accesoDenegado = VerificarAcceso();
+            if (accesoDenegado != null) return accesoDenegado;
+
             if (ModelState.IsValid)
             {
                 contabilidad.Tipo = "Ingreso"; // Aseguramos que sea "Ingreso"
@@ -43,12 +67,18 @@ namespace scg_clinicasur.Controllers
         [HttpGet]
         public IActionResult RegistrarSalida()
         {
+            var accesoDenegado = VerificarAcceso();
+            if (accesoDenegado != null) return accesoDenegado;
+
             return View();
         }
 
         [HttpPost]
         public IActionResult RegistrarSalida(Contabilidad contabilidad)
         {
+            var accesoDenegado = VerificarAcceso();
+            if (accesoDenegado != null) return accesoDenegado;
+
             if (ModelState.IsValid)
             {
                 contabilidad.Tipo = "Gasto"; // Aseguramos que sea "Gasto"
@@ -62,6 +92,9 @@ namespace scg_clinicasur.Controllers
         [HttpGet]
         public IActionResult ReporteMensual()
         {
+            var accesoDenegado = VerificarAcceso();
+            if (accesoDenegado != null) return accesoDenegado;
+
             // Vista inicial sin filtro
             ViewBag.MesSeleccionado = null;
             return View(Enumerable.Empty<Contabilidad>());
@@ -70,6 +103,9 @@ namespace scg_clinicasur.Controllers
         [HttpPost]
         public IActionResult ReporteMensual(string mes)
         {
+            var accesoDenegado = VerificarAcceso();
+            if (accesoDenegado != null) return accesoDenegado;
+
             if (!string.IsNullOrEmpty(mes))
             {
                 // Convertir el valor del input (YYYY-MM) a un rango de fechas

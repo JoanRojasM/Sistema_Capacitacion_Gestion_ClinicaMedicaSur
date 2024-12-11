@@ -29,7 +29,7 @@ namespace scg_clinicasur.Models
 
         [Required(ErrorMessage = "El archivo es obligatorio")]
         [StringLength(255)]
-        public string archivo { get; set; }
+        public string? archivo { get; set; }
 
         [ForeignKey("Usuario")]
         public int? id_usuario { get; set; }

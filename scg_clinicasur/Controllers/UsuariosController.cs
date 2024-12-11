@@ -122,10 +122,13 @@ namespace scg_clinicasur.Controllers
             {
                 try
                 {
+                    // Cifrar la contraseña antes de guardarla
+                    usuario.contraseña = PasswordHelper.HashPassword(usuario.contraseña);
+
                     // Establecer la fecha de registro del usuario
                     usuario.fecha_registro = DateTime.Now;
 
-                    // Guardar el nuevo usuario en la base de datos si el modelo es válido
+                    // Guardar el nuevo usuario en la base de datos
                     _context.Add(usuario);
                     await _context.SaveChangesAsync();
 
@@ -139,7 +142,7 @@ namespace scg_clinicasur.Controllers
                     var smtpClient = new SmtpClient("smtp.outlook.com")
                     {
                         Port = 587,
-                        Credentials = new NetworkCredential("jrojas30463@ufide.ac.cr", "####"),
+                        Credentials = new NetworkCredential("jrojas30463@ufide.ac.cr", "####"), // Reemplaza con tu contraseña real
                         EnableSsl = true,
                     };
 
@@ -149,7 +152,7 @@ namespace scg_clinicasur.Controllers
                                   $"Tus credenciales de acceso son:<br/>" +
                                   $"Usuario: {usuario.correo}<br/>" +
                                   $"Contraseña: La que elegiste durante el registro.<br/>" +
-                                  $"Rol: {rolUsuario}<br/><br/>" +  // Incluir el nombre del rol
+                                  $"Rol: {rolUsuario}<br/><br/>" +
                                   $"Por favor, accede al sistema utilizando tus credenciales.<br/><br/>" +
                                   $"Gracias.";
 
@@ -242,8 +245,8 @@ namespace scg_clinicasur.Controllers
                     return RedirectToAction("Index"); // Redirigir al index si no se encuentra el usuario
                 }
 
-                // Eliminar la validación de contraseña si el campo está vacío
-                bool isPasswordUpdated = !string.IsNullOrWhiteSpace(usuario.contraseña); // Comprobar si la contraseña se actualizó
+                // Comprobar si la contraseña se ha actualizado
+                bool isPasswordUpdated = !string.IsNullOrWhiteSpace(usuario.contraseña);
                 if (!isPasswordUpdated)
                 {
                     // Remover el error de validación relacionado con la contraseña en el servidor
@@ -255,8 +258,8 @@ namespace scg_clinicasur.Controllers
                     // Solo actualizar la contraseña si se ha proporcionado una nueva
                     if (isPasswordUpdated)
                     {
-                        // Implementar el hash de la contraseña si es necesario
-                        usuarioExistente.contraseña = usuario.contraseña;
+                        // Cifrar la nueva contraseña
+                        usuarioExistente.contraseña = PasswordHelper.HashPassword(usuario.contraseña);
                     }
 
                     // Actualizamos los demás campos
@@ -267,21 +270,20 @@ namespace scg_clinicasur.Controllers
                     usuarioExistente.id_rol = usuario.id_rol;
                     usuarioExistente.estado = usuario.estado;
 
-                    // Guardamos los cambios en la base de datos
+                    // Guardar los cambios en la base de datos
                     await _context.SaveChangesAsync();
 
                     // Enviar notificación por correo electrónico
                     var smtpClient = new SmtpClient("smtp.outlook.com")
                     {
                         Port = 587,
-                        Credentials = new NetworkCredential("jrojas30463@ufide.ac.cr", "#####"),
+                        Credentials = new NetworkCredential("jrojas30463@ufide.ac.cr", "#####"), // Reemplaza con tu contraseña real
                         EnableSsl = true,
                     };
 
                     string subject = "Actualización de Información";
                     string body;
 
-                    // Si la contraseña fue actualizada
                     if (isPasswordUpdated)
                     {
                         subject = "Actualización de Contraseña";
@@ -291,7 +293,6 @@ namespace scg_clinicasur.Controllers
                     }
                     else
                     {
-                        // Si solo se actualizaron otros detalles
                         body = $"Hola {usuarioExistente.nombre},<br/><br/>" +
                                $"Tu información ha sido actualizada exitosamente.<br/><br/>" +
                                $"Detalles de la actualización:<br/>" +
@@ -313,31 +314,27 @@ namespace scg_clinicasur.Controllers
 
                     try
                     {
-                        // Intentar enviar el correo
                         await smtpClient.SendMailAsync(mailMessage);
                         TempData["SuccessMessage"] = "Usuario actualizado exitosamente y se ha enviado una notificación al correo.";
                     }
                     catch (Exception ex)
                     {
-                        // Manejar errores en el envío del correo
                         TempData["ErrorMessage"] = $"Error al enviar el correo: {ex.Message}";
                     }
 
                     return RedirectToAction("Index");
                 }
             }
-            catch (DbUpdateException ex)
+            catch (DbUpdateException)
             {
-                // Manejar errores de actualización de base de datos
                 TempData["ErrorMessage"] = "Ocurrió un error al actualizar la base de datos. Por favor, inténtelo de nuevo más tarde.";
             }
-            catch (TimeoutException ex)
+            catch (TimeoutException)
             {
                 TempData["ErrorMessage"] = "La operación tardó demasiado tiempo. Por favor, inténtelo más tarde.";
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                // Manejar cualquier otro tipo de excepción
                 TempData["ErrorMessage"] = "Ocurrió un error inesperado. Por favor, inténtelo nuevamente.";
             }
 
