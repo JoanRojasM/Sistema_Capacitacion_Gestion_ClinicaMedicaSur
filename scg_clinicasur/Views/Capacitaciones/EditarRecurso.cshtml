@@ -1,0 +1,49 @@
+﻿@model scg_clinicasur.Models.RecursosAprendizaje
+@{
+    ViewData["Title"] = "Editar Recurso de Aprendizaje";
+}
+
+<h1>@ViewData["Title"]</h1>
+
+<form asp-action="EditarRecurso" method="post" enctype="multipart/form-data">
+    <input type="hidden" asp-for="id_recurso" />
+
+    <div class="form-group">
+        <label asp-for="titulo" class="control-label">Título:</label>
+        <input asp-for="titulo" class="form-control" />
+        <span asp-validation-for="titulo" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="id_capacitacion" class="control-label">Capacitación:</label>
+        <select asp-for="id_capacitacion" class="form-control" asp-items="ViewBag.Capacitaciones">
+            <option value="">Seleccione una capacitación</option>
+        </select>
+        <span asp-validation-for="id_capacitacion" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="archivo" class="control-label">Archivo (Opcional):</label>
+        <input asp-for="archivo" type="file" class="form-control" />
+        <span asp-validation-for="archivo" class="text-danger"></span>
+        @if (!string.IsNullOrEmpty(Model.archivo))
+        {
+            <p>Archivo actual: <a href="@Model.archivo" target="_blank">Ver archivo</a></p>
+        }
+    </div>
+
+    <div class="form-group">
+        <label asp-for="enlace" class="control-label">Enlace (Opcional):</label>
+        <input asp-for="enlace" class="form-control" />
+        <span asp-validation-for="enlace" class="text-danger"></span>
+        @if (!string.IsNullOrEmpty(Model.enlace))
+        {
+            <p>Enlace actual: <a href="@Model.enlace" target="_blank">@Model.enlace</a></p>
+        }
+    </div>
+
+    <div class="form-group">
+        <input type="submit" value="Guardar Cambios" class="btn btn-primary" />
+        <a asp-action="Recursos" asp-route-id="@Model.id_capacitacion" class="btn btn-secondary">Cancelar</a>
+    </div>
+</form>

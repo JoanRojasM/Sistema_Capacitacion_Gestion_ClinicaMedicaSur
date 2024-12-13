@@ -1,6 +1,7 @@
 ﻿@model IEnumerable<scg_clinicasur.Models.RecursosAprendizaje>
 @{
     var capacitacion = ViewData["Capacitacion"] as scg_clinicasur.Models.Capacitacion;
+    var userRole = ViewData["UserRole"] as string;
 }
 
 <h2>Recursos de Capacitación: @capacitacion.titulo</h2>
@@ -26,6 +27,10 @@
             <th>Video</th>
             <th>Archivo</th>
             <th>Fecha de Creación</th>
+            @if (userRole == "administrador")
+            {
+                <th>Acciones</th>
+            }
         </tr>
     </thead>
     <tbody>
@@ -54,6 +59,15 @@
                     }
                 </td>
                 <td>@recurso.fecha_creacion.ToString("dd/MM/yyyy")</td>
+                @if (userRole == "administrador")
+                {
+                    <td>
+                        <a asp-action="EditarRecurso" asp-route-id="@recurso.id_recurso" class="btn btn-sm btn-warning">Editar</a>
+                        <form asp-action="EliminarRecurso" asp-route-id="@recurso.id_recurso" method="post" class="d-inline">
+                            <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('¿Estás seguro de que deseas eliminar este recurso?');">Eliminar</button>
+                        </form>
+                    </td>
+                }
             </tr>
         }
     </tbody>

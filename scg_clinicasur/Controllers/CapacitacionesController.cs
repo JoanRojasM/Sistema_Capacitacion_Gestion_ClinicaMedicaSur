@@ -415,6 +415,7 @@ namespace scg_clinicasur.Controllers
         }
         public async Task<IActionResult> Recursos(int id, string? buscarTitulo)
         {
+            var userRole = HttpContext.Session.GetString("UserRole");
             var capacitacion = await _context.Capacitaciones
                                               .Include(c => c.Usuario)
                                               .FirstOrDefaultAsync(c => c.id_capacitacion == id);
@@ -437,6 +438,7 @@ namespace scg_clinicasur.Controllers
 
             ViewData["Capacitacion"] = capacitacion;
             ViewData["buscarTitulo"] = buscarTitulo;
+            ViewData["UserRole"] = userRole;
 
             return View(recursos);
         }
@@ -536,6 +538,160 @@ namespace scg_clinicasur.Controllers
             ViewBag.Capacitaciones = new SelectList(capacitacionesList, "id_capacitacion", "DisplayText");
 
             return View(recurso);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> EditarRecurso(int id)
+        {
+            // Verificar si el rol del usuario es administrador
+            var userRole = HttpContext.Session.GetString("UserRole");
+            if (userRole != "administrador")
+            {
+                return RedirectToAction("AccessDenied", "Home"); // Redirigir a una página de acceso denegado
+            }
+
+            var recurso = await _context.RecursosAprendizaje.FindAsync(id);
+            if (recurso == null)
+            {
+                return NotFound();
+            }
+
+            // Cargar la lista de capacitaciones para la lista desplegable
+            var capacitaciones = _context.Capacitaciones.ToList();
+            var capacitacionesList = capacitaciones.Select(c => new
+            {
+                id_capacitacion = c.id_capacitacion,
+                DisplayText = c.titulo
+            }).ToList();
+
+            ViewBag.Capacitaciones = new SelectList(capacitacionesList, "id_capacitacion", "DisplayText", recurso.id_capacitacion);
+
+            return View(recurso);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> EditarRecurso(int id, RecursosAprendizaje recurso, IFormFile? archivo, string? enlace)
+        {
+            // Verificar si el rol del usuario es administrador
+            var userRole = HttpContext.Session.GetString("UserRole");
+            if (userRole != "administrador")
+            {
+                return RedirectToAction("AccessDenied", "Home"); // Redirigir a una página de acceso denegado
+            }
+
+            if (id != recurso.id_recurso)
+            {
+                return NotFound();
+            }
+
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    // Validar archivo o enlace
+                    if (archivo == null && string.IsNullOrEmpty(enlace))
+                    {
+                        ModelState.AddModelError("", "Debe proporcionar un archivo o un enlace.");
+                        return View(recurso);
+                    }
+
+                    // Actualizar archivo si se proporciona
+                    if (archivo != null)
+                    {
+                        var carpetaDestino = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "archivos");
+                        if (!Directory.Exists(carpetaDestino))
+                        {
+                            Directory.CreateDirectory(carpetaDestino);
+                        }
+
+                        var nombreArchivo = Path.GetFileName(archivo.FileName);
+                        var rutaArchivo = Path.Combine(carpetaDestino, nombreArchivo);
+
+                        using (var stream = new FileStream(rutaArchivo, FileMode.Create))
+                        {
+                            await archivo.CopyToAsync(stream);
+                        }
+
+                        recurso.archivo = Path.Combine("/archivos", nombreArchivo);
+                        recurso.enlace = null; // Limpiar enlace si se carga un archivo
+                    }
+                    else if (!string.IsNullOrEmpty(enlace))
+                    {
+                        recurso.enlace = enlace;
+                        recurso.archivo = null; // Limpiar archivo si se proporciona un enlace
+                    }
+
+                    _context.Update(recurso);
+                    await _context.SaveChangesAsync();
+
+                    return RedirectToAction("Recursos", new { id = recurso.id_capacitacion });
+                }
+                catch (Exception ex)
+                {
+                    ModelState.AddModelError("", $"Error al actualizar el recurso: {ex.Message}");
+                }
+            }
+
+            // Recargar capacitaciones en caso de error
+            var capacitaciones = _context.Capacitaciones.ToList();
+            var capacitacionesList = capacitaciones.Select(c => new
+            {
+                id_capacitacion = c.id_capacitacion,
+                DisplayText = c.titulo
+            }).ToList();
+
+            ViewBag.Capacitaciones = new SelectList(capacitacionesList, "id_capacitacion", "DisplayText", recurso.id_capacitacion);
+
+            return View(recurso);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> EliminarRecurso(int id)
+        {
+            // Verificar si el rol del usuario es administrador
+            var userRole = HttpContext.Session.GetString("UserRole");
+            if (userRole != "administrador")
+            {
+                return RedirectToAction("AccessDenied", "Home"); // Redirigir a una página de acceso denegado
+            }
+
+            var recurso = await _context.RecursosAprendizaje.FindAsync(id);
+            if (recurso == null)
+            {
+                return NotFound();
+            }
+
+            return View(recurso);
+        }
+
+        [HttpPost, ActionName("EliminarRecurso")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> ConfirmarEliminarRecurso(int id)
+        {
+            // Verificar si el rol del usuario es administrador
+            var userRole = HttpContext.Session.GetString("UserRole");
+            if (userRole != "administrador")
+            {
+                return RedirectToAction("AccessDenied", "Home"); // Redirigir a una página de acceso denegado
+            }
+
+            try
+            {
+                var recurso = await _context.RecursosAprendizaje.FindAsync(id);
+                if (recurso != null)
+                {
+                    _context.RecursosAprendizaje.Remove(recurso);
+                    await _context.SaveChangesAsync();
+                }
+
+                return RedirectToAction("Recursos", new { id = recurso?.id_capacitacion });
+            }
+            catch (Exception ex)
+            {
+                ModelState.AddModelError("", $"Error al eliminar el recurso: {ex.Message}");
+                return RedirectToAction("Recursos", new { id });
+            }
         }
     }
 }
