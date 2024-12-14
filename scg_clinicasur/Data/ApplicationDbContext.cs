@@ -27,5 +27,6 @@ namespace scg_clinicasur.Data
         public DbSet<scg_clinicasur.Models.HabitoVida> HabitosVida { get; set; }
         public DbSet<scg_clinicasur.Models.MedicamentoPrescrito> MedicamentosPrescritos { get; set; }
         public DbSet<scg_clinicasur.Models.RecursosAprendizaje> RecursosAprendizaje { get; set; }
+        public DbSet<scg_clinicasur.Models.Notificacion> Notificaciones { get; set; }
     }
 }

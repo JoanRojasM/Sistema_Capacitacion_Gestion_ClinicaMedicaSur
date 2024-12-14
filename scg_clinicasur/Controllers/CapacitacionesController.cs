@@ -146,16 +146,11 @@ namespace scg_clinicasur.Controllers
                         IsBodyHtml = true,
                     };
 
-                    // Agregar destinatarios dinámicos
-                    var usuarioResponsable = await _context.Usuarios.FindAsync(capacitacion.id_usuario);
-                    if (usuarioResponsable != null)
-                    {
-                        mailMessage.To.Add(usuarioResponsable.correo);
-                    }
+                    mailMessage.To.Add("daharoni90459@ufide.ac.cr");
 
                     try
                     {
-                        // Enviar el correo
+                        // Intentar enviar el correo
                         await smtpClient.SendMailAsync(mailMessage);
                         ViewBag.Message = "Correo de notificación enviado correctamente.";
                     }
