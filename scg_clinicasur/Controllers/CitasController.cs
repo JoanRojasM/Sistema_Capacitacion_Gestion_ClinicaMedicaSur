@@ -260,8 +260,8 @@ namespace scg_clinicasur.Controllers
                            $"<strong>Paciente:</strong> {paciente?.NombreCompleto}<br/>" +
                            $"<strong>Doctor:</strong> {doctor?.NombreCompleto}<br/>" +
                            $"<strong>Motivo:</strong> {cita.MotivoCita}<br/>" +
-                           $"<strong>Fecha de la Cita:</strong> {cita.FechaInicio}<br/>" +
-                           $"Por favor, ingresa al sistema para más detalles.<br/><br/>" +
+                           $"<strong>Fecha de la Cita:</strong> {cita.FechaInicio}<br/><br/>" +
+                           $"Por favor, ingresa al sistema para más detalles.<br/>" +
                            $"Gracias.",
                     IsBodyHtml = true,
                 };
@@ -419,10 +419,11 @@ namespace scg_clinicasur.Controllers
                         Body = $"Estimado usuario,<br/><br/>" +
                                $"Se ha modificado una de sus citas en el sistema.<br/><br/>" +
                                $"Detalles de la cita:<br/>" +
-                               $"<strong>ID:</strong> {cita.IdCita}<br/>" +
-                               $"<strong>Paciente:</strong> {cita.Paciente}<br/>" +
-                               $"<strong>Doctor:</strong> {cita.Doctor}<br/>" +
-                               $"Por favor, ingresa al sistema para más detalles.<br/><br/>" +
+                               $"<strong>Paciente:</strong> {paciente?.NombreCompleto}<br/>" +
+                               $"<strong>Doctor:</strong> {doctor?.NombreCompleto}<br/>" +
+                               $"<strong>Motivo:</strong> {cita.MotivoCita}<br/>" +
+                               $"<strong>Fecha de la Cita:</strong> {cita.FechaInicio}<br/><br/>" +
+                               $"Por favor, ingresa al sistema para más detalles.<br/>" +
                                $"Gracias.",
                         IsBodyHtml = true,
                     };
@@ -588,10 +589,11 @@ namespace scg_clinicasur.Controllers
                     Body = $"Estimado usuario,<br/><br/>" +
                            $"Se ha eliminado una de sus citas en el sistema.<br/><br/>" +
                            $"Detalles de la cita:<br/>" +
-                           $"<strong>ID:</strong> {cita.IdCita}<br/>" +
-                           $"<strong>Paciente:</strong> {cita.Paciente}<br/>" +
-                           $"<strong>Doctor:</strong> {cita.Doctor}<br/>" +
-                           $"Por favor, ingresa al sistema para más detalles.<br/><br/>" +
+                           $"<strong>Paciente:</strong> {paciente?.NombreCompleto}<br/>" +
+                           $"<strong>Doctor:</strong> {doctor?.NombreCompleto}<br/>" +
+                           $"<strong>Motivo:</strong> {cita.MotivoCita}<br/>" +
+                           $"<strong>Fecha de la Cita:</strong> {cita.FechaInicio}<br/><br/>" +
+                           $"Por favor, ingresa al sistema para más detalles.<br/>" +
                            $"Gracias.",
                     IsBodyHtml = true,
                 };

@@ -31,39 +31,4 @@ public class NotificacionController : Controller
         return View(notificaciones);
     }
 
-    public async Task<IActionResult> Delete(int? id)
-    {
-        if (id == null)
-        {
-            return NotFound();
-        }
-
-        var notificacion = await _context.Notificaciones
-            .FirstOrDefaultAsync(n => n.id_notificacion == id);
-
-        if (notificacion == null)
-        {
-            return NotFound();
-        }
-
-        return View(notificacion);
-    }
-
-    [HttpPost, ActionName("Delete")]
-    [ValidateAntiForgeryToken]
-    public async Task<IActionResult> DeleteConfirmed(int id)
-    {
-        var notificacion = await _context.Notificaciones
-            .FirstOrDefaultAsync(n => n.id_notificacion == id);
-
-        if (notificacion != null)
-        {
-            _context.Notificaciones.Remove(notificacion);
-            await _context.SaveChangesAsync();
-        }
-
-        return RedirectToAction(nameof(Index));
-    }
-
-
 }
