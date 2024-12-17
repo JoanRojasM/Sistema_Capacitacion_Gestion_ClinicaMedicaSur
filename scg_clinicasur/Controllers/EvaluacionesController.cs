@@ -40,13 +40,11 @@ namespace scg_clinicasur.Controllers
 
             var capacitaciones = _context.Capacitaciones.ToList();
 
-            // Verificar si los datos existen
-            if (usuarios == null || capacitaciones == null || !usuarios.Any() || !capacitaciones.Any())
+            if (usuarios == null || capacitaciones == null)
             {
-                return RedirectToAction("Error"); // Redirige a una página de error si no hay datos
+                return RedirectToAction("Error");
             }
 
-            // Pasar datos a la vista
             ViewData["Usuarios"] = usuarios;
             ViewData["Capacitaciones"] = capacitaciones;
 
@@ -111,100 +109,17 @@ namespace scg_clinicasur.Controllers
 
                 try
                 {
-                    // Verificar que el archivo no sea nulo y que tenga contenido
-                    if (archivo != null && archivo.Length > 0)
-                    {
-                        var carpetaDestino = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "archivos");
-                        if (!Directory.Exists(carpetaDestino))
-                        {
-                            Directory.CreateDirectory(carpetaDestino);
-                        }
-
-                        var nombreArchivo = Path.GetFileName(archivo.FileName);
-                        var rutaArchivo = Path.Combine(carpetaDestino, nombreArchivo);
-
-                        using (var stream = new FileStream(rutaArchivo, FileMode.Create))
-                        {
-                            await archivo.CopyToAsync(stream);
-                        }
-
-                        evaluacion.archivo = Path.Combine("/archivos", nombreArchivo); // Guardar la ruta relativa
-                    }
-                    else
-                    {
-                        ModelState.AddModelError("archivo", "El archivo es obligatorio.");
-                        // Recargar datos necesarios para la vista en caso de error
-                        ViewData["Usuarios"] = _context.Usuarios.ToList();
-                        ViewData["Capacitaciones"] = _context.Capacitaciones.ToList();
-                        return View(evaluacion);
-                    }
-
-                    // Asignar fecha de creación
-                    evaluacion.fecha_creacion = DateTime.Now;
-
-                    // Agregar la evaluación a la base de datos
-                    _context.Add(evaluacion);
-                    await _context.SaveChangesAsync();
-
-                    // Configuración del cliente SMTP para el envío de correos
-                    var smtpClient = new SmtpClient("smtp.outlook.com")
-                    {
-                        Port = 587,
-                        Credentials = new NetworkCredential("daharoni90459@ufide.ac.cr", "###"), // Cambiar ### por la contraseña real
-                        EnableSsl = true,
-                    };
-
-                    // Crear el mensaje de correo
-                    var mailMessage = new MailMessage
-                    {
-                        From = new MailAddress("daharoni90459@ufide.ac.cr"),
-                        Subject = $"Nueva Evaluación Disponible: {evaluacion.nombre}",
-                        Body = $"Estimado usuario,<br/><br/>" +
-                               $"Se te ha asignado una nueva evaluación en el sistema.<br/><br/>" +
-                               $"Detalles de la evaluación:<br/>" +
-                               $"<strong>Título:</strong> {evaluacion.nombre}<br/>" +
-                               $"<strong>Descripción:</strong> {evaluacion.descripcion}<br/>" +
-                               $"<strong>Duración:</strong> {evaluacion.tiempo_prueba}<br/>" +
-                               $"<strong>Fecha de Creación:</strong> {evaluacion.fecha_creacion.ToShortDateString()}<br/><br/>" +
-                               $"Por favor, ingresa al sistema para más detalles.<br/><br/>" +
-                               $"Gracias.",
-                        IsBodyHtml = true,
-                    };
-
-                    // Agregar destinatario dinámico si el usuario está asignado
-                    if (evaluacion.id_usuario.HasValue)
-                    {
-                        var usuario = await _context.Usuarios.FindAsync(evaluacion.id_usuario.Value);
-                        if (usuario != null)
-                        {
-                            mailMessage.To.Add(usuario.correo);
-                        }
-                    }
-                    else
-                    {
-                        mailMessage.To.Add("daharoni90459@ufide.ac.cr"); // Correo de fallback
-                    }
-
-                    try
-                    {
-                        await smtpClient.SendMailAsync(mailMessage);
-                        ViewBag.Message = "Correo de notificación enviado correctamente.";
-                    }
-                    catch (Exception ex)
-                    {
-                        ViewBag.Message = $"Error al enviar el correo: {ex.Message}";
-                    }
-
-                    return RedirectToAction(nameof(Index));
+                    await smtpClient.SendMailAsync(mailMessage);
+                    ViewBag.Message = "Correo de notificación enviado correctamente.";
                 }
                 catch (Exception ex)
                 {
-                    ModelState.AddModelError("", $"Error al guardar la evaluación: {ex.Message}");
+                    ViewBag.Message = $"Error al enviar el correo: {ex.Message}";
                 }
+
+                return RedirectToAction(nameof(Index));
             }
 
-            // Recargar datos necesarios para la vista en caso de error
-            ViewData["Usuarios"] = _context.Usuarios.ToList();
             ViewData["Capacitaciones"] = _context.Capacitaciones.ToList();
             ViewData["Usuarios"] = _context.Usuarios.ToList();
             return View(evaluacion);
@@ -225,7 +140,7 @@ namespace scg_clinicasur.Controllers
                 return NotFound();
             }
 
-            return View(evaluacion); 
+            return View(evaluacion);
         }
 
         [HttpPost, ActionName("Eliminar")]
@@ -264,7 +179,7 @@ namespace scg_clinicasur.Controllers
             }
 
             return View(evaluacion);
-        }        
+        }
 
     }
 
