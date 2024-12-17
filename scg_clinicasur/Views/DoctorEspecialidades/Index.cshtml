@@ -1,0 +1,40 @@
+﻿@model IEnumerable<scg_clinicasur.Models.Usuario>
+
+@{
+    ViewData["Title"] = "Asignar Especialidades a Doctores";
+}
+
+<div class="container">
+    <h1 class="my-4 text-center">@ViewData["Title"]</h1>
+
+    <div class="text-end mb-3">
+        <a asp-action="Crear" class="btn btn-success">
+            <i class="bi bi-plus-circle"></i> Asignar Especialidad
+        </a>
+    </div>
+
+    <table class="table table-striped table-hover">
+        <thead class="table-primary">
+            <tr>
+                <th>Doctor</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var doctor in Model)
+            {
+                <tr>
+                    <td>@doctor.nombre @doctor.apellido</td>
+                    <td>
+                        <a asp-action="Editar" asp-route-id="@doctor.id_usuario" class="btn btn-warning btn-sm">
+                            <i class="bi bi-pencil-square"></i> Editar
+                        </a>
+                        <a asp-action="Detalles" asp-route-id="@doctor.id_usuario" class="btn btn-info btn-sm">
+                            <i class="bi bi-eye"></i> Detalles
+                        </a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

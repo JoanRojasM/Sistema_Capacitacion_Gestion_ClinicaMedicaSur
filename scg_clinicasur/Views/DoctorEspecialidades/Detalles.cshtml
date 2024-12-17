@@ -1,0 +1,29 @@
+﻿@{
+    ViewData["Title"] = "Detalles de Especialidades";
+    var doctor = ViewBag.Doctor as scg_clinicasur.Models.Usuario;
+    var especialidades = ViewBag.Especialidades as List<string>;
+}
+
+<div class="container">
+    <h1 class="my-4 text-center">Especialidades de @doctor.nombre @doctor.apellido</h1>
+
+    @if (especialidades != null && especialidades.Any())
+    {
+        <ul class="list-group mb-3">
+            @foreach (var especialidad in especialidades)
+            {
+                <li class="list-group-item">@especialidad</li>
+            }
+        </ul>
+    }
+    else
+    {
+        <div class="alert alert-warning text-center">
+            El doctor no tiene especialidades asignadas actualmente.
+        </div>
+    }
+
+    <a asp-action="Index" class="btn btn-secondary">
+        <i class="bi bi-arrow-left"></i> Volver
+    </a>
+</div>
