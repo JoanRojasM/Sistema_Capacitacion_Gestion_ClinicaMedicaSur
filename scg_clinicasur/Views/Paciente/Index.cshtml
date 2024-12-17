@@ -1,42 +1,38 @@
 ﻿@{
-    ViewBag.Title = "Paciente";
-    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewData["Title"] = "Paciente";
 }
 
-<div class="container">
-    <header class="text-center mb-4">
-        <h1 class="display-5 mt-4">Bienvenido, Paciente</h1>
-        <p class="lead">Estamos aquí para atender tus necesidades de salud con compromiso y dedicación.</p>
-    </header>
-
-    <div class="row mb-4">
-        <div class="col-md-4 text-center">
-            <div class="p-4 bg-light rounded shadow-sm">
-                <h2 class="h4 text-dark">Gestión de Citas</h2>
-                <p class="mb-0">Consulta y administra tus citas médicas de manera rápida y sencilla.</p>
-                <a asp-action="Citas" class="btn btn-primary mt-3">Ver Citas</a>
-            </div>
-        </div>
-
-        <div class="col-md-4 text-center">
-            <div class="p-4 bg-success text-white rounded shadow-sm">
-                <h2 class="h4">Tu Salud</h2>
-                <p class="mb-0">Accede a información importante para mantener tu bienestar.</p>
-                <a asp-action="InformacionSalud" class="btn btn-light mt-3">Más Información</a>
-            </div>
-        </div>
-
-        <div class="col-md-4 text-center">
-            <div class="p-4 bg-warning rounded shadow-sm">
-                <h2 class="h4 text-dark">Soporte</h2>
-                <p class="mb-0">Contáctanos para cualquier duda o consulta que tengas.</p>
-                <a asp-action="Contacto" class="btn btn-dark mt-3">Contactar</a>
-            </div>
-        </div>
+<div class="container text-center">
+    <div class="my-5">
+        <h1 class="display-5 fw-bold">Bienvenido, Paciente</h1>
+        <p class="lead text-muted mx-auto" style="max-width: 700px;">
+            Estamos aquí para atender tus necesidades de salud con compromiso y dedicación. Accede a tus citas, consulta información de salud y contáctanos si necesitas ayuda.
+        </p>
     </div>
 
-    <div class="p-4 bg-primary text-white rounded text-center">
+    <!-- Tarjetas -->
+    <div class="row justify-content-center">
+        <!-- Gestión de Citas -->
+        <div class="col-md-4 mb-4">
+            <div class="card border-0 shadow-sm h-100">
+                <div class="card-body text-center">
+                    <i class="bi bi-calendar-check" style="font-size: 2.5rem; color: #00B0B5;"></i>
+                    <h5 class="card-title mt-3">Gestión de Citas</h5>
+                    <p class="card-text text-muted">
+                        Consulta y administra tus citas médicas de manera rápida y sencilla.
+                    </p>
+                    <a asp-action="Citas" class="btn btn-primary">
+                        <i class="bi bi-arrow-right-circle"></i> Ver Citas
+                    </a>
+                </div>
+            </div>
+        </div>
+
+    <!-- Mensaje Motivacional -->
+    <div class="p-4 p-md-5 rounded mt-4 text-white" style="background-color: #054DC5;">
         <h2 class="display-6">Estamos Comprometidos con Tu Bienestar</h2>
-        <p class="lead">En la Clínica Médica del Sur, trabajamos cada día para ofrecerte atención médica de calidad, personalizada y humana.</p>
+        <p class="lead">
+            En la Clínica Médica del Sur, trabajamos cada día para ofrecerte atención médica de calidad, personalizada y humana.
+        </p>
     </div>
 </div>

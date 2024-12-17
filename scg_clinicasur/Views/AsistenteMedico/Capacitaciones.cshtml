@@ -4,36 +4,66 @@
     ViewData["Title"] = "Mis Capacitaciones";
 }
 
-<h2 class="mb-4">Mis Capacitaciones</h2>
+<h2 class="mb-4 text-center">@ViewData["Title"]</h2>
 
-<table class="table table-striped table-bordered table-hover">
-    <thead class="thead-dark">
-        <tr>
-            <th>Título de la Capacitación</th>
-            <th>Descripción</th>
-            <th>Duración</th>
-            <th>Estado</th>
-            <th>Acciones</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var capacitacion in Model)
-        {
+<div class="table-responsive">
+    <table class="table table-striped table-hover table-bordered align-middle">
+        <thead class="table-dark text-center">
             <tr>
-                <td>@capacitacion.titulo</td>
-                <td>@capacitacion.descripcion</td>
-                <td>@capacitacion.duracion</td>
-                <td>@capacitacion.estado</td>
-                <td class="text-center">
-                    <form asp-action="SolicitarCancelacion" asp-controller="AsistenteLimpieza" method="post" class="d-inline">
-                        <input type="hidden" name="capacitacionId" value="@capacitacion.id_capacitacion" />
-                        <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('¿Estás seguro de que deseas solicitar la cancelación de esta capacitación?');">
-                            Solicitar Cancelación
-                        </button>
-                    </form>
-                    <a asp-controller="Capacitaciones" asp-action="Recursos" asp-route-id="@capacitacion.id_capacitacion" class="btn btn-info">Recursos de Aprendizaje</a>
-                </td>
+                <th>Título</th>
+                <th>Descripción</th>
+                <th>Duración</th>
+                <th>Estado</th>
+                <th>Acciones</th>
             </tr>
-        }
-    </tbody>
-</table>
+        </thead>
+        <tbody>
+            @if (Model != null && Model.Any())
+            {
+                @foreach (var capacitacion in Model)
+                {
+                    <tr>
+                        <td>@capacitacion.titulo</td>
+                        <td>@capacitacion.descripcion</td>
+                        <td>@capacitacion.duracion</td>
+                        <td>
+                            @if (capacitacion.estado == "Completada")
+                            {
+                                <span class="badge bg-success text-white">Completada</span>
+                            }
+                            else if (capacitacion.estado == "En Progreso")
+                            {
+                                <span class="badge bg-warning text-dark">En Progreso</span>
+                            }
+                            else
+                            {
+                                <span class="badge bg-secondary text-white">@capacitacion.estado</span>
+                            }
+                        </td>
+                        <td class="text-center">
+                            <div class="d-grid gap-2 d-md-flex justify-content-center">
+                                <form asp-action="SolicitarCancelacion" asp-controller="AsistenteLimpieza" method="post" class="d-inline">
+                                    <input type="hidden" name="capacitacionId" value="@capacitacion.id_capacitacion" />
+                                    <button type="submit" class="btn btn-danger btn-sm me-2"
+                                            onclick="return confirm('¿Estás seguro de que deseas solicitar la cancelación de esta capacitación?');">
+                                        <i class="bi bi-x-circle"></i> Cancelar
+                                    </button>
+                                </form>
+                                <a asp-controller="Capacitaciones" asp-action="Recursos" asp-route-id="@capacitacion.id_capacitacion"
+                                   class="btn btn-info btn-sm">
+                                    <i class="bi bi-folder"></i> Recursos
+                                </a>
+                            </div>
+                        </td>
+                    </tr>
+                }
+            }
+            else
+            {
+                <tr>
+                    <td colspan="5" class="text-muted text-center">No se encontraron capacitaciones disponibles.</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

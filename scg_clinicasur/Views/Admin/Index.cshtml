@@ -1,52 +1,95 @@
 ﻿@{
     ViewData["Title"] = "Admin";
 }
-<div class="container">
-    <div class="text-center my-4">
-        <h1 class="display-5">Bienvenido, Administrador</h1>
+
+<div class="container text-center">
+    <div class="my-5">
+        <h1 class="display-5 fw-bold">Bienvenido, Administrador</h1>
+        <p class="lead text-muted mx-auto" style="max-width: 700px;">
+            Accede a las herramientas administrativas para gestionar usuarios, citas, expedientes, contabilidad y más. Mantén todo bajo control con facilidad.
+        </p>
     </div>
 
-    <div class="p-4 p-md-5 mb-4 rounded text-white" style="background-color: #00B0B5;">
-        <div class="col-12 px-0 text-center">
-            <h1 class="display-4 fst-italic">Clínica Médica del Sur</h1>
-            <p class="lead my-3">
-                Fundada en 1990 por el Dr. Alvaro Sanabria Mora. Más de 25 años de experiencia.
-                Sucursal en Hatillo Centro.
-            </p>
+    <!-- Secciones Administrativas -->
+    <div class="row mb-4 text-center justify-content-center">
+        <!-- Gestión de Usuarios -->
+        <div class="col-md-4 mb-4">
+            <div class="p-4 rounded shadow-sm bg-white h-100">
+                <i class="bi bi-people" style="font-size: 2.5rem; color: #00B0B5;"></i>
+                <h2 class="h4 mt-3 text-dark">Gestión de Usuarios</h2>
+                <p class="text-muted mb-3">Administra los roles y permisos de todos los usuarios del sistema.</p>
+                <a asp-controller="Usuarios" asp-action="Index" class="btn btn-outline-primary">
+                    <i class="bi bi-arrow-right-circle"></i> Administrar Usuarios
+                </a>
+            </div>
+        </div>
+
+        <!-- Gestión de Especialidades -->
+        <div class="col-md-4 mb-4">
+            <div class="p-4 rounded shadow-sm bg-white h-100">
+                <i class="bi bi-clipboard-plus" style="font-size: 2.5rem; color: #28A745;"></i>
+                <h2 class="h4 mt-3 text-dark">Gestión de Especialidades</h2>
+                <p class="text-muted mb-3">Administra las especialidades asignadas a cada doctor.</p>
+                <a asp-controller="DoctorEspecialidades" asp-action="Index" class="btn btn-outline-success">
+                    <i class="bi bi-arrow-right-circle"></i> Gestionar Especialidades
+                </a>
+            </div>
+        </div>
+
+        <!-- Gestión de Citas -->
+        <div class="col-md-4 mb-4">
+            <div class="p-4 rounded shadow-sm bg-white h-100">
+                <i class="bi bi-calendar-check" style="font-size: 2.5rem; color: #FFC107;"></i>
+                <h2 class="h4 mt-3 text-dark">Gestión de Citas</h2>
+                <p class="text-muted mb-3">Organiza y monitorea las citas médicas de la clínica.</p>
+                <a asp-controller="Citas" asp-action="Index" class="btn btn-outline-warning">
+                    <i class="bi bi-arrow-right-circle"></i> Ver Citas
+                </a>
+            </div>
+        </div>
+
+        <!-- Gestión de Contabilidad -->
+        <div class="col-md-4 mb-4">
+            <div class="p-4 rounded shadow-sm bg-white h-100">
+                <i class="bi bi-cash" style="font-size: 2.5rem; color: #17A2B8;"></i>
+                <h2 class="h4 mt-3 text-dark">Contabilidad</h2>
+                <p class="text-muted mb-3">Accede a los registros financieros y contables de la clínica.</p>
+                <a asp-controller="Contabilidad" asp-action="Historial" class="btn btn-outline-info">
+                    <i class="bi bi-arrow-right-circle"></i> Ver Contabilidad
+                </a>
+            </div>
+        </div>
+
+        <!-- Gestión de Expedientes -->
+        <div class="col-md-4 mb-4">
+            <div class="p-4 rounded shadow-sm bg-white h-100">
+                <i class="bi bi-folder2-open" style="font-size: 2.5rem; color: #DC3545;"></i>
+                <h2 class="h4 mt-3 text-dark">Expedientes Médicos</h2>
+                <p class="text-muted mb-3">Revisa y administra los expedientes médicos de los pacientes.</p>
+                <a asp-controller="Expedientes" asp-action="Index" class="btn btn-outline-danger">
+                    <i class="bi bi-arrow-right-circle"></i> Ver Expedientes
+                </a>
+            </div>
+        </div>
+
+        <!-- Capacitaciones -->
+        <div class="col-md-4 mb-4">
+            <div class="p-4 rounded shadow-sm bg-white h-100">
+                <i class="bi bi-journal" style="font-size: 2.5rem; color: #6F42C1;"></i>
+                <h2 class="h4 mt-3 text-dark">Capacitaciones</h2>
+                <p class="text-muted mb-3">Consulta y organiza las capacitaciones para el personal.</p>
+                <a asp-controller="Capacitaciones" asp-action="Index" class="btn btn-outline-secondary">
+                    <i class="bi bi-arrow-right-circle"></i> Ver Capacitaciones
+                </a>
+            </div>
         </div>
     </div>
 
-    <div class="row mb-4">
-        <div class="col-md-4 text-center">
-            <div class="p-4 rounded shadow-sm" style="background-color: #e3f2fd;">
-                <h2 class="h4 text-dark">Nuestro Compromiso</h2>
-                <p class="mb-0">En la Clínica Médica del Sur, estamos dedicados a brindarte atención médica de calidad con calidez humana. Nuestro equipo de profesionales trabaja día a día para garantizar tu bienestar, ofreciendo servicios integrales y personalizados que te ayuden a mantener y mejorar tu salud.</p>
-            </div>
-        </div>
-        <div class="col-md-4 text-center">
-            <div class="p-4 rounded shadow-sm text-white" style="background-color: #007A7E;">
-                <h2 class="h4">Información de Contacto</h2>
-                <p class="mb-0">Teléfono: (506) 2252 0202</p>
-                <p class="mb-0">Correo: dralvarosanabria@gmail.com</p>
-                <p class="mb-0">
-                    Dirección:
-                    Hatillo Centro 10110 Hatillo, San José Province, Costa Rica
-                </p>
-            </div>
-        </div>
-        <div class="col-md-4 text-center">
-            <div class="p-4 rounded shadow-sm" style="background-color: #fdd835;">
-                <h2 class="h4 text-dark">Síguenos en Redes Sociales</h2>
-                <p class="mb-0">Instagram: Dr. Álvaro Sanabria Mora</p>
-                <p class="mb-0">Facebook: Clínica Médica del Sur</p>
-                <p class="mb-0">LinkedIn: Dr. Alvaro Sanabria</p>
-                <p class="mb-0">WhatsApp: 8378 8341</p>
-            </div>
-        </div>
-    </div>
-
+    <!-- Bloque Motivacional -->
     <div class="p-4 p-md-5 mb-4 rounded text-white text-center" style="background-color: #054DC5;">
-        <h2 class="display-6">Tu Salud, Nuestra Prioridad</h2>
-        <p class="lead">Creemos que la salud es el pilar fundamental para una vida plena. Por eso, en la Clínica Médica del Sur, nos comprometemos a cuidar de ti y de los tuyos, con tecnología de punta, atención especializada y un enfoque preventivo que pone tu bienestar en el centro de todo lo que hacemos.</p>
+        <h2 class="display-6">Tu Liderazgo es Clave</h2>
+        <p class="lead">
+            Como administrador, tu labor garantiza el correcto funcionamiento de nuestra clínica. Gracias a tu gestión eficiente, mantenemos la calidad y la confianza de nuestros pacientes.
+        </p>
     </div>
 </div>

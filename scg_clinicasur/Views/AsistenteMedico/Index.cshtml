@@ -1,34 +1,56 @@
 ﻿@{
-    ViewBag.Title = "Asistente Médico";
-    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewData["Title"] = "Asistente Médico";
 }
 
-<div class="container">
-    <header class="text-center mb-4">
-        <h1 class="display-5 mt-4">Bienvenido, Asistente Médico</h1>
-        <p class="lead">Gestión de Capacitaciones</p>
-    </header>
+<div class="container text-center">
+    <!-- Encabezado -->
+    <div class="my-5">
+        <h1 class="display-5 fw-bold">Bienvenido, Asistente Médico</h1>
+        <p class="lead text-muted mx-auto" style="max-width: 700px;">
+            Accede a tus herramientas y funciones para organizar evaluaciones y capacitaciones. Desempeña un papel clave en el apoyo médico diario.
+        </p>
+    </div>
 
-    <div class="row mb-4">
-        <div class="col-md-6 text-center">
-            <div class="p-4 bg-light rounded shadow-sm">
-                <h2 class="h4 text-dark">Programación de Evaluaciones</h2>
-                <p class="mb-0">Accede y gestiona las evaluaciones relacionadas con tus responsabilidades médicas.</p>
-                <a asp-controller="AsistenteMedico" asp-action="Evaluaciones" class="btn btn-primary mt-3">Ver Evaluaciones</a>
+    <!-- Tarjetas -->
+    <div class="row justify-content-center">
+        <!-- Programación de Evaluaciones -->
+        <div class="col-md-4 mb-4">
+            <div class="card border-0 shadow-sm h-100">
+                <div class="card-body text-center">
+                    <i class="bi bi-check2-circle" style="font-size: 2.5rem; color: #00B0B5;"></i>
+                    <h5 class="card-title mt-3">Programación de Evaluaciones</h5>
+                    <p class="card-text text-muted">
+                        Accede y gestiona las evaluaciones relacionadas con tus responsabilidades médicas.
+                    </p>
+                    <a asp-controller="AsistenteMedico" asp-action="Evaluaciones" class="btn btn-primary">
+                        <i class="bi bi-arrow-right-circle"></i> Ver Evaluaciones
+                    </a>
+                </div>
             </div>
         </div>
 
-        <div class="col-md-6 text-center">
-            <div class="p-4 bg-success text-white rounded shadow-sm">
-                <h2 class="h4">Programación de Capacitaciones</h2>
-                <p class="mb-0">Consulta y organiza las capacitaciones diseñadas para mejorar tus habilidades en asistencia médica.</p>
-                <a asp-controller="AsistenteMedico" asp-action="Capacitaciones" class="btn btn-light mt-3">Ver Capacitaciones</a>
+        <!-- Programación de Capacitaciones -->
+        <div class="col-md-4 mb-4">
+            <div class="card border-0 shadow-sm h-100">
+                <div class="card-body text-center">
+                    <i class="bi bi-journal-medical" style="font-size: 2.5rem; color: #28A745;"></i>
+                    <h5 class="card-title mt-3">Programación de Capacitaciones</h5>
+                    <p class="card-text text-muted">
+                        Consulta y organiza las capacitaciones diseñadas para mejorar tus habilidades en asistencia médica.
+                    </p>
+                    <a asp-controller="AsistenteMedico" asp-action="Capacitaciones" class="btn btn-success">
+                        <i class="bi bi-arrow-right-circle"></i> Ver Capacitaciones
+                    </a>
+                </div>
             </div>
         </div>
     </div>
 
-    <div class="p-4 bg-primary text-white rounded text-center">
+    <!-- Mensaje Motivacional -->
+    <div class="p-4 p-md-5 rounded mt-4 text-white" style="background-color: #054DC5;">
         <h2 class="display-6">Comprometidos con la Excelencia</h2>
-        <p class="lead">Estamos aquí para apoyarte en tu desarrollo profesional y garantizar la mejor atención médica para nuestros pacientes.</p>
+        <p class="lead">
+            Tu labor es fundamental para garantizar la mejor atención a nuestros pacientes. Estamos aquí para apoyarte en tu desarrollo y desempeño diario.
+        </p>
     </div>
 </div>

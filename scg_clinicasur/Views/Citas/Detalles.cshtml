@@ -4,45 +4,53 @@
     ViewData["Title"] = "Detalles de la Cita";
 }
 
-<!DOCTYPE html>
-<html>
-<head>
-    <link rel="stylesheet" href="~/css/site.css">
-    <title>@ViewData["Title"]</title>
-</head>
-<body>
-    <div class="container mt-5">
-        <h1>@ViewData["Title"]</h1>
+<div class="container mt-5">
+    <!-- Encabezado -->
+    <div class="text-center mb-4">
+        <h1 class="display-5 fw-bold text-primary">@ViewData["Title"]</h1>
+        <p class="lead text-muted">Consulta la información detallada de la cita seleccionada.</p>
+    </div>
 
-        @if (!string.IsNullOrEmpty(ViewBag.ErrorMessage))
-        {
-            <div class="alert alert-danger">@ViewBag.ErrorMessage</div>
-        }
-        else
-        {
-            <div class="card">
-                <div class="card-header">
-                    Información de la Cita
+    <!-- Tarjeta con la información de la cita -->
+    <div class="card shadow-lg border-0">
+        <div class="card-body p-4">
+            <h4 class="fw-bold text-secondary mb-4">Información de la Cita</h4>
+            <div class="row">
+                <!-- Información izquierda -->
+                <div class="col-md-6">
+                    <p class="mb-3"><strong>Paciente:</strong> @Model.Paciente.nombre @Model.Paciente.apellido</p>
+                    <p class="mb-3"><strong>Doctor:</strong> @Model.Doctor.nombre @Model.Doctor.apellido</p>
+                    <p class="mb-3"><strong>Fecha de Inicio:</strong> @Model.FechaInicio.ToString("dd/MM/yyyy HH:mm")</p>
+                    <p class="mb-3"><strong>Fecha de Fin:</strong> @Model.FechaFin.ToString("dd/MM/yyyy HH:mm")</p>
                 </div>
-                <div class="card-body">
-                    <h5 class="card-title">Paciente: @Model.Paciente.nombre @Model.Paciente.apellido</h5>
-                    <h5 class="card-title">Doctor: @Model.Doctor.nombre @Model.Doctor.apellido</h5>
-                    <p class="card-text"><strong>Fecha de Inicio:</strong> @Model.FechaInicio.ToString("dd/MM/yyyy HH:mm")</p>
-                    <p class="card-text"><strong>Fecha de Fin:</strong> @Model.FechaFin.ToString("dd/MM/yyyy HH:mm")</p>
-                    <p class="card-text"><strong>Motivo de la Cita:</strong> @Model.MotivoCita</p>
-                    <p class="card-text"><strong>Estado de la Cita:</strong> @Model.EstadoCita.EstadoNombre</p>
-                    <p class="card-text"><strong>Fecha de Creación:</strong> @Model.FechaCreacion?.ToString("dd/MM/yyyy HH:mm")</p>
 
-                    <h5 class="card-title mt-4">Historial Médico Relevante</h5>
-                    <p class="card-text">Agregar información del historial aquí</p>
-
-                    <h5 class="card-title mt-4">Notas Adicionales</h5>
-                    <p class="card-text">Agregar notas adicionales aquí</p>
-
-                    <a asp-action="Index" class="btn btn-primary mt-3">Volver al Listado</a>
+                <!-- Información derecha -->
+                <div class="col-md-6">
+                    <p class="mb-3"><strong>Motivo de la Cita:</strong> @Model.MotivoCita</p>
+                    <p class="mb-3">
+                        <strong>Estado de la Cita:</strong>
+                        <span class="badge bg-success">@Model.EstadoCita.EstadoNombre</span>
+                    </p>
+                    <p class="mb-3"><strong>Fecha de Creación:</strong> @Model.FechaCreacion?.ToString("dd/MM/yyyy HH:mm")</p>
                 </div>
             </div>
-        }
+
+            <hr class="my-4">
+
+            <!-- Sección de Historial Médico -->
+            <h4 class="fw-bold text-secondary mb-3">Historial Médico Relevante</h4>
+            <p class="text-muted fst-italic">Aquí se puede agregar información del historial médico del paciente.</p>
+
+            <!-- Sección de Notas Adicionales -->
+            <h4 class="fw-bold text-secondary mb-3 mt-4">Notas Adicionales</h4>
+            <p class="text-muted fst-italic">Espacio para agregar cualquier comentario o nota relevante.</p>
+        </div>
     </div>
-</body>
-</html>
+
+    <!-- Botón de navegación -->
+    <div class="text-center mt-4">
+        <a asp-action="Index" class="btn btn-secondary">
+            <i class="bi bi-arrow-left-circle"></i> Volver al Listado
+        </a>
+    </div>
+</div>

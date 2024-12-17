@@ -4,34 +4,67 @@
     ViewData["Title"] = "Confirmar Eliminación";
 }
 
-<!DOCTYPE html>
-<html>
-<head>
-    <link rel="stylesheet" href="~/css/site.css">
-    <title>@ViewData["Title"]</title>
-</head>
-<body>
-    <header>
-        <h1>@ViewData["Title"]</h1>
-        <nav>
-            <a asp-action="Index" class="button">Volver al Listado</a>
-        </nav>
-    </header>
-    <main>
-        <h3>Detalles del Usuario</h3>
-        <p><strong>Nombre:</strong> @Model.nombre @Model.apellido</p>
-        <p><strong>Correo:</strong> @Model.correo</p>
-        <p><strong>Teléfono:</strong> @Model.telefono</p>
-        <p><strong>Rol:</strong> @Model.roles.nombre_rol</p> <!-- Asegúrate de incluir el rol del usuario -->
-        <p><strong>Estado:</strong> @Model.estado</p>
-        <p><strong>Fecha de Registro:</strong> @Model.fecha_registro.ToString("dd/MM/yyyy")</p>
+<div class="container mt-5">
+    <!-- Encabezado -->
+    <div class="text-center mb-4">
+        <h1 class="display-5 fw-bold text-danger">Confirmar Eliminación</h1>
+        <p class="lead text-muted">Estás a punto de eliminar el siguiente usuario. Esta acción no se puede deshacer.</p>
+    </div>
 
-        <h4>¿Estás seguro de que deseas eliminar a este usuario?</h4>
-        <form method="post" asp-action="Eliminar">
+    <!-- Tarjeta con Información del Usuario -->
+    <div class="card shadow-sm border-0">
+        <div class="card-body p-4">
+            <h3 class="text-center text-primary mb-4">Detalles del Usuario</h3>
+            <dl class="row">
+                <dt class="col-sm-4 text-muted">Nombre Completo:</dt>
+                <dd class="col-sm-8 fw-bold">@Model.nombre @Model.apellido</dd>
+
+                <dt class="col-sm-4 text-muted">Correo Electrónico:</dt>
+                <dd class="col-sm-8">
+                    <i class="bi bi-envelope"></i> @Model.correo
+                </dd>
+
+                <dt class="col-sm-4 text-muted">Teléfono:</dt>
+                <dd class="col-sm-8">
+                    @(string.IsNullOrEmpty(Model.telefono) ? "No disponible" : Model.telefono)
+                </dd>
+
+                <dt class="col-sm-4 text-muted">Rol:</dt>
+                <dd class="col-sm-8">
+                    <span class="badge bg-info text-dark">@Model.roles.nombre_rol</span>
+                </dd>
+
+                <dt class="col-sm-4 text-muted">Estado:</dt>
+                <dd class="col-sm-8">
+                    @if (Model.estado == "activo")
+                    {
+                        <span class="badge bg-success">Activo</span>
+                    }
+                    else
+                    {
+                        <span class="badge bg-secondary">Inactivo</span>
+                    }
+                </dd>
+
+                <dt class="col-sm-4 text-muted">Fecha de Registro:</dt>
+                <dd class="col-sm-8">
+                    <i class="bi bi-calendar"></i> @Model.fecha_registro.ToString("dd/MM/yyyy")
+                </dd>
+            </dl>
+        </div>
+    </div>
+
+    <!-- Confirmación de Eliminación -->
+    <div class="text-center mt-4">
+        <h4 class="text-danger mb-3 fw-bold">¿Estás seguro de que deseas eliminar a este usuario?</h4>
+        <form method="post" asp-action="Eliminar" class="d-inline">
             <input type="hidden" asp-for="id_usuario" />
-            <button type="submit" class="button">Sí, Eliminar</button>
+            <button type="submit" class="btn btn-danger me-2">
+                <i class="bi bi-trash"></i> Sí, Eliminar
+            </button>
         </form>
-        <a href="@Url.Action("Index")" class="button">Cancelar</a>
-    </main>
-</body>
-</html>
+        <a href="@Url.Action("Index")" class="btn btn-secondary">
+            <i class="bi bi-x-circle"></i> Cancelar
+        </a>
+    </div>
+</div>

@@ -1,40 +1,69 @@
 ﻿@model scg_clinicasur.Models.Expediente
 
-<h1>Editar Expediente Médico</h1>
+@{
+    ViewData["Title"] = "Editar Expediente Médico";
+}
 
-<form asp-action="EditarExpedientes">
-    <div class="form-group">
-        <label for="nombrePaciente">Nombre del Paciente</label>
-        <input type="text" class="form-control" id="nombrePaciente" name="nombrePaciente" value="@Model.nombrePaciente" readonly />
+<div class="container mt-5">
+    <!-- Encabezado -->
+    <div class="text-center mb-4">
+        <h1 class="display-5 fw-bold text-primary">
+            <i class="bi bi-folder2"></i> @ViewData["Title"]
+        </h1>
+        <p class="lead text-muted">Actualiza la información del expediente del paciente.</p>
     </div>
 
-    <div class="form-group">
-        <label for="fechaNacimiento">Fecha de Nacimiento</label>
-        <input type="date" class="form-control" id="fechaNacimiento" name="fechaNacimiento" value="@Model.fechaNacimiento.ToString("yyyy-MM-dd")" readonly />
-    </div>
+    <!-- Formulario de Edición -->
+    <form asp-action="EditarExpedientes" method="post" class="shadow-sm p-4 bg-white rounded">
+        <div class="row g-4">
+            <!-- Nombre del Paciente -->
+            <div class="col-md-6">
+                <label for="nombrePaciente" class="form-label fw-bold">Nombre del Paciente</label>
+                <input type="text" class="form-control" id="nombrePaciente" name="nombrePaciente" value="@Model.nombrePaciente" readonly />
+            </div>
 
-    <div class="form-group">
-        <label for="ultimaConsulta">Última Consulta</label>
-        <input type="date" class="form-control" id="ultimaConsulta" name="ultimaConsulta" value="@Model.ultimaConsulta.ToString("yyyy-MM-dd")" />
-    </div>
+            <!-- Fecha de Nacimiento -->
+            <div class="col-md-6">
+                <label for="fechaNacimiento" class="form-label fw-bold">Fecha de Nacimiento</label>
+                <input type="date" class="form-control" id="fechaNacimiento" name="fechaNacimiento" value="@Model.fechaNacimiento.ToString("yyyy-MM-dd")" readonly />
+            </div>
 
-    <div class="form-group">
-        <label for="diagnostico">Diagnóstico</label>
-        <textarea class="form-control" id="diagnostico" name="diagnostico">@Model.diagnostico</textarea>
-    </div>
+            <!-- Última Consulta -->
+            <div class="col-md-6">
+                <label for="ultimaConsulta" class="form-label fw-bold">Última Consulta</label>
+                <input type="date" class="form-control" id="ultimaConsulta" name="ultimaConsulta" value="@Model.ultimaConsulta.ToString("yyyy-MM-dd")" />
+            </div>
 
-    <div class="form-group">
-        <label for="descripcion">Descripción</label>
-        <textarea class="form-control" id="descripcion" name="descripcion">@Model.descripcion</textarea>
-    </div>
+            <!-- Diagnóstico -->
+            <div class="col-md-6">
+                <label for="diagnostico" class="form-label fw-bold">Diagnóstico</label>
+                <textarea class="form-control" id="diagnostico" name="diagnostico" rows="3">@Model.diagnostico</textarea>
+            </div>
 
-    <div class="form-group">
-        <label for="tratamientosPrevios">Tratamientos Previos</label>
-        <textarea class="form-control" id="tratamientosPrevios" name="tratamientosPrevios">@Model.tratamientosPrevios</textarea>
-    </div>
+            <!-- Descripción -->
+            <div class="col-md-12">
+                <label for="descripcion" class="form-label fw-bold">Descripción</label>
+                <textarea class="form-control" id="descripcion" name="descripcion" rows="3">@Model.descripcion</textarea>
+            </div>
 
-    <input type="hidden" name="idExpediente" value="@Model.idExpediente" />
+            <!-- Tratamientos Previos -->
+            <div class="col-md-12">
+                <label for="tratamientosPrevios" class="form-label fw-bold">Tratamientos Previos</label>
+                <textarea class="form-control" id="tratamientosPrevios" name="tratamientosPrevios" rows="3">@Model.tratamientosPrevios</textarea>
+            </div>
 
-    <button type="submit" class="btn btn-primary">Guardar Cambios</button>
-    <a href="@Url.Action("DetallesConsulta", "Expedientes", new { id = Model.idExpediente })" class="btn btn-secondary">Cancelar</a>
-</form>
+            <!-- Campo Oculto -->
+            <input type="hidden" name="idExpediente" value="@Model.idExpediente" />
+        </div>
+
+        <!-- Botones de Acción -->
+        <div class="text-end mt-4">
+            <button type="submit" class="btn btn-primary me-2">
+                <i class="bi bi-save"></i> Guardar Cambios
+            </button>
+            <a href="@Url.Action("DetallesConsulta", "Expedientes", new { id = Model.idExpediente })" class="btn btn-secondary">
+                <i class="bi bi-x-circle"></i> Cancelar
+            </a>
+        </div>
+    </form>
+</div>

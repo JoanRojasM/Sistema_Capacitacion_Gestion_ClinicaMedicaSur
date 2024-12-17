@@ -4,280 +4,146 @@
     ViewData["Title"] = "Calendario de Citas";
 }
 
-<!DOCTYPE html>
-<html>
-<head>
-    <link rel="stylesheet" href="~/css/site.css">
-    <title>Calendario de Citas</title>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
-    <style>
-        * {
-            box-sizing: border-box;
-        }
-
-        ul {
-            list-style-type: none;
-        }
-
-        body {
-            font-family: Verdana, sans-serif;
-        }
-
-        .month {
-            padding: 2px 3px;
-            width: 100%;
-            background: #a9e0d5;
-            text-align: center;
-        }
-
-            .month ul {
-                margin: 0;
-                padding: 0;
-            }
-
-                .month ul li {
-                    color: white;
-                    font-size: 20px;
-                    letter-spacing: 3px;
-                }
-
-        .weekdays {
-            margin: 0;
-            padding: 10px 0;
-            background-color: #ddd;
-        }
-
-            .weekdays li {
-                display: inline-block;
-                width: 13.6%;
-                color: #666;
-                text-align: center;
-            }
-
-        .days {
-            padding: 10px 0;
-            background: #eee;
-            margin: 0;
-        }
-
-            .days li {
-                list-style-type: none;
-                display: inline-block;
-                width: 13.6%;
-                text-align: center;
-                margin-bottom: 5px;
-                font-size: 12px;
-                color: #000;
-                font-weight: bold;
-                border: 1px solid #000;
-                height: 100px;
-                background: #fff;
-                overflow-y: auto;
-                position: relative;
-            }
-
-            .days .active {
-                color: #777;
-                background: #fff;
-                border: 1px solid #000;
-            }
-
-            .days .inactive {
-                color: #777;
-                background: #f2f2f2;
-                border: 1px solid #bfbfbf;
-            }
-
-            .days .dia_actual {
-                color: #777;
-                background: #D3F9F6;
-            }
-
-            .days :hover {
-                cursor: pointer;
-                background: #e6fffa;
-            }
-
-        .registro {
-            background-color: #a9e0d5;
-            color: #000;
-            padding: 5px;
-            margin-top: 5px;
-            font-size: 10px;
-            border-radius: 4px;
-            overflow-y: auto;
-        }
-
-        .detalle-cita {
-            display: none;
-            position: absolute;
-            top: 20px;
-            left: 20px;
-            background: #fff;
-            border: 1px solid #000;
-            padding: 10px;
-            width: 300px;
-            max-height: 200px;
-            overflow-y: auto;
-            z-index: 10;
-        }
-
-            .detalle-cita .close-btn {
-                cursor: pointer;
-                color: red;
-                float: right;
-                font-weight: bold;
-            }
-
-        .btn-detalles {
-            margin-top: 5px;
-            padding: 2px 5px;
-            font-size: 10px;
-            cursor: pointer;
-            background-color: #1abc9c;
-            color: #fff;
-            border: none;
-            border-radius: 3px;
-        }
-
-        .no-citas {
-            color: #777;
-            font-size: 10px;
-            margin-top: 5px;
-            display: block;
-        }
-    </style>
-</head>
-<body>
-
-    <h1>Calendario de Citas</h1>
-
-    <div class="col">
-        <label for="fecha">Seleccionar mes</label>
-        <input type="month" name="fecha" id="fecha" class="form-control">
+<div class="container mt-5">
+    <!-- Encabezado -->
+    <div class="text-center mb-4">
+        <h1 class="display-5 fw-bold text-primary">@ViewData["Title"]</h1>
+        <p class="lead text-muted">Visualiza y gestiona las citas médicas programadas por día.</p>
     </div>
 
-    <div class="month">
-        <ul>
-            <li><span id="mes">Mes</span> <br><span id="anno" style="font-size:18px"></span></li>
-        </ul>
+    <!-- Selección de Mes -->
+    <div class="row mb-4 justify-content-center">
+        <div class="col-md-4">
+            <label for="fecha" class="form-label fw-bold">Seleccionar Mes</label>
+            <input type="month" id="fecha" class="form-control" min="@DateTime.Now.ToString("yyyy-MM")" />
+        </div>
     </div>
 
-    <ul class="weekdays">
-        <li>Lunes</li>
-        <li>Martes</li>
-        <li>Miércoles</li>
-        <li>Jueves</li>
-        <li>Viernes</li>
-        <li>Sábado</li>
-        <li>Domingo</li>
-    </ul>
+    <!-- Calendario -->
+    <div class="card shadow-sm border-0">
+        <div class="card-body">
+            <!-- Encabezado del Mes -->
+            <div class="text-center mb-3">
+                <h3 class="fw-bold" id="mes"></h3>
+                <h5 id="anno" class="text-muted"></h5>
+            </div>
 
-    <ul id="dias" class="days"></ul>
+            <!-- Días de la Semana -->
+            <ul class="list-unstyled d-flex justify-content-between bg-light p-2 text-center rounded">
+                <li class="fw-bold flex-fill">Lunes</li>
+                <li class="fw-bold flex-fill">Martes</li>
+                <li class="fw-bold flex-fill">Miércoles</li>
+                <li class="fw-bold flex-fill">Jueves</li>
+                <li class="fw-bold flex-fill">Viernes</li>
+                <li class="fw-bold flex-fill">Sábado</li>
+                <li class="fw-bold flex-fill">Domingo</li>
+            </ul>
 
-    <!-- Div para mostrar detalles de las citas al hacer clic en un día -->
-    <div id="detalle-cita" class="detalle-cita">
-        <span class="close-btn" onclick="$('#detalle-cita').hide();">x</span>
-        <div id="detalle-contenido"></div>
+            <!-- Días -->
+            <ul id="dias" class="list-unstyled d-flex flex-wrap gap-1"></ul>
+        </div>
     </div>
+</div>
 
-    <script>
-        $(document).ready(function () {
-            const fecha = get_anno_mes();
-            $('#fecha').val(fecha);
+<!-- Detalle de Cita -->
+<div id="detalle-cita" class="position-fixed bg-white border rounded shadow p-3" style="display:none; z-index:1050; width: 300px;">
+    <button class="btn-close float-end" onclick="$('#detalle-cita').hide();"></button>
+    <div id="detalle-contenido" class="mt-2"></div>
+</div>
+
+<script>
+    $(document).ready(function () {
+        const fecha = get_anno_mes();
+        $('#fecha').val(fecha);
+        cargar_dias();
+
+        $('#fecha').change(function () {
             cargar_dias();
-
-            // Actualizar calendario al cambiar el mes
-            $('#fecha').change(function () {
-                cargar_dias();
-            });
         });
+    });
 
-        function cargar_dias() {
-            const date = new Date($('#fecha').val() + '-10 08:00:00');
-            const anno = date.getFullYear();
-            const mes = date.getMonth();
+    function cargar_dias() {
+        const date = new Date($('#fecha').val() + '-01');
+        const anno = date.getFullYear();
+        const mes = date.getMonth();
 
-            $('#anno').text(anno);
-            $('#mes').text(mes_a_texto(mes));
+        $('#anno').text(anno);
+        $('#mes').text(mes_a_texto(mes));
 
-            // Obtener citas desde el servidor
-            $.ajax({
-                url: `/Calendario/ObtenerCitasPorMes?year=${anno}&month=${mes + 1}`,
-                method: 'GET',
-                success: function (citas) {
-                    mostrarCalendario(anno, mes, citas);
-                },
-                error: function () {
-                    alert("No se pudieron cargar las citas");
-                }
-            });
-        }
-
-        function mostrarCalendario(anno, mes, citas) {
-            const PrimerDiaMes = new Date(anno, mes, 1);
-            const fecha_inicio = new Date(PrimerDiaMes);
-            fecha_inicio.setDate(1 - (PrimerDiaMes.getDay() + 6) % 7);
-
-            $('#dias').empty(); // Limpiar los días anteriores
-
-            for (let i = 0; i < 42; i++) {  // Mostrar 6 semanas (42 días)
-                const fecha_ciclo = new Date(fecha_inicio);
-                fecha_ciclo.setDate(fecha_inicio.getDate() + i);
-                const li = document.createElement('li');
-                li.innerHTML = fecha_ciclo.getDate();
-                li.classList.add(fecha_ciclo.getMonth() == mes ? 'active' : 'inactive');
-
-                // Agregar citas en el día correspondiente
-                const citasDia = citas.filter(c => new Date(c.fechaInicio).toDateString() === fecha_ciclo.toDateString());
-
-                // Si hay citas, mostrar botón "Detalles"; si no, mostrar "No hay citas para este día"
-                if (citasDia.length > 0) {
-                    const detallesBtn = document.createElement('button');
-                    detallesBtn.innerText = "Detalles";
-                    detallesBtn.classList.add('btn-detalles');
-                    detallesBtn.onclick = function () { mostrarDetallesCita(citasDia, fecha_ciclo); };
-                    li.appendChild(detallesBtn);
-                } else {
-                    const noCitasText = document.createElement('span');
-                    noCitasText.classList.add('no-citas');
-                    noCitasText.innerText = "No hay citas para este día";
-                    li.appendChild(noCitasText);
-                }
-
-                $('#dias').append(li);
+        // Obtener citas del servidor
+        $.ajax({
+            url: `/Calendario/ObtenerCitasPorMes?year=${anno}&month=${mes + 1}`,
+            method: 'GET',
+            success: function (citas) {
+                mostrarCalendario(anno, mes, citas);
+            },
+            error: function () {
+                alert("No se pudieron cargar las citas.");
             }
-        }
+        });
+    }
 
-        function mostrarDetallesCita(citasDia, fecha) {
-            const detalleCitaDiv = $('#detalle-cita');
-            const detalleContenido = $('#detalle-contenido');
-            detalleContenido.empty();
+    function mostrarCalendario(anno, mes, citas) {
+        const PrimerDiaMes = new Date(anno, mes, 1);
+        const fecha_inicio = new Date(PrimerDiaMes);
+        fecha_inicio.setDate(1 - (PrimerDiaMes.getDay() + 6) % 7);
+
+        $('#dias').empty();
+
+        for (let i = 0; i < 42; i++) {
+            const fecha_ciclo = new Date(fecha_inicio);
+            fecha_ciclo.setDate(fecha_inicio.getDate() + i);
+
+            const li = document.createElement('li');
+            li.className = "border rounded bg-light text-center p-2 flex-fill";
+            li.style.height = "120px";
+            li.innerHTML = `<div class="fw-bold">${fecha_ciclo.getDate()}</div>`;
+
+            if (fecha_ciclo.getMonth() != mes) {
+                li.classList.add('bg-secondary', 'text-white');
+            }
+
+            const citasDia = citas.filter(c => new Date(c.fechaInicio).toDateString() === fecha_ciclo.toDateString());
 
             if (citasDia.length > 0) {
-                citasDia.forEach(cita => {
-                    detalleContenido.append(`
-                        <div>
-                            <strong>Motivo:</strong> ${cita.motivoCita} <br>
-                            <strong>Paciente:</strong> ${cita.paciente} <br>
-                            <strong>Doctor:</strong> ${cita.doctor} <br>
-                            <strong>Hora:</strong> ${new Date(cita.fechaInicio).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })} - ${new Date(cita.fechaFin).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
-                        </div><hr>
-                    `);
-                });
+                const detallesBtn = document.createElement('button');
+                detallesBtn.innerText = "Ver Citas";
+                detallesBtn.classList.add('btn', 'btn-sm', 'btn-success', 'mt-2');
+                detallesBtn.onclick = function () { mostrarDetallesCita(citasDia, fecha_ciclo); };
+                li.appendChild(detallesBtn);
             } else {
-                detalleContenido.append("<p>No hay citas para este día.</p>");
+                li.innerHTML += `<div class="text-muted mt-2" style="font-size: 12px;">No hay citas</div>`;
             }
 
-            // Posicionar el cuadro y mostrarlo
-            detalleCitaDiv.css({ top: event.clientY + 10, left: event.clientX + 10 });
-            detalleCitaDiv.show();
+            $('#dias').append(li);
         }
+    }
 
-        // Funciones auxiliares
-        function mes_a_texto(mes) { return ["enero", "febrero", "marzo", "abril", "mayo", "junio", "julio", "agosto", "septiembre", "octubre", "noviembre", "diciembre"][mes]; }
-        function get_anno_mes() { const e = new Date(); return e.getFullYear() + "-" + (e.getMonth() + 1).toString().padStart(2, '0'); }
-    </script>
+    function mostrarDetallesCita(citasDia) {
+        const detalleContenido = $('#detalle-contenido');
+        detalleContenido.empty();
 
-</body>
-</html>
+        citasDia.forEach(cita => {
+            detalleContenido.append(`
+                <div class="mb-2">
+                    <strong>Motivo:</strong> ${cita.motivoCita}<br>
+                    <strong>Paciente:</strong> ${cita.paciente}<br>
+                    <strong>Doctor:</strong> ${cita.doctor}<br>
+                    <strong>Hora:</strong> ${new Date(cita.fechaInicio).toLocaleTimeString()} - ${new Date(cita.fechaFin).toLocaleTimeString()}
+                </div>
+                <hr>
+            `);
+        });
+
+        $('#detalle-cita').show();
+    }
+
+    function mes_a_texto(mes) {
+        return ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"][mes];
+    }
+
+    function get_anno_mes() {
+        const hoy = new Date();
+        return `${hoy.getFullYear()}-${(hoy.getMonth() + 1).toString().padStart(2, '0')}`;
+    }
+</script>

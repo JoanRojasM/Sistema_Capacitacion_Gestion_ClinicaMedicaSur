@@ -1,33 +1,84 @@
 ﻿@model scg_clinicasur.Models.ResultadosLaboratorio
 
+@{
+    ViewData["Title"] = "Editar Resultado de Laboratorio";
+}
+
 <!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Editar Resultado de Laboratorio</title>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <title>@ViewData["Title"]</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.10.5/font/bootstrap-icons.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #f8f9fa;
+        }
+
+        .container {
+            background-color: #ffffff;
+            border-radius: 10px;
+            box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+            padding: 30px;
+            margin-top: 30px;
+        }
+
+        h1 {
+            color: #0d6efd;
+            font-weight: bold;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .form-control-file {
+            padding: 8px;
+            border: 1px solid #ced4da;
+            border-radius: 5px;
+        }
+
+        .btn {
+            font-size: 1rem;
+            padding: 10px 15px;
+            transition: all 0.2s ease-in-out;
+        }
+
+            .btn:hover {
+                transform: scale(1.03);
+            }
+    </style>
 </head>
 <body>
     <div class="container mt-5">
-        <h2>Editar Resultado de Laboratorio</h2>
+        <!-- Título -->
+        <h1><i class="bi bi-pencil-square"></i> @ViewData["Title"]</h1>
 
+        <!-- Formulario -->
         <form asp-action="EditarResultado" method="post" enctype="multipart/form-data">
             @Html.AntiForgeryToken()
             <input type="hidden" name="id" value="@Model.IdResultado" />
 
-            <div class="form-group">
-                <label for="archivoPDF">Cargar Nuevo Archivo PDF</label>
-                <input type="file" class="form-control-file" id="archivoPDF" name="archivoPDF" accept=".pdf" required />
-                <small class="form-text text-muted">Solo se permiten archivos en formato PDF.</small>
+            <!-- Archivo PDF -->
+            <div class="mb-4">
+                <label for="archivoPDF" class="form-label fw-bold"><i class="bi bi-file-earmark-pdf"></i> Subir Nuevo Archivo PDF</label>
+                <input type="file" class="form-control" id="archivoPDF" name="archivoPDF" accept=".pdf" required />
+                <div class="form-text text-muted">Por favor, sube un archivo en formato PDF.</div>
             </div>
 
-            <button type="submit" class="btn btn-primary">Guardar Cambios</button>
-            <a href="@Url.Action("VerHistorialResultados", "Expedientes", new { idExpediente = Model.IdExpediente })" class="btn btn-secondary">Cancelar</a>
+            <!-- Botones -->
+            <div class="d-flex justify-content-between">
+                <button type="submit" class="btn btn-primary">
+                    <i class="bi bi-save"></i> Guardar Cambios
+                </button>
+                <a href="@Url.Action("VerHistorialResultados", "Expedientes", new { idExpediente = Model.IdExpediente })" class="btn btn-secondary">
+                    <i class="bi bi-arrow-left"></i> Cancelar
+                </a>
+            </div>
         </form>
     </div>
 
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

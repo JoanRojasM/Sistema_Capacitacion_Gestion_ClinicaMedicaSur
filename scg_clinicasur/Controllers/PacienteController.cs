@@ -234,7 +234,6 @@ namespace scg_clinicasur.Controllers
                 return View("ErrorCita");
             }
         }
-
         public IActionResult ListadoPacientes(string searchName)
         {
             // Obtener solo los usuarios con rol "paciente"

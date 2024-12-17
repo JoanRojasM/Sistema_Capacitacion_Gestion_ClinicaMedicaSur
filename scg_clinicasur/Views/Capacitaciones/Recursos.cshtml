@@ -4,71 +4,116 @@
     var userRole = ViewData["UserRole"] as string;
 }
 
-<h2>Recursos de Capacitación: @capacitacion.titulo</h2>
-
-<p><strong>Descripción:</strong> @capacitacion.descripcion</p>
-<p><strong>Duración:</strong> @capacitacion.duracion</p>
-
-<form asp-action="Recursos" method="get" class="form-inline mb-3">
-    <input type="hidden" name="id" value="@capacitacion?.id_capacitacion" />
-    <div class="form-group">
-        <input type="text" name="buscarTitulo" value="@ViewData["buscarTitulo"]" class="form-control" placeholder="Buscar por título..." />
+<div class="container mt-5">
+    <!-- Encabezado -->
+    <div class="text-center mb-4">
+        <h1 class="display-5 fw-bold text-primary">Recursos de Capacitación</h1>
+        <p class="lead text-muted">Detalles de la capacitación <strong>@capacitacion?.titulo</strong></p>
     </div>
-    <button type="submit" class="btn btn-primary ml-2">Buscar</button>
-    <a asp-action="Recursos" asp-route-id="@capacitacion?.id_capacitacion" class="btn btn-secondary ml-2">Limpiar</a>
-</form>
 
-<h3>Recursos de Aprendizaje</h3>
+    <!-- Tarjeta con detalles de la capacitación -->
+    <div class="card shadow-sm mb-4 border-0">
+        <div class="card-body">
+            <h4 class="card-title text-center text-success mb-3">Detalles de la Capacitación</h4>
+            <div class="row">
+                <div class="col-md-6">
+                    <p><strong>Título:</strong> @capacitacion?.titulo</p>
+                    <p><strong>Descripción:</strong> @capacitacion?.descripcion</p>
+                </div>
+                <div class="col-md-6">
+                    <p><strong>Duración:</strong> @(!string.IsNullOrEmpty(capacitacion?.duracion) ? capacitacion.duracion : "No especificada")</p>
+                    <p><strong>Fecha de Creación:</strong> @capacitacion?.fecha_creacion.ToString("dd/MM/yyyy")</p>
+                </div>
+            </div>
+        </div>
+    </div>
 
-<table class="table">
-    <thead>
-        <tr>
-            <th>Título</th>
-            <th>Video</th>
-            <th>Archivo</th>
-            <th>Fecha de Creación</th>
-            @if (userRole == "administrador")
-            {
-                <th>Acciones</th>
-            }
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var recurso in Model)
-        {
-            <tr>
-                <td>@recurso.titulo</td>
-                <td>
-                    @if (!string.IsNullOrEmpty(recurso.enlace))
+    <!-- Formulario de Búsqueda -->
+    <form asp-action="Recursos" method="get" class="mb-4">
+        <input type="hidden" name="id" value="@capacitacion?.id_capacitacion" />
+        <div class="input-group">
+            <input type="text" name="buscarTitulo" value="@ViewData["buscarTitulo"]" class="form-control" placeholder="Buscar por título...">
+            <button type="submit" class="btn btn-primary"><i class="bi bi-search"></i> Buscar</button>
+            <a asp-action="Recursos" asp-route-id="@capacitacion?.id_capacitacion" class="btn btn-secondary"><i class="bi bi-arrow-clockwise"></i> Limpiar</a>
+        </div>
+    </form>
+
+    <!-- Tabla de Recursos -->
+    <div class="table-responsive">
+        <table class="table table-hover table-striped align-middle shadow-sm">
+            <thead class="table-primary">
+                <tr>
+                    <th>Título</th>
+                    <th>Video</th>
+                    <th>Archivo</th>
+                    <th>Fecha de Creación</th>
+                    @if (userRole == "administrador")
                     {
-                        <a href="@recurso.enlace" target="_blank">Ver Video</a>
+                        <th>Acciones</th>
                     }
-                    else
-                    {
-                        <span>No disponible</span>
-                    }
-                </td>
-                <td>
-                    @if (!string.IsNullOrEmpty(recurso.archivo))
-                    {
-                        <a href="@Url.Content(recurso.archivo)" target="_blank">Ver Archivo</a>
-                    }
-                    else
-                    {
-                        <span>No disponible</span>
-                    }
-                </td>
-                <td>@recurso.fecha_creacion.ToString("dd/MM/yyyy")</td>
-                @if (userRole == "administrador")
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var recurso in Model)
                 {
-                    <td>
-                        <a asp-action="EditarRecurso" asp-route-id="@recurso.id_recurso" class="btn btn-sm btn-warning">Editar</a>
-                        <form asp-action="EliminarRecurso" asp-route-id="@recurso.id_recurso" method="post" class="d-inline">
-                            <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('¿Estás seguro de que deseas eliminar este recurso?');">Eliminar</button>
-                        </form>
-                    </td>
+                    <tr>
+                        <td class="fw-bold">@recurso.titulo</td>
+                        <td>
+                            @if (!string.IsNullOrEmpty(recurso.enlace))
+                            {
+                                <a href="@recurso.enlace" target="_blank" class="btn btn-sm btn-outline-info">
+                                    <i class="bi bi-play-circle"></i> Ver Video
+                                </a>
+                            }
+                            else
+                            {
+                                <span class="text-muted">No disponible</span>
+                            }
+                        </td>
+                        <td>
+                            @if (!string.IsNullOrEmpty(recurso.archivo))
+                            {
+                                <a href="@Url.Content(recurso.archivo)" target="_blank" class="btn btn-sm btn-outline-success">
+                                    <i class="bi bi-file-earmark"></i> Ver Archivo
+                                </a>
+                            }
+                            else
+                            {
+                                <span class="text-muted">No disponible</span>
+                            }
+                        </td>
+                        <td>@recurso.fecha_creacion.ToString("dd/MM/yyyy")</td>
+                        @if (userRole == "administrador")
+                        {
+                            <td>
+                                <div class="d-flex gap-2 justify-content-center">
+                                    <a asp-action="EditarRecurso" asp-route-id="@recurso.id_recurso" class="btn btn-sm btn-warning text-white">
+                                        <i class="bi bi-pencil"></i> Editar
+                                    </a>
+                                    <form asp-action="EliminarRecurso" asp-route-id="@recurso.id_recurso" method="post" class="d-inline">
+                                        <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('¿Estás seguro de que deseas eliminar este recurso?');">
+                                            <i class="bi bi-trash"></i> Eliminar
+                                        </button>
+                                    </form>
+                                </div>
+                            </td>
+                        }
+                    </tr>
                 }
-            </tr>
-        }
-    </tbody>
-</table>
+                @if (!Model.Any())
+                {
+                    <tr>
+                        <td colspan="5" class="text-center text-muted">No hay recursos disponibles.</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Botón Volver -->
+    <div class="text-center mt-4">
+        <a asp-action="Index" class="btn btn-secondary">
+            <i class="bi bi-arrow-left-circle"></i> Volver a Capacitaciones
+        </a>
+    </div>
+</div>

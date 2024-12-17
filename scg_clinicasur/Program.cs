@@ -25,9 +25,10 @@ builder.Services.AddHttpContextAccessor();
 builder.Services.AddAuthentication("MyCookieAuth")
     .AddCookie("MyCookieAuth", options =>
     {
-        options.LoginPath = "/Account/Login"; // Ruta de login
-        options.LogoutPath = "/Account/Logout"; // Ruta de logout
-        options.Cookie.SecurePolicy = CookieSecurePolicy.Always; // Asegúrate de que la cookie sea segura
+        options.LoginPath = "/Account/Login";      // Ruta de login
+        options.LogoutPath = "/Account/Logout";    // Ruta de logout
+        options.AccessDeniedPath = "/Home/AccessDenied"; // Redirección si el usuario no tiene permisos
+        options.Cookie.SecurePolicy = CookieSecurePolicy.Always; // Asegura que la cookie sea segura
     });
 
 // Add services to the container (controladores y vistas)

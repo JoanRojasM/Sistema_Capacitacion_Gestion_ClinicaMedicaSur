@@ -4,67 +4,62 @@
     ViewData["Title"] = "Listado de Citas";
 }
 
-<!DOCTYPE html>
-<html>
-<head>
-    <link rel="stylesheet" href="~/css/site.css">
-    <title>@ViewData["Title"]</title>
-</head>
-<body>
-    <header>
-        <h1>@ViewData["Title"]</h1>
-        <nav>
-            <div class="header-buttons">
-                <a asp-action="Crear" class="button">Crear Cita</a>
-                <a asp-action="Calendario" class="button">Calendario de Cita</a>
+<div class="container mt-5">
+    <!-- Encabezado -->
+    <div class="text-center mb-4">
+        <h1 class="display-5 fw-bold text-primary">@ViewData["Title"]</h1>
+        <p class="lead text-muted">Administra y visualiza todas las citas programadas en el sistema.</p>
+    </div>
 
-                <!-- Dropdown de filtrado por estado de cita -->
-                <div class="dropdown">
-                    <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
-                        Estado de Cita
-                    </button>
-                    <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                        <li>
-                            <div class="form-check">
-                                <input class="form-check-input" type="checkbox" id="checkProgramada" name="estado" value="programada">
-                                <label class="form-check-label" for="checkProgramada">
-                                    Programada
-                                </label>
-                            </div>
-                        </li>
-                        <li>
-                            <div class="form-check">
-                                <input class="form-check-input" type="checkbox" id="checkCancelada" name="estado" value="cancelada">
-                                <label class="form-check-label" for="checkCancelada">
-                                    Cancelada
-                                </label>
-                            </div>
-                        </li>
-                        <li>
-                            <div class="form-check">
-                                <input class="form-check-input" type="checkbox" id="checkCompletada" name="estado" value="completada">
-                                <label class="form-check-label" for="checkCompletada">
-                                    Completada
-                                </label>
-                            </div>
-                        </li>
-                        <li><hr class="dropdown-divider"></li>
-                        <li>
-                            <!-- Botón para confirmar la selección -->
-                            <button class="btn btn-secondary w-100" id="confirmFilter" onclick="applyFilter()">Confirmar</button>
-                        </li>
-                        <li>
-                            <!-- Botón para resetear el filtro -->
-                            <button class="btn btn-secondary w-100" id="resetFilter" onclick="resetFilter()">Resetear Filtro</button>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-        </nav>
-    </header>
-    <main>
-        <table class="table">
-            <thead>
+    <!-- Botones y Filtros -->
+    <div class="d-flex justify-content-between flex-wrap mb-4">
+        <!-- Botones de Crear y Calendario -->
+        <div class="d-flex gap-2">
+            <a asp-action="Crear" class="btn btn-success">
+                <i class="bi bi-calendar-plus"></i> Crear Cita
+            </a>
+            <a asp-action="Calendario" class="btn btn-info">
+                <i class="bi bi-calendar-check"></i> Calendario de Citas
+            </a>
+        </div>
+
+        <!-- Dropdown de Filtrado por Estado -->
+        <div class="dropdown">
+            <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
+                <i class="bi bi-funnel"></i> Filtrar por Estado
+            </button>
+            <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                <li>
+                    <div class="form-check ms-3">
+                        <input class="form-check-input" type="checkbox" id="checkProgramada" name="estado" value="programada">
+                        <label class="form-check-label" for="checkProgramada">Programada</label>
+                    </div>
+                </li>
+                <li>
+                    <div class="form-check ms-3">
+                        <input class="form-check-input" type="checkbox" id="checkCancelada" name="estado" value="cancelada">
+                        <label class="form-check-label" for="checkCancelada">Cancelada</label>
+                    </div>
+                </li>
+                <li>
+                    <div class="form-check ms-3">
+                        <input class="form-check-input" type="checkbox" id="checkCompletada" name="estado" value="completada">
+                        <label class="form-check-label" for="checkCompletada">Completada</label>
+                    </div>
+                </li>
+                <li><hr class="dropdown-divider"></li>
+                <li class="text-center">
+                    <button class="btn btn-sm btn-primary" onclick="applyFilter()">Confirmar</button>
+                    <button class="btn btn-sm btn-outline-secondary" onclick="resetFilter()">Resetear</button>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- Tabla de Citas -->
+    <div class="table-responsive">
+        <table class="table table-striped table-hover text-center shadow-sm">
+            <thead class="table-primary">
                 <tr>
                     <th>Paciente</th>
                     <th>Doctor</th>
@@ -84,38 +79,56 @@
                         <td>@cita.FechaInicio.ToString("dd/MM/yyyy HH:mm")</td>
                         <td>@cita.FechaFin.ToString("dd/MM/yyyy HH:mm")</td>
                         <td>@cita.MotivoCita</td>
-                        <td>@cita.EstadoCita.EstadoNombre</td>
                         <td>
-                            <a asp-action="Detalles" asp-route-id="@cita.IdCita" class="btn btn-info">Detalles</a>
-                            <a asp-action="Editar" asp-route-id="@cita.IdCita" class="btn btn-primary">Editar</a>
-                            <a asp-action="Eliminar" asp-route-id="@cita.IdCita" class="btn btn-danger">Eliminar</a>
+                            @if (cita.EstadoCita.EstadoNombre == "programada")
+                            {
+                                <span class="badge bg-info text-dark">Programada</span>
+                            }
+                            else if (cita.EstadoCita.EstadoNombre == "cancelada")
+                            {
+                                <span class="badge bg-danger">Cancelada</span>
+                            }
+                            else if (cita.EstadoCita.EstadoNombre == "completada")
+                            {
+                                <span class="badge bg-success">Completada</span>
+                            }
+                        </td>
+                        <td>
+                            <div class="btn-group" role="group">
+                                <a asp-action="Detalles" asp-route-id="@cita.IdCita" class="btn btn-sm btn-info">
+                                    <i class="bi bi-eye"></i> Detalles
+                                </a>
+                                <a asp-action="Editar" asp-route-id="@cita.IdCita" class="btn btn-sm btn-warning text-white">
+                                    <i class="bi bi-pencil-square"></i> Editar
+                                </a>
+                                <a asp-action="Eliminar" asp-route-id="@cita.IdCita" class="btn btn-sm btn-danger" onclick="return confirm('¿Estás seguro de que deseas eliminar esta cita?');">
+                                    <i class="bi bi-trash"></i> Eliminar
+                                </a>
+                            </div>
                         </td>
                     </tr>
                 }
             </tbody>
         </table>
-    </main>
+    </div>
+</div>
 
-    <!-- Script para capturar los estados seleccionados y enviarlos al servidor -->
-    <script>
-        function applyFilter() {
-            const selectedStates = [];
-            if (document.getElementById('checkProgramada').checked) selectedStates.push('programada');
-            if (document.getElementById('checkCancelada').checked) selectedStates.push('cancelada');
-            if (document.getElementById('checkCompletada').checked) selectedStates.push('completada');
+<!-- Script para Filtrar Estados -->
+<script>
+    function applyFilter() {
+        const selectedStates = [];
+        if (document.getElementById('checkProgramada').checked) selectedStates.push('programada');
+        if (document.getElementById('checkCancelada').checked) selectedStates.push('cancelada');
+        if (document.getElementById('checkCompletada').checked) selectedStates.push('completada');
 
-            // Redirigir con los estados seleccionados como parámetros de consulta
-            const queryString = selectedStates.map(state => `estado=${state}`).join('&');
-            window.location.href = `?${queryString}`;
-        }
+        const queryString = selectedStates.map(state => `estado=${state}`).join('&');
+        window.location.href = `?${queryString}`;
+    }
 
-        function resetFilter() {
-            // Desmarcar todos los checkboxes y recargar la página
-            document.getElementById('checkProgramada').checked = false;
-            document.getElementById('checkCancelada').checked = false;
-            document.getElementById('checkCompletada').checked = false;
-            window.location.href = '?';
-        }
-    </script>
-</body>
-</html>
+    function resetFilter() {
+        document.getElementById('checkProgramada').checked = false;
+        document.getElementById('checkCancelada').checked = false;
+        document.getElementById('checkCompletada').checked = false;
+        window.location.href = '?';
+    }
+</script>

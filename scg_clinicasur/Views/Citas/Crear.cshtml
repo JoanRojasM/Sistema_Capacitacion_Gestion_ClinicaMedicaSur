@@ -4,181 +4,132 @@
     ViewData["Title"] = "Crear Cita";
 }
 
-<!DOCTYPE html>
-<html>
-<head>
-    <link rel="stylesheet" href="~/css/site.css">
-    <title>@ViewData["Title"]</title>
-    <style>
-        .hora-bloque {
-            margin: 5px;
-            padding: 10px 15px;
-            border: 1px solid #333; /* Borde gris oscuro */
-            background-color: #555; /* Fondo gris oscuro */
-            color: #fff;
-            cursor: pointer;
-            transition: background-color 0.3s ease; /* Efecto de transición */
-        }
+<div class="container mt-5">
+    <!-- Encabezado -->
+    <div class="text-center mb-4">
+        <h1 class="display-5 fw-bold text-primary">@ViewData["Title"]</h1>
+        <p class="lead text-muted">Seleccione un doctor, una fecha y la hora para programar la cita.</p>
+    </div>
 
-        .hora-bloque:hover {
-                background-color: #666; /* Un gris un poco más claro al pasar el cursor */
-        }
+    <!-- Mensaje de Error -->
+    @if (ViewData.ModelState.ContainsKey("") && ViewData.ModelState[""].Errors.Count > 0)
+    {
+        <div class="alert alert-danger">
+            @foreach (var error in ViewData.ModelState[""].Errors)
+            {
+                <p>@error.ErrorMessage</p>
+            }
+        </div>
+    }
 
-        .hora-bloque.selected {
-                background-color: #28a745; /* Verde para el bloque seleccionado */
-                color: #fff;
-                border-color: #28a745;
-        }
-
-        .hora-bloque.disabled {
-                background-color: #ccc; /* Gris claro para los botones deshabilitados */
-                color: #666;
-                cursor: not-allowed;
-        }
-    </style>
-</head>
-<body>
-    <header>
-        <h1>@ViewData["Title"]</h1>
-        <nav>
-            <a asp-action="Index" class="button">Volver al Listado</a>
-        </nav>
-    </header>
-    <main>
-        <!-- Sección para mostrar mensajes de error -->
-        @if (ViewData.ModelState.ContainsKey("") && ViewData.ModelState[""].Errors.Count > 0)
-        {
-            <div class="alert alert-danger">
-                @foreach (var error in ViewData.ModelState[""].Errors)
-                {
-                    <p>@error.ErrorMessage</p>
-                }
-            </div>
-        }
-
-        <!-- Formulario de creación de cita -->
-        <form method="post" asp-action="Crear">
-            <div class="form-group">
-                <label for="IdPaciente">Paciente:</label>
-                <select asp-for="IdPaciente" class="form-control">
+    <!-- Formulario -->
+    <form method="post" asp-action="Crear">
+        <div class="row g-4">
+            <!-- Seleccionar Paciente -->
+            <div class="col-md-6">
+                <label for="IdPaciente" class="form-label fw-bold">Paciente</label>
+                <select asp-for="IdPaciente" class="form-select">
                     <option value="">Seleccionar Paciente</option>
                     @foreach (var paciente in ViewBag.Pacientes)
                     {
-                        <option value="@paciente.id_usuario">
-                            @paciente.nombre @paciente.apellido
-                        </option>
+                        <option value="@paciente.id_usuario">@paciente.nombre @paciente.apellido</option>
                     }
                 </select>
                 <span asp-validation-for="IdPaciente" class="text-danger"></span>
             </div>
 
-            <div class="form-group">
-                <label for="IdDoctor">Doctor:</label>
-                <select asp-for="IdDoctor" id="doctorSelect" class="form-control">
+            <!-- Seleccionar Doctor -->
+            <div class="col-md-6">
+                <label for="IdDoctor" class="form-label fw-bold">Doctor</label>
+                <select asp-for="IdDoctor" id="doctorSelect" class="form-select">
                     <option value="">Seleccionar Doctor</option>
                     @foreach (var doctor in ViewBag.Doctores)
                     {
-                        <option value="@doctor.id_usuario">
-                            @doctor.nombre @doctor.apellido
-                        </option>
+                        <option value="@doctor.id_usuario">@doctor.nombre @doctor.apellido</option>
                     }
                 </select>
                 <span asp-validation-for="IdDoctor" class="text-danger"></span>
             </div>
 
-            <div class="form-group">
-                <label for="fecha">Fecha de Cita:</label>
+            <!-- Fecha de Cita -->
+            <div class="col-md-6">
+                <label for="fechaCita" class="form-label fw-bold">Fecha de la Cita</label>
                 <input type="date" id="fechaCita" class="form-control" min="@DateTime.Now.ToString("yyyy-MM-dd")" />
             </div>
 
-            <!-- Contenedor para las horas disponibles -->
-            <div id="horasDisponibles" class="form-group">
-                <label>Horas Disponibles:</label>
-                <div id="horasContainer">
-                    <!-- Las horas disponibles se cargarán aquí -->
-                </div>
+            <!-- Contenedor de Horas -->
+            <div class="col-md-12">
+                <label class="form-label fw-bold">Horas Disponibles</label>
+                <div id="horasContainer" class="d-flex flex-wrap gap-2"></div>
+                <input type="hidden" id="FechaInicio" name="FechaInicio" />
+                <input type="hidden" id="FechaFin" name="FechaFin" />
             </div>
 
-            <!-- Campos ocultos para FechaInicio y FechaFin -->
-            <input type="hidden" id="FechaInicio" name="FechaInicio" />
-            <input type="hidden" id="FechaFin" name="FechaFin" />
-
-            <div class="form-group">
-                <label for="MotivoCita">Motivo de la Cita:</label>
+            <!-- Motivo -->
+            <div class="col-md-6">
+                <label for="MotivoCita" class="form-label fw-bold">Motivo de la Cita</label>
                 <input type="text" asp-for="MotivoCita" class="form-control" required />
                 <span asp-validation-for="MotivoCita" class="text-danger"></span>
             </div>
 
-            <div class="form-group">
-                <label for="IdEstadoCita">Estado de la Cita:</label>
-                <select asp-for="IdEstadoCita" class="form-control">
+            <!-- Estado -->
+            <div class="col-md-6">
+                <label for="IdEstadoCita" class="form-label fw-bold">Estado</label>
+                <select asp-for="IdEstadoCita" class="form-select">
                     <option value="1">Programada</option>
                     <option value="2">Cancelada</option>
                     <option value="3">Completada</option>
                 </select>
-                <span asp-validation-for="IdEstadoCita" class="text-danger"></span>
             </div>
+        </div>
 
-            <button type="submit" class="btn btn-primary">Guardar</button>
-        </form>
-    </main>
+        <!-- Botones -->
+        <div class="text-center mt-4">
+            <button type="submit" class="btn btn-success">
+                <i class="bi bi-calendar-plus"></i> Guardar
+            </button>
+            <a asp-action="Index" class="btn btn-secondary">
+                <i class="bi bi-arrow-left"></i> Cancelar
+            </a>
+        </div>
+    </form>
+</div>
 
-    <script>
-        // Al cambiar el doctor o la fecha, cargar las horas disponibles
-        document.getElementById('doctorSelect').addEventListener('change', cargarHorasDisponibles);
-        document.getElementById('fechaCita').addEventListener('change', cargarHorasDisponibles);
+<!-- Script para cargar horas disponibles -->
+<script>
+    document.getElementById('doctorSelect').addEventListener('change', cargarHorasDisponibles);
+    document.getElementById('fechaCita').addEventListener('change', cargarHorasDisponibles);
 
+    function cargarHorasDisponibles() {
+        var idDoctor = document.getElementById('doctorSelect').value;
+        var fecha = document.getElementById('fechaCita').value;
 
-        function cargarHorasDisponibles() {
-            var idDoctor = document.getElementById('doctorSelect').value;
-            var fecha = document.getElementById('fechaCita').value;
+        if (idDoctor && fecha) {
+            fetch(`/Citas/ObtenerHorasDisponibles?idDoctor=${idDoctor}&fecha=${fecha}`)
+                .then(response => response.json())
+                .then(data => {
+                    var horasContainer = document.getElementById('horasContainer');
+                    horasContainer.innerHTML = '';
+                    data.forEach(hora => {
+                        var horaBtn = document.createElement('button');
+                        horaBtn.classList.add('hora-bloque', 'btn', 'btn-sm');
+                        horaBtn.innerText = `${hora.horaInicio} - ${hora.horaFin}`;
+                        horaBtn.type = 'button';
 
-            // Convertir la fecha al formato yyyy-MM-dd
-            if (fecha) {
-                fecha = new Date(fecha).toISOString().split('T')[0];
-            }
-
-            if (idDoctor && fecha) {
-                fetch(`/Citas/ObtenerHorasDisponibles?idDoctor=${idDoctor}&fecha=${fecha}`)
-                    .then(response => response.json())
-                    .then(data => {
-                        console.log("Datos de horas disponibles:", data);  // Verificar aquí los datos
-
-                        var horasContainer = document.getElementById('horasContainer');
-                        horasContainer.innerHTML = ''; // Limpiar las horas anteriores
-
-                        data.forEach(hora => {
-                            var horaBloque = document.createElement('button');
-                            horaBloque.classList.add('hora-bloque');
-                            horaBloque.innerText = `${hora.horaInicio} - ${hora.horaFin}`;
-                            horaBloque.type = 'button';
-
-                            if (hora.ocupada) {
-                                horaBloque.disabled = true;
-                                horaBloque.classList.add('disabled');
-                            } else {
-                                horaBloque.onclick = function () {
-                                    // Asignar la hora seleccionada a los campos FechaInicio y FechaFin
-                                    document.getElementById('FechaInicio').value = `${fecha}T${hora.horaInicio}`;
-                                    document.getElementById('FechaFin').value = `${fecha}T${hora.horaFin}`;
-
-                                    // Quitar la clase 'selected' de todos los botones
-                                    document.querySelectorAll('.hora-bloque').forEach(b => b.classList.remove('selected'));
-
-                                    // Aplicar la clase 'selected' al botón que se acaba de hacer clic
-                                    horaBloque.classList.add('selected');
-
-                                    // Verificación en consola
-                                    console.log("Botón seleccionado:", horaBloque.innerText, horaBloque.classList);
-                                };
-                            }
-
-                            horasContainer.appendChild(horaBloque);
-                        });
-                    })
-                    .catch(error => console.error('Error:', error));
-            }
+                        if (hora.ocupada) {
+                            horaBtn.classList.add('btn-secondary', 'disabled');
+                        } else {
+                            horaBtn.classList.add('btn-outline-success');
+                            horaBtn.onclick = function () {
+                                document.getElementById('FechaInicio').value = `${fecha}T${hora.horaInicio}`;
+                                document.getElementById('FechaFin').value = `${fecha}T${hora.horaFin}`;
+                                document.querySelectorAll('.hora-bloque').forEach(b => b.classList.remove('btn-success', 'text-white'));
+                                horaBtn.classList.add('btn-success', 'text-white');
+                            };
+                        }
+                        horasContainer.appendChild(horaBtn);
+                    });
+                });
         }
-    </script>
-</body>
-</html>
+    }
+</script>

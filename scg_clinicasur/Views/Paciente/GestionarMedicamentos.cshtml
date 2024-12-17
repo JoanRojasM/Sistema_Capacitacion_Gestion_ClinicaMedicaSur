@@ -1,77 +1,166 @@
 ﻿@model scg_clinicasur.Models.GestionarMedicamentosViewModel
 
-<h1>Gestionar Medicamentos Prescritos</h1>
-
-@if (Model.MedicamentosActivos != null && Model.MedicamentosActivos.Any())
-{
-    <h4>Medicamentos Activos</h4>
-    <table class="table table-bordered table-striped">
-        <thead>
-            <tr>
-                <th>Medicamento</th>
-                <th>Dosis</th>
-                <th>Fecha de Prescripción</th>
-                <th>Acciones</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var medicamento in Model.MedicamentosActivos)
-            {
-                <tr>
-                    <td>@medicamento.NombreMedicamento</td>
-                    <td>@medicamento.Dosis</td>
-                    <td>@medicamento.FechaPrescripcion.ToString("dd/MM/yyyy HH:mm:ss")</td>
-                    <td>
-                        <form asp-action="DescontinuarMedicamento" method="post" class="d-inline">
-                            <input type="hidden" name="id_medicamento" value="@medicamento.IdMedicamento" />
-                            <button type="submit" class="btn btn-danger btn-sm">Descontinuar</button>
-                        </form>
-                    </td>
-                </tr>
-            }
-        </tbody>
-    </table>
-}
-else
-{
-    <p>No hay medicamentos activos para este paciente.</p>
+@{
+    ViewData["Title"] = "Gestionar Medicamentos de " + Model.Paciente.nombre + " " + Model.Paciente.apellido;
 }
 
-<h4>Historial de Medicamentos</h4>
-<table class="table table-bordered table-striped">
-    <thead>
-        <tr>
-            <th>Medicamento</th>
-            <th>Dosis</th>
-            <th>Fecha de Prescripción</th>
-            <th>Estado</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var medicamento in Model.HistorialMedicamentos)
-        {
-            <tr>
-                <td>@medicamento.NombreMedicamento</td>
-                <td>@medicamento.Dosis</td>
-                <td>@medicamento.FechaPrescripcion.ToString("dd/MM/yyyy HH:mm:ss")</td>
-                <td>@medicamento.Estado</td>
-            </tr>
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewData["Title"]</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.10.5/font/bootstrap-icons.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #f8f9fa;
         }
-    </tbody>
-</table>
 
-<h3>Prescribir Nuevo Medicamento</h3>
-<form asp-action="PrescribirMedicamento" method="post">
-    <input type="hidden" name="id_paciente" value="@Model.Paciente.id_usuario" />
-    <div class="form-group">
-        <label>Nombre del Medicamento</label>
-        <input type="text" name="nombreMedicamento" class="form-control" required />
-    </div>
-    <div class="form-group">
-        <label>Dosis</label>
-        <input type="text" name="dosis" class="form-control" required />
-    </div>
-    <button type="submit" class="btn btn-primary mt-3">Prescribir Medicamento</button>
-</form>
+        .container {
+            background: #fff;
+            border-radius: 10px;
+            padding: 25px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
 
-<a href="@Url.Action("ListadoPacientes", "Paciente")" class="btn btn-secondary mt-3">Volver a Pacientes</a>
+        h1, h4 {
+            color: #0d6efd;
+            font-weight: bold;
+        }
+
+        .section-title {
+            margin-top: 20px;
+            color: #495057;
+            border-bottom: 2px solid #0d6efd;
+            padding-bottom: 5px;
+        }
+
+        .table-hover tbody tr:hover {
+            background-color: #e9f5ff;
+        }
+
+        .btn-custom {
+            display: inline-flex;
+            align-items: center;
+        }
+
+            .btn-custom i {
+                margin-right: 5px;
+            }
+    </style>
+</head>
+<body>
+    <div class="container mt-5">
+        <!-- Título principal -->
+        <h1><i class="bi bi-capsule"></i> @ViewData["Title"]</h1>
+
+        <!-- Medicamentos Activos -->
+        <h4 class="section-title mt-4"><i class="bi bi-check-circle"></i> Medicamentos Activos</h4>
+        @if (Model.MedicamentosActivos != null && Model.MedicamentosActivos.Any())
+        {
+            <table class="table table-hover mt-3">
+                <thead class="table-success">
+                    <tr>
+                        <th>Medicamento</th>
+                        <th>Dosis</th>
+                        <th>Fecha de Prescripción</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var medicamento in Model.MedicamentosActivos)
+                    {
+                        <tr>
+                            <td>@medicamento.NombreMedicamento</td>
+                            <td>@medicamento.Dosis</td>
+                            <td>@medicamento.FechaPrescripcion.ToString("dd/MM/yyyy HH:mm")</td>
+                            <td>
+                                <form asp-action="DescontinuarMedicamento" method="post" class="d-inline">
+                                    @Html.AntiForgeryToken()
+                                    <input type="hidden" name="id_medicamento" value="@medicamento.IdMedicamento" />
+                                    <button type="submit" class="btn btn-danger btn-sm btn-custom" onclick="return confirm('¿Desea descontinuar este medicamento?')">
+                                        <i class="bi bi-x-circle"></i> Descontinuar
+                                    </button>
+                                </form>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        }
+        else
+        {
+            <div class="alert alert-warning">
+                <i class="bi bi-exclamation-circle"></i> No hay medicamentos activos para este paciente.
+            </div>
+        }
+
+        <!-- Historial de Medicamentos -->
+        <h4 class="section-title mt-4"><i class="bi bi-clock-history"></i> Historial de Medicamentos</h4>
+        @if (Model.HistorialMedicamentos != null && Model.HistorialMedicamentos.Any())
+        {
+            <table class="table table-hover mt-3">
+                <thead class="table-primary">
+                    <tr>
+                        <th>Medicamento</th>
+                        <th>Dosis</th>
+                        <th>Fecha de Prescripción</th>
+                        <th>Estado</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var medicamento in Model.HistorialMedicamentos)
+                    {
+                        <tr>
+                            <td>@medicamento.NombreMedicamento</td>
+                            <td>@medicamento.Dosis</td>
+                            <td>@medicamento.FechaPrescripcion.ToString("dd/MM/yyyy HH:mm")</td>
+                            <td>
+                                <span class="badge @(medicamento.Estado == "Activo" ? "bg-success" : "bg-secondary")">
+                                    @medicamento.Estado
+                                </span>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        }
+        else
+        {
+            <div class="alert alert-light">
+                <i class="bi bi-file-earmark-text"></i> No hay historial de medicamentos.
+            </div>
+        }
+
+        <!-- Formulario para Prescribir Medicamentos -->
+        <h4 class="section-title mt-4"><i class="bi bi-plus-circle"></i> Prescribir Nuevo Medicamento</h4>
+        <form asp-action="PrescribirMedicamento" method="post" class="mt-3">
+            @Html.AntiForgeryToken()
+            <input type="hidden" name="id_paciente" value="@Model.Paciente.id_usuario" />
+
+            <div class="row g-3">
+                <div class="col-md-6">
+                    <label class="form-label">Nombre del Medicamento</label>
+                    <input type="text" name="nombreMedicamento" class="form-control" placeholder="Ej: Paracetamol" required />
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label">Dosis</label>
+                    <input type="text" name="dosis" class="form-control" placeholder="Ej: 500mg cada 8 horas" required />
+                </div>
+            </div>
+
+            <button type="submit" class="btn btn-primary mt-3 btn-custom">
+                <i class="bi bi-save"></i> Guardar Medicamento
+            </button>
+        </form>
+
+        <!-- Botón para volver -->
+        <a href="@Url.Action("ListadoPacientes", "Paciente")" class="btn btn-secondary mt-4 btn-custom">
+            <i class="bi bi-arrow-left-circle"></i> Volver a Pacientes
+        </a>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

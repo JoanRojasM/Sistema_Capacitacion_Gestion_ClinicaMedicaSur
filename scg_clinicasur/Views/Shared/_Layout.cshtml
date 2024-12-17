@@ -26,10 +26,6 @@
 
         main {
             flex: 1;
-            display: flex;
-            flex-direction: column;
-            justify-content: center; /* Centra verticalmente el contenido */
-            align-items: center; /* Centra horizontalmente el contenido */
             padding: 20px;
         }
 
@@ -46,38 +42,29 @@
                 background-color: #007A7E;
             }
 
-        .navbar-toggler-icon {
-            background-image: url("data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3E%3Cpath stroke='rgba%28255,255,255,1%29' stroke-width='2' stroke-linecap='round' stroke-miterlimit='10' d='M4 7h22M4 15h22M4 23h22'/%3E%3C/svg%3E");
-        }
-
         footer {
             background-color: #007A7E;
             color: white;
             padding: 20px 0;
             text-align: center;
+            margin-top: auto;
+            width: 100%;
         }
 
         .footer-section {
+            max-width: 1200px;
+            margin: 0 auto;
             display: flex;
             justify-content: space-between;
             align-items: center;
             flex-wrap: wrap;
+            padding: 0 20px;
         }
-
-            .footer-section > div {
-                flex: 1;
-                text-align: center;
-                padding: 10px;
-            }
 
             .footer-section a {
                 color: white;
                 text-decoration: none;
             }
-
-                .footer-section a:hover {
-                    text-decoration: underline;
-                }
 
         .navbar-right-icons {
             display: flex;
@@ -102,46 +89,59 @@
                         <ul class="navbar-nav">
                             @if (userRole == "administrador")
                             {
-                                <li class="nav-item">
-                                    <a class="nav-link" asp-area="" asp-controller="Admin" asp-action="Index">
-                                        <i class="bi bi-house"></i> Home
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link" asp-area="" asp-controller="Capacitaciones" asp-action="Index">
-                                        <i class="bi bi-journal"></i> Capacitaciones
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link" asp-area="" asp-controller="Evaluaciones" asp-action="Index">
-                                        <i class="bi bi-check2-circle"></i> Evaluaciones
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link" asp-controller="Citas" asp-action="Index">
-                                        <i class="bi bi-calendar-check"></i> Citas
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link" asp-controller="Usuarios" asp-action="Index">
-                                        <i class="bi bi-people"></i> Usuarios
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link" asp-controller="Contabilidad" asp-action="Historial">
-                                        <i class="bi bi-cash"></i> Contabilidad
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link" asp-controller="Expedientes" asp-action="Index">
-                                        <i class="bi bi-folder2-open"></i> Expedientes
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link" asp-controller="Paciente" asp-action="ListadoPacientes">
-                                        <i class="bi bi-file-earmark-person"></i> Pacientes
-                                    </a>
-                                </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link" asp-controller="Admin" asp-action="Index">
+                                            <i class="bi bi-house"></i> Home
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link" asp-controller="Capacitaciones" asp-action="Index">
+                                            <i class="bi bi-journal"></i> Capacitaciones
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link" asp-controller="Evaluaciones" asp-action="Index">
+                                            <i class="bi bi-check2-circle"></i> Evaluaciones
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link" asp-controller="Citas" asp-action="Index">
+                                            <i class="bi bi-calendar-check"></i> Citas
+                                        </a>
+                                    </li>
+                                    <!-- Dropdown Usuarios -->
+                                    <li class="nav-item dropdown">
+                                        <a class="nav-link dropdown-toggle" href="#" id="usuariosDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                            <i class="bi bi-people"></i> Usuarios
+                                        </a>
+                                        <ul class="dropdown-menu" aria-labelledby="usuariosDropdown">
+                                            <li>
+                                                <a class="dropdown-item" asp-controller="Usuarios" asp-action="Index">
+                                                    <i class="bi bi-person-badge"></i> Administrar Usuarios
+                                                </a>
+                                            </li>
+                                            <li>
+                                                <a class="dropdown-item" asp-controller="DoctorEspecialidades" asp-action="Index">
+                                                    <i class="bi bi-clipboard-plus"></i> Especialidades de Doctores
+                                                </a>
+                                            </li>
+                                        </ul>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link" asp-controller="Contabilidad" asp-action="Historial">
+                                            <i class="bi bi-cash"></i> Contabilidad
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link" asp-controller="Expedientes" asp-action="Index">
+                                            <i class="bi bi-folder2-open"></i> Expedientes
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link" asp-controller="Paciente" asp-action="ListadoPacientes">
+                                            <i class="bi bi-file-earmark-person"></i> Pacientes
+                                        </a>
+                                    </li>
                             }
                             else if (userRole == "doctor")
                             {
@@ -160,14 +160,30 @@
                                         <i class="bi bi-calendar"></i> Calendario
                                     </a>
                                 </li>
+                            }
+                            else if (userRole == "asistente_limpieza")
+                            {
                                 <li class="nav-item">
-                                    <a class="nav-link" asp-controller="Usuarios" asp-action="Index">
-                                        <i class="bi bi-person-plus"></i> Agregar Paciente
+                                    <a class="nav-link" asp-controller="AsistenteLimpieza" asp-action="Evaluaciones">
+                                        <i class="bi bi-check2-circle"></i> Evaluaciones
                                     </a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link" asp-controller="Expedientes" asp-action="Index">
-                                        <i class="bi bi-folder"></i> Expedientes
+                                    <a class="nav-link" asp-controller="AsistenteLimpieza" asp-action="Capacitaciones">
+                                        <i class="bi bi-journal"></i> Capacitaciones
+                                    </a>
+                                </li>
+                            }
+                            else if (userRole == "asistente_medico")
+                            {
+                                <li class="nav-item">
+                                    <a class="nav-link" asp-controller="AsistenteMedico" asp-action="Evaluaciones">
+                                        <i class="bi bi-check2-square"></i> Evaluaciones
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" asp-controller="AsistenteMedico" asp-action="Capacitaciones">
+                                        <i class="bi bi-book"></i> Capacitaciones
                                     </a>
                                 </li>
                             }
@@ -182,7 +198,11 @@
                                 <i class="bi bi-person-circle" style="font-size: 1.5rem; color: white;"></i>
                             </a>
                             <ul class="dropdown-menu dropdown-menu-end">
-                                <li><a class="dropdown-item" asp-controller="Account" asp-action="Logout">Cerrar Sesión</a></li>
+                                <li>
+                                    <a class="dropdown-item" asp-controller="Account" asp-action="Logout">
+                                        <i class="bi bi-box-arrow-right me-2"></i> Cerrar Sesión
+                                    </a>
+                                </li>
                             </ul>
                         </div>
                     </div>
@@ -197,24 +217,26 @@
         <footer>
             <div class="footer-section">
                 <div>
-                    <strong>Clinica Médica del Sur</strong><br />
-                    Fundada en 1990 por el Dr. Alvaro Sanabria Mora.<br />
-                    Más de 25 años de experiencia.
+                    <strong><i class="bi bi-building"></i> Clinica Médica del Sur</strong><br />
+                    <i class="bi bi-calendar3"></i> Fundada en 1990 por el Dr. Alvaro Sanabria Mora.<br />
+                    <i class="bi bi-award"></i> Más de 25 años de experiencia.
                 </div>
                 <div>
-                    <strong>Sucursal</strong><br />
-                    Hatillo Centro, Hatillo, Costa Rica<br />
-                    Tel: 2252-0202<br />
-                    <a href="https://www.facebook.com/clinica.medicadelsur/?locale=es_LA">Facebook</a> |
-                    <a href="https://www.waze.com/es/live-map/directions/clinica-medica-del-sur-hatillo-centro,-hatillo,-san-jose?to=place.w.180813923.1808139231.585555">Waze</a>
+                    <strong><i class="bi bi-geo-alt"></i> Sucursal</strong><br />
+                    <i class="bi bi-geo"></i> Hatillo Centro, Hatillo, Costa Rica<br />
+                    <i class="bi bi-telephone"></i> Tel: 2252-0202<br />
+                    <a href="https://www.facebook.com/clinica.medicadelsur/?locale=es_LA">
+                        <i class="bi bi-facebook"></i> Facebook
+                    </a> |
+                    <a href="https://www.waze.com/">
+                        <i class="bi bi-map"></i> Waze
+                    </a>
                 </div>
                 <div>
-                    <strong>Contacto</strong><br />
-                    Tel: 2262-2525 / 2263-4826<br />
-                    Email: info@centromedicodelsur.co.cr<br />
-                    Costado este del Nuevo Hospital de Heredia,<br />
-                    en Heredia Centro.<br />
-                    Horario: Lunes a Viernes, 8:00am - 5:00pm
+                    <strong><i class="bi bi-envelope"></i> Contacto</strong><br />
+                    <i class="bi bi-telephone"></i> Tel: 2262-2525 / 2263-4826<br />
+                    <i class="bi bi-envelope-at"></i> Email: info@centromedicodelsur.co.cr<br />
+                    <i class="bi bi-clock"></i> Horario: Lunes a Viernes, 8:00am - 5:00pm
                 </div>
             </div>
         </footer>

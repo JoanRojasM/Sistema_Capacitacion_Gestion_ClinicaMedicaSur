@@ -2,67 +2,92 @@
 
 @{
     ViewData["Title"] = "Crear Usuario";
-
-    // Obtener el rol del usuario
     var userRole = Context.Session.GetString("UserRole");
 }
 
-<!DOCTYPE html>
-<html>
-<head>
-    <link rel="stylesheet" href="~/css/site.css">
-    <title>@ViewData["Title"]</title>
-</head>
-<body>
-    <header>
-        <h1>@ViewData["Title"]</h1>
-        <nav>
-            <a asp-action="Index" class="button">Volver al Listado</a>
-        </nav>
-    </header>
-    <main>
-        <form method="post" asp-action="Crear">
-            <label asp-for="nombre">Nombre:</label>
-            <input asp-for="nombre" class="form-control" />
-            <span asp-validation-for="nombre" class="text-danger"></span>
+<div class="container mt-5">
+    <!-- Encabezado -->
+    <div class="text-center mb-4">
+        <h1 class="display-5 fw-bold text-primary">@ViewData["Title"]</h1>
+        <p class="lead text-muted">Complete el formulario para registrar un nuevo usuario.</p>
+    </div>
 
-            <label asp-for="apellido">Apellido:</label>
-            <input asp-for="apellido" class="form-control" />
-            <span asp-validation-for="apellido" class="text-danger"></span>
+    <!-- Tarjeta con Formulario -->
+    <div class="card shadow-sm border-0">
+        <div class="card-body p-4">
+            <form method="post" asp-action="Crear">
+                <div class="mb-3">
+                    <label asp-for="nombre" class="form-label fw-bold">Nombre:</label>
+                    <input asp-for="nombre" class="form-control" placeholder="Ingrese el nombre del usuario" />
+                    <span asp-validation-for="nombre" class="text-danger"></span>
+                </div>
 
-            <label asp-for="correo">Correo Electrónico:</label>
-            <input asp-for="correo" type="email" class="form-control" />
-            <span asp-validation-for="correo" class="text-danger"></span>
+                <div class="mb-3">
+                    <label asp-for="apellido" class="form-label fw-bold">Apellido:</label>
+                    <input asp-for="apellido" class="form-control" placeholder="Ingrese el apellido del usuario" />
+                    <span asp-validation-for="apellido" class="text-danger"></span>
+                </div>
 
-            <label asp-for="contraseña">Contraseña:</label>
-            <input asp-for="contraseña" type="password" class="form-control" />
-            <span asp-validation-for="contraseña" class="text-danger"></span>
+                <div class="mb-3">
+                    <label asp-for="correo" class="form-label fw-bold">Correo Electrónico:</label>
+                    <input asp-for="correo" type="email" class="form-control" placeholder="Ej. usuario@correo.com" />
+                    <span asp-validation-for="correo" class="text-danger"></span>
+                </div>
 
-            <label asp-for="telefono">Teléfono:</label>
-            <input asp-for="telefono" class="form-control" />
-            <span asp-validation-for="telefono" class="text-danger"></span>
+                <div class="mb-3">
+                    <label asp-for="contraseña" class="form-label fw-bold">Contraseña:</label>
+                    <input asp-for="contraseña" type="password" class="form-control" placeholder="Ingrese una contraseña segura" />
+                    <span asp-validation-for="contraseña" class="text-danger"></span>
+                </div>
 
-            <label asp-for="id_rol">Rol:</label>
-            <select asp-for="id_rol" class="form-control" asp-items="ViewBag.Roles"></select>
-            <span asp-validation-for="id_rol" class="text-danger"></span>
+                <div class="mb-3">
+                    <label asp-for="telefono" class="form-label fw-bold">Teléfono:</label>
+                    <input asp-for="telefono" class="form-control" placeholder="Ej. 8888-8888" />
+                    <span asp-validation-for="telefono" class="text-danger"></span>
+                </div>
 
-            <label asp-for="estado">Estado:</label>
-            <select asp-for="estado" class="form-control" asp-items="ViewBag.Estados"></select>
-            <span asp-validation-for="estado" class="text-danger"></span>
+                <div class="mb-3">
+                    <label asp-for="id_rol" class="form-label fw-bold">Rol:</label>
+                    <select asp-for="id_rol" class="form-select" asp-items="ViewBag.Roles">
+                        <option value="">Seleccione un rol</option>
+                    </select>
+                    <span asp-validation-for="id_rol" class="text-danger"></span>
+                </div>
 
-            <button type="submit" class="btn btn-primary">Guardar</button>
-        </form>
-    </main>
+                <div class="mb-3">
+                    <label asp-for="estado" class="form-label fw-bold">Estado:</label>
+                    <select asp-for="estado" class="form-select" asp-items="ViewBag.Estados">
+                        <option value="">Seleccione un estado</option>
+                    </select>
+                    <span asp-validation-for="estado" class="text-danger"></span>
+                </div>
 
+                <!-- Botones -->
+                <div class="text-center mt-4">
+                    <button type="submit" class="btn btn-success me-2">
+                        <i class="bi bi-person-plus"></i> Guardar
+                    </button>
+                    <a asp-action="Index" class="btn btn-secondary">
+                        <i class="bi bi-arrow-left"></i> Cancelar
+                    </a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
     <script>
         $(document).ready(function () {
             var userRole = '@userRole';
 
-            // Si el rol del usuario es 'doctor', solo permitir que se seleccione el rol 'paciente'
+            // Si el rol del usuario es 'doctor', deshabilitar el select y forzar a 'paciente'
             if (userRole === 'doctor') {
                 $('#id_rol').val('paciente').prop('disabled', true);
             }
         });
     </script>
-</body>
-</html>
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

@@ -1,7 +1,70 @@
 ﻿@{
     ViewData["Title"] = "Doctor";
 }
-<body>
-    <div class="col-12 text-center">
-        <h1 class="display-5 mt-4">Bienvenido, Doctor</h1>
-</body>
+
+<div class="container text-center">
+    <div class="my-5">
+        <h1 class="display-5 fw-bold">Bienvenido, Doctor</h1>
+        <p class="lead text-muted mx-auto" style="max-width: 700px;">
+            Accede a tus herramientas y funciones para brindar la mejor atención a tus pacientes. Administra tus citas, revisa expedientes y mantente actualizado con capacitaciones.
+        </p>
+    </div>
+
+    <!-- Tarjetas -->
+    <div class="row justify-content-center">
+        <div class="col-md-4 mb-4">
+            <div class="card border-0 shadow-sm h-100">
+                <div class="card-body text-center">
+                    <i class="bi bi-calendar-check" style="font-size: 2.5rem; color: #00B0B5;"></i>
+                    <h5 class="card-title mt-3">Gestión de Citas</h5>
+                    <p class="card-text text-muted">
+                        Organiza y visualiza tus citas con pacientes de forma rápida y eficiente.
+                    </p>
+                    <a asp-controller="Citas" asp-action="Index" class="btn btn-primary">
+                        <i class="bi bi-arrow-right-circle"></i> Ver Citas
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Expedientes Médicos -->
+        <div class="col-md-4 mb-4">
+            <div class="card border-0 shadow-sm h-100">
+                <div class="card-body text-center">
+                    <i class="bi bi-folder2-open" style="font-size: 2.5rem; color: #007A7E;"></i>
+                    <h5 class="card-title mt-3">Expedientes Médicos</h5>
+                    <p class="card-text text-muted">
+                        Accede a los expedientes clínicos de tus pacientes y revisa su historial médico.
+                    </p>
+                    <a asp-controller="Expedientes" asp-action="Index" class="btn btn-success">
+                        <i class="bi bi-arrow-right-circle"></i> Ver Expedientes
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Capacitaciones -->
+        <div class="col-md-4 mb-4">
+            <div class="card border-0 shadow-sm h-100">
+                <div class="card-body text-center">
+                    <i class="bi bi-journal" style="font-size: 2.5rem; color: #fdd835;"></i>
+                    <h5 class="card-title mt-3">Capacitaciones</h5>
+                    <p class="card-text text-muted">
+                        Consulta los cursos y capacitaciones disponibles para mejorar tus habilidades.
+                    </p>
+                    <a asp-controller="Capacitaciones" asp-action="Index" class="btn btn-warning text-white">
+                        <i class="bi bi-arrow-right-circle"></i> Ver Capacitaciones
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Mensaje Motivacional -->
+    <div class="p-4 p-md-5 rounded mt-4 text-white" style="background-color: #054DC5;">
+        <h2 class="display-6">Cuidando Juntos a Nuestros Pacientes</h2>
+        <p class="lead">
+            En la Clínica Médica del Sur, los doctores son nuestro pilar fundamental. Gracias a su dedicación y compromiso, brindamos atención médica de alta calidad.
+        </p>
+    </div>
+</div>

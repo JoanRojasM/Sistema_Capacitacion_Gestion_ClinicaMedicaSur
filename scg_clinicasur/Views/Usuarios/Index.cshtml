@@ -1,159 +1,130 @@
-﻿@model IEnumerable<scg_clinicasur.Models.Usuario>
-@inject Microsoft.AspNetCore.Http.IHttpContextAccessor HttpContextAccessor
+﻿    @model IEnumerable<scg_clinicasur.Models.Usuario>
+    @inject Microsoft.AspNetCore.Http.IHttpContextAccessor HttpContextAccessor
 
-@{
-    ViewData["Title"] = "Listado de Usuarios";
-    var userRole = HttpContextAccessor.HttpContext.Session.GetString("UserRole"); // Obtener el rol del usuario desde la sesión
-}
+    @{
+        ViewData["Title"] = "Listado de Usuarios";
+        var userRole = HttpContextAccessor.HttpContext.Session.GetString("UserRole");
+    }
 
-@if (TempData["SuccessMessage"] != null)
-{
-    <div class="alert alert-success alert-dismissible fade show" role="alert">
-        @TempData["SuccessMessage"]
-        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-    </div>
-}
+    <div class="container mt-4">
+        <!-- Encabezado -->
+        <div class="text-center mb-4">
+            <h1 class="display-5 fw-bold">@ViewData["Title"]</h1>
+        </div>
 
-@if (TempData["ErrorMessage"] != null)
-{
-    <div class="alert alert-danger alert-dismissible fade show" role="alert">
-        @TempData["ErrorMessage"]
-        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-    </div>
-}
+        <!-- Mensajes -->
+        @if (TempData["SuccessMessage"] != null)
+        {
+            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                @TempData["SuccessMessage"]
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        }
+        @if (TempData["ErrorMessage"] != null)
+        {
+            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                @TempData["ErrorMessage"]
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        }
 
-<!DOCTYPE html>
-<html>
-<head>
-    <link rel="stylesheet" href="~/css/site.css">
-    <title>@ViewData["Title"]</title>
-</head>
-<body>
-    <header>
-        <h1>@ViewData["Title"]</h1>
-        <nav>
-            <div class="header-buttons">
-                <a asp-action="Crear" class="button">Crear Usuario</a>
+        <!-- Botones y Filtros -->
+        <div class="d-flex justify-content-between flex-wrap mb-3">
+            <a asp-action="Crear" class="btn btn-success mb-2">
+                <i class="bi bi-person-plus"></i> Crear Usuario
+            </a>
 
-                @if (userRole == "administrador")
-                {
-                    <div class="dropdown">
-                        <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
-                            Filtrar por Rol
-                        </button>
-                        <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                            <li>
-                                <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" id="checkDoctor">
-                                    <label class="form-check-label" for="checkDoctor">Doctor</label>
-                                </div>
-                            </li>
-                            <li>
-                                <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" id="checkAsistenteMedico">
-                                    <label class="form-check-label" for="checkAsistenteMedico">Asistente Médico</label>
-                                </div>
-                            </li>
-                            <li>
-                                <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" id="checkAsistenteLimpieza">
-                                    <label class="form-check-label" for="checkAsistenteLimpieza">Asistente de Limpieza</label>
-                                </div>
-                            </li>
-                            <li>
-                                <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" id="checkPaciente">
-                                    <label class="form-check-label" for="checkPaciente">Paciente</label>
-                                </div>
-                            </li>
-                            <li>
-                                <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" id="checkAdministrador">
-                                    <label class="form-check-label" for="checkAdministrador">Administrador</label>
-                                </div>
-                            </li>
-                            <li><hr class="dropdown-divider"></li>
-                            <li>
-                                <button class="btn btn-secondary w-100" id="confirmFilter">Confirmar</button>
-                            </li>
-                            <li>
-                                <button class="btn btn-secondary w-100" id="resetFilter">Resetear Filtro</button>
-                            </li>
-                        </ul>
-                    </div>
-                }
+            <form method="get" action="@Url.Action("Index")" class="d-flex mb-2">
+                <input type="text" name="searchName" class="form-control me-2" placeholder="Buscar por nombre" value="@ViewData["searchName"]">
+                <button type="submit" class="btn btn-outline-success me-2">
+                    <i class="bi bi-search"></i> Buscar
+                </button>
+                <a href="@Url.Action("Index")" class="btn btn-outline-danger">
+                    <i class="bi bi-arrow-clockwise"></i> Resetear
+                </a>
+            </form>
+        </div>
 
-                <!-- Filtro por Estado (para ambos roles) -->
+        <!-- Dropdown de Filtros -->
+        <div class="d-flex gap-3 mb-4">
+            @if (userRole == "administrador")
+            {
                 <div class="dropdown">
-                    <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuButtonEstado" data-bs-toggle="dropdown" aria-expanded="false">
-                        Filtrar por Estado
+                    <button class="btn btn-primary dropdown-toggle" type="button" id="filterRoles" data-bs-toggle="dropdown" aria-expanded="false">
+                        Filtrar por Rol
                     </button>
-                    <ul class="dropdown-menu" aria-labelledby="dropdownMenuButtonEstado">
-                        <li>
-                            <div class="form-check">
-                                <input class="form-check-input" type="checkbox" id="checkActivo">
-                                <label class="form-check-label" for="checkActivo">Activo</label>
-                            </div>
-                        </li>
-                        <li>
-                            <div class="form-check">
-                                <input class="form-check-input" type="checkbox" id="checkInactivo">
-                                <label class="form-check-label" for="checkInactivo">Inactivo</label>
-                            </div>
-                        </li>
-                        <li><hr class="dropdown-divider"></li>
-                        <li>
-                            <button class="btn btn-secondary w-100" id="confirmFilterEstado">Confirmar</button>
-                        </li>
-                        <li>
-                            <button class="btn btn-secondary w-100" id="resetFilterEstado">Resetear Filtro</button>
-                        </li>
+                    <ul class="dropdown-menu" aria-labelledby="filterRoles">
+                        <li><a class="dropdown-item" href="?roles=doctor">Doctor</a></li>
+                        <li><a class="dropdown-item" href="?roles=asistente_medico">Asistente Médico</a></li>
+                        <li><a class="dropdown-item" href="?roles=asistente_limpieza">Asistente de Limpieza</a></li>
+                        <li><a class="dropdown-item" href="?roles=paciente">Paciente</a></li>
+                        <li><a class="dropdown-item" href="?roles=administrador">Administrador</a></li>
                     </ul>
                 </div>
-
-                <form method="get" action="@Url.Action("Index")" class="d-flex">
-                    <!-- Campo de búsqueda por nombre -->
-                    <input type="text" name="searchName" class="form-control me-2" placeholder="Buscar por nombre" value="@ViewData["searchName"]">
-
-                    <!-- Botón para realizar la búsqueda -->
-                    <button type="submit" class="btn btn-outline-success">Buscar</button>
-                    <a href="@Url.Action("Index")" class="btn btn-outline-danger">Resetear</a>
-                </form>
-
+            }
+            <div class="dropdown">
+                <button class="btn btn-secondary dropdown-toggle" type="button" id="filterEstado" data-bs-toggle="dropdown" aria-expanded="false">
+                    Filtrar por Estado
+                </button>
+                <ul class="dropdown-menu" aria-labelledby="filterEstado">
+                    <li><a class="dropdown-item" href="?estado=activo">Activo</a></li>
+                    <li><a class="dropdown-item" href="?estado=inactivo">Inactivo</a></li>
+                </ul>
             </div>
-        </nav>
-    </header>
-    <main>
-        <table>
-            <thead>
-                <tr>
-                    <th>Nombre</th>
-                    <th>Correo</th>
-                    <th>Rol</th>
-                    <th>Estado</th>
-                    <th>Fecha de Registro</th>
-                    <th>Acciones</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (var usuario in Model)
-                {
+        </div>
+
+        <!-- Tabla de Usuarios -->
+        <div class="table-responsive">
+            <table class="table table-striped table-hover align-middle text-center shadow-sm">
+                <thead class="table-primary">
                     <tr>
-                        <td>@usuario.nombre @usuario.apellido</td>
-                        <td>@usuario.correo</td>
-                        <td>@usuario.roles.nombre_rol</td>
-                        <td>@usuario.estado</td>
-                        <td>@usuario.fecha_registro.ToString("dd/MM/yyyy")</td>
-                        <td>
-                            <a asp-action="Detalles" asp-route-id="@usuario.id_usuario" class="button">Detalles</a>
-                            <a asp-action="Editar" asp-route-id="@usuario.id_usuario" class="button">Editar</a>
-                            <a asp-action="Eliminar" asp-route-id="@usuario.id_usuario" class="button">Eliminar</a>
-                        </td>
+                        <th>Nombre</th>
+                        <th>Correo</th>
+                        <th>Rol</th>
+                        <th>Estado</th>
+                        <th>Fecha de Registro</th>
+                        <th>Acciones</th>
                     </tr>
-                }
-            </tbody>
-        </table>
-    </main>
+                </thead>
+                <tbody>
+                    @foreach (var usuario in Model)
+                    {
+                        <tr>
+                            <td>@usuario.nombre @usuario.apellido</td>
+                            <td>@usuario.correo</td>
+                            <td>
+                                <span class="badge bg-info text-dark">@usuario.roles.nombre_rol</span>
+                            </td>
+                            <td>
+                                @if (usuario.estado == "activo")
+                                {
+                                    <span class="badge bg-success">Activo</span>
+                                }
+                                else
+                                {
+                                    <span class="badge bg-secondary">Inactivo</span>
+                                }
+                            </td>
+                            <td>@usuario.fecha_registro.ToString("dd/MM/yyyy")</td>
+                            <td>
+                                <div class="btn-group" role="group">
+                                    <a asp-action="Detalles" asp-route-id="@usuario.id_usuario" class="btn btn-primary btn-sm">
+                                        <i class="bi bi-eye"></i> Detalles
+                                    </a>
+                                    <a asp-action="Editar" asp-route-id="@usuario.id_usuario" class="btn btn-warning btn-sm text-white">
+                                        <i class="bi bi-pencil-square"></i> Editar
+                                    </a>
+                                    <a asp-action="Eliminar" asp-route-id="@usuario.id_usuario" class="btn btn-danger btn-sm">
+                                        <i class="bi bi-trash"></i> Eliminar
+                                    </a>
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
 
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
 
@@ -233,6 +204,3 @@
             });
         });
     </script>
-
-</body>
-</html>

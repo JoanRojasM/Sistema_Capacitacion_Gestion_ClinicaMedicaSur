@@ -84,6 +84,10 @@ build_metadata.AdditionalFiles.CssScope =
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ2FwYWNpdGFjaW9uZXNcRWRpdGFyLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
+[C:/Users/Usuario/OneDrive/Documentos/GitHub/Sistema_Capacitacion_Gestion_ClinicaMedicaSur/scg_clinicasur/Views/Capacitaciones/EditarRecurso.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ2FwYWNpdGFjaW9uZXNcRWRpdGFyUmVjdXJzby5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
 [C:/Users/Usuario/OneDrive/Documentos/GitHub/Sistema_Capacitacion_Gestion_ClinicaMedicaSur/scg_clinicasur/Views/Capacitaciones/Eliminar.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ2FwYWNpdGFjaW9uZXNcRWxpbWluYXIuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
@@ -216,16 +220,8 @@ build_metadata.AdditionalFiles.CssScope =
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxJbmRleC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/Usuario/OneDrive/Documentos/GitHub/Sistema_Capacitacion_Gestion_ClinicaMedicaSur/scg_clinicasur/Views/Notificaciones/Configuracion.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3NcTm90aWZpY2FjaW9uZXNcQ29uZmlndXJhY2lvbi5jc2h0bWw=
-build_metadata.AdditionalFiles.CssScope = 
-
-[C:/Users/Usuario/OneDrive/Documentos/GitHub/Sistema_Capacitacion_Gestion_ClinicaMedicaSur/scg_clinicasur/Views/Notificaciones/Detalles.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3NcTm90aWZpY2FjaW9uZXNcRGV0YWxsZXMuY3NodG1s
-build_metadata.AdditionalFiles.CssScope = 
-
-[C:/Users/Usuario/OneDrive/Documentos/GitHub/Sistema_Capacitacion_Gestion_ClinicaMedicaSur/scg_clinicasur/Views/Notificaciones/Index.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3NcTm90aWZpY2FjaW9uZXNcSW5kZXguY3NodG1s
+[C:/Users/Usuario/OneDrive/Documentos/GitHub/Sistema_Capacitacion_Gestion_ClinicaMedicaSur/scg_clinicasur/Views/Notificacion/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcTm90aWZpY2FjaW9uXEluZGV4LmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
 [C:/Users/Usuario/OneDrive/Documentos/GitHub/Sistema_Capacitacion_Gestion_ClinicaMedicaSur/scg_clinicasur/Views/Paciente/Citas.cshtml]

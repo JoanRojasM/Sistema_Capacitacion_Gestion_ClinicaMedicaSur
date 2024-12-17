@@ -4,55 +4,84 @@
     ViewData["Title"] = "Listado de Expedientes Médicos";
 }
 
-<h1>@ViewData["Title"]</h1>
+<div class="container mt-5">
+    <!-- Encabezado -->
+    <div class="text-center mb-4">
+        <h1 class="display-5 fw-bold text-primary">
+            <i class="bi bi-folder2-open"></i> @ViewData["Title"]
+        </h1>
+        <p class="lead text-muted">Consulta y gestiona los expedientes médicos de los pacientes.</p>
+    </div>
 
-<!-- Formulario de búsqueda -->
-<form method="get" action="@Url.Action("Index")" class="d-flex mb-3">
-    <!-- Campo de búsqueda por nombre -->
-    <input type="text" name="searchName" class="form-control me-2" placeholder="Buscar por nombre" value="@ViewData["searchName"]">
+    <!-- Formulario de búsqueda -->
+    <div class="card shadow-sm border-0 mb-4">
+        <div class="card-body">
+            <form method="get" action="@Url.Action("Index")" class="row g-3">
+                <div class="col-md-8">
+                    <input type="text" name="searchName" class="form-control" placeholder="Buscar por nombre del paciente" value="@ViewData["searchName"]">
+                </div>
+                <div class="col-md-4 d-flex gap-2 justify-content-end">
+                    <button type="submit" class="btn btn-success">
+                        <i class="bi bi-search"></i> Buscar
+                    </button>
+                    <a href="@Url.Action("Index")" class="btn btn-outline-danger">
+                        <i class="bi bi-arrow-clockwise"></i> Resetear
+                    </a>
+                </div>
+            </form>
+        </div>
+    </div>
 
-    <!-- Botón para realizar la búsqueda -->
-    <button type="submit" class="btn btn-outline-success">Buscar</button>
-    <a href="@Url.Action("Index")" class="btn btn-outline-danger ms-2">Resetear</a>
-</form>
+    <!-- Botón para crear un nuevo expediente -->
+    <div class="text-end mb-3">
+        <a asp-action="CrearExpediente" class="btn btn-primary btn-lg">
+            <i class="bi bi-file-earmark-plus"></i> Crear Expediente
+        </a>
+    </div>
 
-<!-- Botón para crear un nuevo expediente -->
-<div class="header-buttons">
-    <a asp-action="CrearExpediente" class="button">Crear Expediente</a>
+    <!-- Tabla de resultados -->
+    <div class="card shadow-sm border-0">
+        <div class="card-body p-0">
+            <div class="table-responsive">
+                <table class="table table-hover table-striped align-middle mb-0 text-center">
+                    <thead class="table-primary">
+                        <tr>
+                            <th>ID Expediente</th>
+                            <th>Nombre del Paciente</th>
+                            <th>Fecha de Nacimiento</th>
+                            <th>Última Consulta</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (Model.Any())
+                        {
+                            @foreach (var expediente in Model)
+                            {
+                                <tr>
+                                    <td>EXP-@expediente.idExpediente.ToString("D4")</td>
+                                    <td>@expediente.nombrePaciente</td>
+                                    <td>@expediente.fechaNacimiento.ToString("dd/MM/yyyy")</td>
+                                    <td>@expediente.ultimaConsulta.ToString("dd/MM/yyyy")</td>
+                                    <td>
+                                        <a href="@Url.Action("DetallesConsulta", "Expedientes", new { id = expediente.idExpediente })" class="btn btn-info btn-sm">
+                                            <i class="bi bi-eye"></i> Ver Detalles
+                                        </a>
+                                    </td>
+                                </tr>
+                            }
+                        }
+                        else
+                        {
+                            <tr>
+                                <td colspan="5" class="text-muted text-center py-3 fs-5">
+                                    <i class="bi bi-info-circle"></i> No se encontraron resultados.
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
 </div>
-
-<!-- Tabla de resultados -->
-<table class="table">
-    <thead>
-        <tr>
-            <th>ID Expediente</th>
-            <th>Nombre del Paciente</th>
-            <th>Fecha de Nacimiento</th>
-            <th>Última Consulta</th>
-            <th>Acciones</th>
-        </tr>
-    </thead>
-    <tbody>
-        @if (Model.Any())
-        {
-            @foreach (var expediente in Model)
-            {
-                <tr>
-                    <td>@expediente.idExpediente</td>
-                    <td>@expediente.nombrePaciente</td> <!-- Aquí usamos NombrePaciente en lugar de nombrePaciente -->
-                    <td>@expediente.fechaNacimiento.ToString("yyyy-MM-dd")</td>
-                    <td>@expediente.ultimaConsulta.ToString("yyyy-MM-dd")</td>
-                    <td>
-                        <a href="@Url.Action("DetallesConsulta", "Expedientes", new { id = expediente.idExpediente })" class="btn btn-primary">Ver Detalles</a>
-                    </td>
-                </tr>
-            }
-        }
-        else
-        {
-            <tr>
-                <td colspan="6" class="text-center">No se encontraron resultados</td>
-            </tr>
-        }
-    </tbody>
-</table>

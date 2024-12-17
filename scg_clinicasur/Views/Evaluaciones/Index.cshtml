@@ -1,36 +1,70 @@
 ﻿@model IEnumerable<scg_clinicasur.Models.Evaluacion>
+@{
+    ViewData["Title"] = "Evaluaciones";
+}
 
-<h1>Evaluaciones</h1>
+<div class="container mt-5">
+    <!-- Encabezado -->
+    <div class="text-center mb-4">
+        <h1 class="display-5 fw-bold text-primary">@ViewData["Title"]</h1>
+        <p class="lead text-muted">Administra y consulta las evaluaciones disponibles en el sistema.</p>
+    </div>
 
-<p>
-    <a href="@Url.Action("Crear")" class="btn btn-primary">Crear Nueva Evaluación</a>
-</p>
+    <!-- Botón Crear -->
+    <div class="text-end mb-3">
+        <a href="@Url.Action("Crear")" class="btn btn-success btn-lg">
+            <i class="bi bi-plus-circle"></i> Crear Nueva Evaluación
+        </a>
+    </div>
 
-<table class="table">
-    <thead>
-        <tr>
-            <th>Nombre</th>
-            <th>Descripción</th>
-            <th>Tiempo de Prueba</th>
-            <th>Capacitación</th>
-            <th>Acciones</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var evaluacion in Model)
-        {
-            <tr>
-                <td>@evaluacion.nombre</td>
-                <td>@evaluacion.descripcion</td>
-                <td>@evaluacion.tiempo_prueba</td>
-                <td>@evaluacion.Capacitacion.titulo</td>
-
-                <td>
-                    <a href="@Url.Action("Detalles", new { id = evaluacion.id_evaluacion })" class="btn btn-info">Detalles</a>
-                    <a href="@Url.Action("Editar", new { id = evaluacion.id_evaluacion })" class="btn btn-warning">Editar</a>
-                    <a href="@Url.Action("Eliminar", new { id = evaluacion.id_evaluacion })" class="btn btn-danger" onclick="return confirm('¿Estás seguro de que quieres eliminar esta evaluación?')">Eliminar</a>
-                </td>
-            </tr>
-        }
-    </tbody>
-</table>
+    <!-- Tabla -->
+    <div class="table-responsive shadow-sm rounded">
+        <table class="table table-hover table-striped align-middle text-center">
+            <thead class="table-primary">
+                <tr>
+                    <th>Nombre</th>
+                    <th>Descripción</th>
+                    <th>Tiempo de Prueba</th>
+                    <th>Capacitación</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model.Any())
+                {
+                    @foreach (var evaluacion in Model)
+                    {
+                        <tr>
+                            <td>@evaluacion.nombre</td>
+                            <td>@evaluacion.descripcion</td>
+                            <td>@evaluacion.tiempo_prueba</td>
+                            <td>@evaluacion.Capacitacion.titulo</td>
+                            <td>
+                                <!-- Botones de Acción -->
+                                <div class="btn-group" role="group">
+                                    <a href="@Url.Action("Detalles", new { id = evaluacion.id_evaluacion })" class="btn btn-primary btn-sm">
+                                        <i class="bi bi-eye"></i> Detalles
+                                    </a>
+                                    <a href="@Url.Action("Editar", new { id = evaluacion.id_evaluacion })" class="btn btn-warning btn-sm text-white">
+                                        <i class="bi bi-pencil-square"></i> Editar
+                                    </a>
+                                    <form asp-action="Eliminar" asp-route-id="@evaluacion.id_evaluacion" method="post" class="d-inline" onsubmit="return confirm('¿Estás seguro de que quieres eliminar esta evaluación?');">
+                                        <button type="submit" class="btn btn-danger btn-sm">
+                                            <i class="bi bi-trash"></i> Eliminar
+                                        </button>
+                                    </form>
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                }
+                else
+                {
+                    <tr>
+                        <td colspan="5" class="text-center text-muted">No hay evaluaciones disponibles.</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

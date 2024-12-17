@@ -4,94 +4,106 @@
     ViewData["Title"] = "Gestionar Alergias de " + Model.Paciente.nombre + " " + Model.Paciente.apellido;
 }
 
-<h1>@ViewData["Title"]</h1>
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewData["Title"]</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.10.5/font/bootstrap-icons.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #f9fafb;
+        }
 
-<div class="alert alert-info">
-    <h4>Alergias Actuales del Paciente</h4>
-    @if (Model.AlergiasPaciente != null && Model.AlergiasPaciente.Any())
-    {
-        <ul>
-            @foreach (var idAlergia in Model.AlergiasPaciente)
+        .container {
+            background: #fff;
+            border-radius: 10px;
+            padding: 25px;
+            margin-top: 30px;
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            color: #0d6efd;
+            text-align: center;
+            font-weight: bold;
+            margin-bottom: 30px;
+        }
+
+        .alert h4 {
+            font-weight: bold;
+            color: #0d6efd;
+        }
+
+        .table th {
+            background-color: #0d6efd;
+            color: #ffffff;
+            text-align: center;
+        }
+
+        ul li {
+            list-style-type: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Título -->
+        <h1><i class="bi bi-clipboard-heart"></i> @ViewData["Title"]</h1>
+
+        <!-- Alergias Actuales -->
+        <div class="alert alert-info">
+            <h4><i class="bi bi-thermometer"></i> Alergias Actuales</h4>
+            @if (Model.AlergiasPaciente != null && Model.AlergiasPaciente.Any())
             {
-                var alergia = Model.TodasAlergias.FirstOrDefault(a => a.id_alergia == idAlergia);
-                if (alergia != null)
-                {
-                    <li>@alergia.nombre_alergia</li>
-                }
-            }
-        </ul>
-    }
-    else
-    {
-        <p>No se han registrado alergias para este paciente.</p>
-    }
-</div>
-
-<button class="btn btn-secondary" type="button" onclick="toggleHistorial()">Ver Historial de Alergias</button>
-
-<div id="historialAlergias" style="display: none; margin-top: 20px;">
-    <h3>Historial de Alergias</h3>
-    <table class="table table-bordered table-striped">
-        <thead>
-            <tr>
-                <th>Alergia</th>
-                <th>Fecha de Registro</th>
-            </tr>
-        </thead>
-        <tbody>
-            @if (Model.HistorialAlergias != null && Model.HistorialAlergias.Any())
-            {
-                @foreach (var entry in Model.HistorialAlergias)
-                {
-                    <tr>
-                        <td>@entry.nombre_alergia</td>
-                        <td>@entry.fechaRegistro.ToString("dd/MM/yyyy HH:mm:ss")</td>
-                    </tr>
-                }
+                <ul>
+                    @foreach (var idAlergia in Model.AlergiasPaciente)
+                    {
+                        var alergia = Model.TodasAlergias.FirstOrDefault(a => a.id_alergia == idAlergia);
+                        if (alergia != null)
+                        {
+                            <li><i class="bi bi-check-circle-fill text-success"></i> @alergia.nombre_alergia</li>
+                        }
+                    }
+                </ul>
             }
             else
             {
-                <tr>
-                    <td colspan="2">No hay historial de alergias para este paciente.</td>
-                </tr>
+                <p><i class="bi bi-exclamation-circle text-warning"></i> No se han registrado alergias.</p>
             }
-        </tbody>
-    </table>
-</div>
+        </div>
 
-<form asp-action="GuardarAlergias" method="post" style="margin-top: 20px;">
-    <input type="hidden" name="id_paciente" value="@Model.Paciente.id_usuario" />
+        <!-- Formulario -->
+        <form asp-action="GuardarAlergias" method="post">
+            <input type="hidden" name="id_paciente" value="@Model.Paciente.id_usuario" />
 
-    <button type="button" class="btn btn-primary" onclick="toggleAlergiasForm()">Gestionar Alergias</button>
+            <h4 class="mt-4 mb-3"><i class="bi bi-pencil-square"></i> Seleccionar Alergias</h4>
+            <div class="row">
+                @foreach (var alergia in Model.TodasAlergias)
+                {
+                    <div class="col-md-6 mb-2">
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox"
+                                   name="alergiasSeleccionadas"
+                                   value="@alergia.id_alergia"
+                            @(Model.AlergiasPaciente != null && Model.AlergiasPaciente.Contains(alergia.id_alergia) ? "checked" : "") />
+                            <label class="form-check-label">@alergia.nombre_alergia</label>
+                        </div>
+                    </div>
+                }
+            </div>
 
-    <div id="alergiasForm" style="display: none; margin-top: 20px;">
-        <h3>Seleccionar Alergias</h3>
-        <ul>
-            @foreach (var alergia in Model.TodasAlergias)
-            {
-                <li>
-                    <input type="checkbox" name="alergiasSeleccionadas" value="@alergia.id_alergia"
-                    @(Model.AlergiasPaciente != null && Model.AlergiasPaciente.Contains(alergia.id_alergia) ? "checked" : "") />
-                    @alergia.nombre_alergia
-                </li>
-            }
-        </ul>
-        <button type="submit" class="btn btn-primary">Guardar Alergias</button>
+            <button type="submit" class="btn btn-success mt-3">
+                <i class="bi bi-floppy"></i> Guardar Alergias
+            </button>
+            <a href="@Url.Action("ListadoPacientes", "Paciente")" class="btn btn-secondary mt-3">
+                <i class="bi bi-arrow-left-circle"></i> Volver a Pacientes
+            </a>
+        </form>
     </div>
-</form>
 
-<a href="@Url.Action("ListadoPacientes", "Paciente")" class="btn btn-secondary mt-3">Volver a Pacientes</a>
-
-@section Scripts {
-    <script>
-        function toggleHistorial() {
-            var historialDiv = document.getElementById("historialAlergias");
-            historialDiv.style.display = historialDiv.style.display === "none" ? "block" : "none";
-        }
-
-        function toggleAlergiasForm() {
-            var alergiasForm = document.getElementById("alergiasForm");
-            alergiasForm.style.display = alergiasForm.style.display === "none" ? "block" : "none";
-        }
-    </script>
-}
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

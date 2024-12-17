@@ -1,27 +1,57 @@
 ﻿@model scg_clinicasur.Models.Evaluacion
 
-<h1>Detalles de la Evaluación</h1>
+@{
+    ViewData["Title"] = "Detalles de la Evaluación";
+}
 
-<div>
-    <strong>Nombre:</strong> @Model.nombre
-</div>
-<div>
-    <strong>Descripción:</strong> @Model.descripcion
-</div>
-<div>
-    <strong>Tiempo de Prueba:</strong> @Model.tiempo_prueba
-</div>
-<div>
-    <strong>Archivo:</strong>
-</div>
-<div>
-    <strong>Capacitación:</strong> @Model.Capacitacion.titulo
-</div>
-<div>
-    <strong>Usuario:</strong> @Model.Usuario.nombre
-</div>
-<div>
-    <strong>Fecha de Creación:</strong> @Model.fecha_creacion
-</div>
+<div class="container mt-5">
+    <!-- Encabezado -->
+    <div class="text-center mb-4">
+        <h1 class="display-5 fw-bold text-primary">@ViewData["Title"]</h1>
+        <p class="lead text-muted">Información detallada de la evaluación: <strong>@Model.nombre</strong></p>
+    </div>
 
-<a href="@Url.Action("Index")" class="btn btn-secondary">Volver a la lista</a>
+    <!-- Tarjeta con Información -->
+    <div class="card shadow-sm border-0">
+        <div class="card-body p-4">
+            <div class="row align-items-center">
+                <!-- Ícono Principal -->
+                <div class="col-md-4 text-center mb-3 mb-md-0">
+                    <i class="bi bi-clipboard-check text-primary" style="font-size: 8rem;"></i>
+                </div>
+
+                <!-- Detalles -->
+                <div class="col-md-8">
+                    <dl class="row mb-0">
+                        <dt class="col-sm-4 text-muted">Nombre:</dt>
+                        <dd class="col-sm-8 fw-bold">@Model.nombre</dd>
+
+                        <dt class="col-sm-4 text-muted">Descripción:</dt>
+                        <dd class="col-sm-8">@Model.descripcion</dd>
+
+                        <dt class="col-sm-4 text-muted">Tiempo de Prueba:</dt>
+                        <dd class="col-sm-8">@Model.tiempo_prueba</dd>
+
+                        <dt class="col-sm-4 text-muted">Capacitación:</dt>
+                        <dd class="col-sm-8">
+                            <span class="badge bg-info text-dark">@Model.Capacitacion.titulo</span>
+                        </dd>
+
+                        <dt class="col-sm-4 text-muted">Usuario:</dt>
+                        <dd class="col-sm-8">@Model.Usuario.nombre</dd>
+
+                        <dt class="col-sm-4 text-muted">Fecha de Creación:</dt>
+                        <dd class="col-sm-8">@Model.fecha_creacion.ToString("dd/MM/yyyy")</dd>
+                    </dl>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Botones de Acción -->
+    <div class="text-center mt-4">
+        <a href="@Url.Action("Index")" class="btn btn-secondary me-2">
+            <i class="bi bi-arrow-left"></i> Volver a la Lista
+        </a>
+    </div>
+</div>

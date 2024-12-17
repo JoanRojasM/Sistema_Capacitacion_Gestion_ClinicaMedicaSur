@@ -1,51 +1,91 @@
 ﻿@model scg_clinicasur.Models.Evaluacion
+@{
+    ViewData["Title"] = "Crear Evaluación";
+}
 
-<h1>Crear Evaluación</h1>
-
-<form method="post" enctype="multipart/form-data" asp-controller="Evaluaciones" asp-action="Crear">
-    <div class="form-group">
-        <label for="nombre">Nombre</label>
-        <input asp-for="nombre" class="form-control" />
-        <span asp-validation-for="nombre" class="text-danger"></span>
-    </div>
-    <div class="form-group">
-        <label for="descripcion">Descripción</label>
-        <textarea asp-for="descripcion" class="form-control"></textarea>
-        <span asp-validation-for="descripcion" class="text-danger"></span>
-    </div>
-    <div class="form-group">
-        <label for="tiempo_prueba">Tiempo de la Prueba</label>
-        <input asp-for="tiempo_prueba" class="form-control" />
-        <span asp-validation-for="tiempo_prueba" class="text-danger"></span>
-    </div>
-    <div class="mb-3">
-        <input type="file" name="file" class="form-control"/>
-    </div>
-    <div class="form-group">
-        <label for="id_capacitacion">Capacitación</label>
-        <select asp-for="id_capacitacion" class="form-control">
-            <option value="">Seleccione una capacitación</option>
-            @foreach (var capacitacion in (IEnumerable<scg_clinicasur.Models.Capacitacion>)ViewData["Capacitaciones"])
-            {
-                <option value="@capacitacion.id_capacitacion">@capacitacion.titulo</option>
-            }
-        </select>
-        <span asp-validation-for="id_capacitacion" class="text-danger"></span>
-    </div>
-    <div class="form-group">
-        <label for="id_usuario">Usuario</label>
-        <select asp-for="id_usuario" class="form-control">
-            <option value="">Seleccione un usuario</option>
-            @foreach (var usuario in (IEnumerable<scg_clinicasur.Models.Usuario>)ViewData["Usuarios"])
-            {
-                <option value="@usuario.id_usuario">@usuario.nombre</option>
-            }
-        </select>
-        <span asp-validation-for="id_usuario" class="text-danger"></span>
+<div class="container mt-5">
+    <!-- Encabezado -->
+    <div class="text-center mb-4">
+        <h1 class="display-5 fw-bold text-primary">Crear Nueva Evaluación</h1>
+        <p class="lead text-muted">Complete la información requerida para registrar una nueva evaluación.</p>
     </div>
 
-    <div class="form-group">
-        <input type="submit" value="Guardar" class="btn btn-primary" />
-        <a asp-action="Index" class="btn btn-secondary">Cancelar</a>
+    <!-- Formulario -->
+    <div class="card shadow-sm border-0">
+        <div class="card-body p-4">
+            <form method="post" enctype="multipart/form-data" asp-controller="Evaluaciones" asp-action="Crear">
+                <div class="row mb-3">
+                    <!-- Nombre -->
+                    <div class="col-md-6">
+                        <label asp-for="nombre" class="form-label fw-bold">Nombre de la Evaluación</label>
+                        <input asp-for="nombre" class="form-control" placeholder="Ingrese el nombre de la evaluación" />
+                        <span asp-validation-for="nombre" class="text-danger"></span>
+                    </div>
+
+                    <!-- Tiempo de la Prueba -->
+                    <div class="col-md-6">
+                        <label asp-for="tiempo_prueba" class="form-label fw-bold">Tiempo de la Prueba</label>
+                        <input asp-for="tiempo_prueba" class="form-control" placeholder="Ejemplo: 60 minutos" />
+                        <span asp-validation-for="tiempo_prueba" class="text-danger"></span>
+                    </div>
+                </div>
+
+                <!-- Descripción -->
+                <div class="mb-3">
+                    <label asp-for="descripcion" class="form-label fw-bold">Descripción</label>
+                    <textarea asp-for="descripcion" class="form-control" rows="3" placeholder="Describa la evaluación"></textarea>
+                    <span asp-validation-for="descripcion" class="text-danger"></span>
+                </div>
+
+                <!-- Archivo -->
+                <div class="mb-3">
+                    <label class="form-label fw-bold">Adjuntar Archivo</label>
+                    <input type="file" name="file" class="form-control" />
+                    <small class="text-muted">Formatos permitidos: PDF, Word, Excel</small>
+                </div>
+
+                <div class="row mb-3">
+                    <!-- Capacitación -->
+                    <div class="col-md-6">
+                        <label asp-for="id_capacitacion" class="form-label fw-bold">Capacitación</label>
+                        <select asp-for="id_capacitacion" class="form-select">
+                            <option value="">Seleccione una capacitación</option>
+                            @foreach (var capacitacion in (IEnumerable<scg_clinicasur.Models.Capacitacion>)ViewData["Capacitaciones"])
+                            {
+                                <option value="@capacitacion.id_capacitacion">@capacitacion.titulo</option>
+                            }
+                        </select>
+                        <span asp-validation-for="id_capacitacion" class="text-danger"></span>
+                    </div>
+
+                    <!-- Usuario -->
+                    <div class="col-md-6">
+                        <label asp-for="id_usuario" class="form-label fw-bold">Usuario Responsable</label>
+                        <select asp-for="id_usuario" class="form-select">
+                            <option value="">Seleccione un usuario</option>
+                            @foreach (var usuario in (IEnumerable<scg_clinicasur.Models.Usuario>)ViewData["Usuarios"])
+                            {
+                                <option value="@usuario.id_usuario">@usuario.nombre @usuario.apellido</option>
+                            }
+                        </select>
+                        <span asp-validation-for="id_usuario" class="text-danger"></span>
+                    </div>
+                </div>
+
+                <!-- Botones de Acción -->
+                <div class="text-center mt-4">
+                    <button type="submit" class="btn btn-success btn-lg me-2">
+                        <i class="bi bi-save"></i> Guardar
+                    </button>
+                    <a asp-action="Index" class="btn btn-secondary btn-lg">
+                        <i class="bi bi-arrow-left"></i> Cancelar
+                    </a>
+                </div>
+            </form>
+        </div>
     </div>
-</form>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

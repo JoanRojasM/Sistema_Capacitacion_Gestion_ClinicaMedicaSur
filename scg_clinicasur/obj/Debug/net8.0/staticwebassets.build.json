@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "urCwPsyuERUZTaJxXAXywngDP4ppy081wuRtxyQ0Ctc=",
+  "Hash": "pK1pj+ibDGkNoBrNIuNsANmgWCHUkiMGSW/7dyEssIk=",
   "Source": "scg_clinicasur",
   "BasePath": "_content/scg_clinicasur",
   "Mode": "Default",
@@ -57,6 +57,27 @@
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "C:\\Users\\Usuario\\OneDrive\\Documentos\\GitHub\\Sistema_Capacitacion_Gestion_ClinicaMedicaSur\\scg_clinicasur\\obj\\Debug\\net8.0\\scopedcss\\projectbundle\\scg_clinicasur.bundle.scp.css"
+    },
+    {
+      "Identity": "C:\\Users\\Usuario\\OneDrive\\Documentos\\GitHub\\Sistema_Capacitacion_Gestion_ClinicaMedicaSur\\scg_clinicasur\\wwwroot\\archivos\\Caso Practico 2 G6 2024.pdf",
+      "SourceId": "scg_clinicasur",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\Users\\Usuario\\OneDrive\\Documentos\\GitHub\\Sistema_Capacitacion_Gestion_ClinicaMedicaSur\\scg_clinicasur\\wwwroot\\",
+      "BasePath": "_content/scg_clinicasur",
+      "RelativePath": "archivos/Caso Practico 2 G6 2024#[.{fingerprint}]?.pdf",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "Fingerprint": "8fa0nb72mf",
+      "Integrity": "PFglxrzscVPuruQnDnhJDhzWgVlRag6VUhvyuI8/xPQ=",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\archivos\\Caso Practico 2 G6 2024.pdf"
     },
     {
       "Identity": "C:\\Users\\Usuario\\OneDrive\\Documentos\\GitHub\\Sistema_Capacitacion_Gestion_ClinicaMedicaSur\\scg_clinicasur\\wwwroot\\css\\site.css",
@@ -1317,9 +1338,133 @@
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "wwwroot\\lib\\jquery-validation-unobtrusive\\LICENSE.txt"
+    },
+    {
+      "Identity": "C:\\Users\\Usuario\\OneDrive\\Documentos\\GitHub\\Sistema_Capacitacion_Gestion_ClinicaMedicaSur\\scg_clinicasur\\wwwroot\\uploads\\descarga.png",
+      "SourceId": "scg_clinicasur",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\Users\\Usuario\\OneDrive\\Documentos\\GitHub\\Sistema_Capacitacion_Gestion_ClinicaMedicaSur\\scg_clinicasur\\wwwroot\\",
+      "BasePath": "_content/scg_clinicasur",
+      "RelativePath": "uploads/descarga#[.{fingerprint}]?.png",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "Fingerprint": "x8sc96544l",
+      "Integrity": "/xT0tceWbSb7fVInB3op1AqXJCmegjA9trIbre5Acxs=",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\uploads\\descarga.png"
+    },
+    {
+      "Identity": "C:\\Users\\Usuario\\OneDrive\\Documentos\\GitHub\\Sistema_Capacitacion_Gestion_ClinicaMedicaSur\\scg_clinicasur\\wwwroot\\uploads\\images.png",
+      "SourceId": "scg_clinicasur",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\Users\\Usuario\\OneDrive\\Documentos\\GitHub\\Sistema_Capacitacion_Gestion_ClinicaMedicaSur\\scg_clinicasur\\wwwroot\\",
+      "BasePath": "_content/scg_clinicasur",
+      "RelativePath": "uploads/images#[.{fingerprint}]?.png",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "Fingerprint": "g3kkhpv2sk",
+      "Integrity": "vMdHIgnyJUZI9zXlZ/jyrHzDTxf2piS3OKUuxCUCBNA=",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\uploads\\images.png"
     }
   ],
   "Endpoints": [
+    {
+      "Route": "archivos/Caso Practico 2 G6 2024.8fa0nb72mf.pdf",
+      "AssetFile": "C:\\Users\\Usuario\\OneDrive\\Documentos\\GitHub\\Sistema_Capacitacion_Gestion_ClinicaMedicaSur\\scg_clinicasur\\wwwroot\\archivos\\Caso Practico 2 G6 2024.pdf",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "198899"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "application/pdf"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"PFglxrzscVPuruQnDnhJDhzWgVlRag6VUhvyuI8/xPQ=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Wed, 11 Dec 2024 00:40:24 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=31536000, immutable"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "fingerprint",
+          "Value": "8fa0nb72mf"
+        },
+        {
+          "Name": "label",
+          "Value": "archivos/Caso Practico 2 G6 2024.pdf"
+        },
+        {
+          "Name": "integrity",
+          "Value": "sha256-PFglxrzscVPuruQnDnhJDhzWgVlRag6VUhvyuI8/xPQ="
+        }
+      ]
+    },
+    {
+      "Route": "archivos/Caso Practico 2 G6 2024.pdf",
+      "AssetFile": "C:\\Users\\Usuario\\OneDrive\\Documentos\\GitHub\\Sistema_Capacitacion_Gestion_ClinicaMedicaSur\\scg_clinicasur\\wwwroot\\archivos\\Caso Practico 2 G6 2024.pdf",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "198899"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "application/pdf"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"PFglxrzscVPuruQnDnhJDhzWgVlRag6VUhvyuI8/xPQ=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Wed, 11 Dec 2024 00:40:24 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "no-cache"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "integrity",
+          "Value": "sha256-PFglxrzscVPuruQnDnhJDhzWgVlRag6VUhvyuI8/xPQ="
+        }
+      ]
+    },
     {
       "Route": "css/site.css",
       "AssetFile": "C:\\Users\\Usuario\\OneDrive\\Documentos\\GitHub\\Sistema_Capacitacion_Gestion_ClinicaMedicaSur\\scg_clinicasur\\wwwroot\\css\\site.css",
@@ -1343,7 +1488,7 @@
         },
         {
           "Name": "Last-Modified",
-          "Value": "Tue, 10 Dec 2024 22:34:26 GMT"
+          "Value": "Wed, 11 Dec 2024 00:40:24 GMT"
         },
         {
           "Name": "Cache-Control",
@@ -1380,7 +1525,7 @@
         },
         {
           "Name": "Last-Modified",
-          "Value": "Tue, 10 Dec 2024 22:34:26 GMT"
+          "Value": "Wed, 11 Dec 2024 00:40:24 GMT"
         },
         {
           "Name": "Cache-Control",
@@ -6401,6 +6546,170 @@
         {
           "Name": "integrity",
           "Value": "sha256-vBBxfL1BUAyoajKHLbtpaotg4xjGRQLU9of6VzRebm0="
+        }
+      ]
+    },
+    {
+      "Route": "uploads/descarga.png",
+      "AssetFile": "C:\\Users\\Usuario\\OneDrive\\Documentos\\GitHub\\Sistema_Capacitacion_Gestion_ClinicaMedicaSur\\scg_clinicasur\\wwwroot\\uploads\\descarga.png",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "4876"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "image/png"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"/xT0tceWbSb7fVInB3op1AqXJCmegjA9trIbre5Acxs=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Tue, 17 Dec 2024 09:31:13 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=3600, must-revalidate"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "integrity",
+          "Value": "sha256-/xT0tceWbSb7fVInB3op1AqXJCmegjA9trIbre5Acxs="
+        }
+      ]
+    },
+    {
+      "Route": "uploads/descarga.x8sc96544l.png",
+      "AssetFile": "C:\\Users\\Usuario\\OneDrive\\Documentos\\GitHub\\Sistema_Capacitacion_Gestion_ClinicaMedicaSur\\scg_clinicasur\\wwwroot\\uploads\\descarga.png",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "4876"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "image/png"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"/xT0tceWbSb7fVInB3op1AqXJCmegjA9trIbre5Acxs=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Tue, 17 Dec 2024 09:31:13 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=31536000, immutable"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "fingerprint",
+          "Value": "x8sc96544l"
+        },
+        {
+          "Name": "label",
+          "Value": "uploads/descarga.png"
+        },
+        {
+          "Name": "integrity",
+          "Value": "sha256-/xT0tceWbSb7fVInB3op1AqXJCmegjA9trIbre5Acxs="
+        }
+      ]
+    },
+    {
+      "Route": "uploads/images.g3kkhpv2sk.png",
+      "AssetFile": "C:\\Users\\Usuario\\OneDrive\\Documentos\\GitHub\\Sistema_Capacitacion_Gestion_ClinicaMedicaSur\\scg_clinicasur\\wwwroot\\uploads\\images.png",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "2874"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "image/png"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"vMdHIgnyJUZI9zXlZ/jyrHzDTxf2piS3OKUuxCUCBNA=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Tue, 17 Dec 2024 09:31:13 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=31536000, immutable"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "fingerprint",
+          "Value": "g3kkhpv2sk"
+        },
+        {
+          "Name": "label",
+          "Value": "uploads/images.png"
+        },
+        {
+          "Name": "integrity",
+          "Value": "sha256-vMdHIgnyJUZI9zXlZ/jyrHzDTxf2piS3OKUuxCUCBNA="
+        }
+      ]
+    },
+    {
+      "Route": "uploads/images.png",
+      "AssetFile": "C:\\Users\\Usuario\\OneDrive\\Documentos\\GitHub\\Sistema_Capacitacion_Gestion_ClinicaMedicaSur\\scg_clinicasur\\wwwroot\\uploads\\images.png",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "2874"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "image/png"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"vMdHIgnyJUZI9zXlZ/jyrHzDTxf2piS3OKUuxCUCBNA=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Tue, 17 Dec 2024 09:31:13 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=3600, must-revalidate"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "integrity",
+          "Value": "sha256-vMdHIgnyJUZI9zXlZ/jyrHzDTxf2piS3OKUuxCUCBNA="
         }
       ]
     }

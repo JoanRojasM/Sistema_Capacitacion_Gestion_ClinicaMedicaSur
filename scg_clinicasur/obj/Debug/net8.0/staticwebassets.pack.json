@@ -5,6 +5,10 @@
       "PackagePath": "staticwebassets\\scg_clinicasur.0xezdzykzl.bundle.scp.css"
     },
     {
+      "Id": "C:\\Users\\Usuario\\OneDrive\\Documentos\\GitHub\\Sistema_Capacitacion_Gestion_ClinicaMedicaSur\\scg_clinicasur\\wwwroot\\archivos\\Caso Practico 2 G6 2024.pdf",
+      "PackagePath": "staticwebassets\\archivos\\Caso Practico 2 G6 2024.pdf"
+    },
+    {
       "Id": "C:\\Users\\Usuario\\OneDrive\\Documentos\\GitHub\\Sistema_Capacitacion_Gestion_ClinicaMedicaSur\\scg_clinicasur\\wwwroot\\css\\site.css",
       "PackagePath": "staticwebassets\\css\\site.css"
     },
@@ -243,6 +247,14 @@
     {
       "Id": "C:\\Users\\Usuario\\OneDrive\\Documentos\\GitHub\\Sistema_Capacitacion_Gestion_ClinicaMedicaSur\\scg_clinicasur\\wwwroot\\lib\\jquery\\dist\\jquery.min.map",
       "PackagePath": "staticwebassets\\lib\\jquery\\dist\\jquery.min.map"
+    },
+    {
+      "Id": "C:\\Users\\Usuario\\OneDrive\\Documentos\\GitHub\\Sistema_Capacitacion_Gestion_ClinicaMedicaSur\\scg_clinicasur\\wwwroot\\uploads\\descarga.png",
+      "PackagePath": "staticwebassets\\uploads\\descarga.png"
+    },
+    {
+      "Id": "C:\\Users\\Usuario\\OneDrive\\Documentos\\GitHub\\Sistema_Capacitacion_Gestion_ClinicaMedicaSur\\scg_clinicasur\\wwwroot\\uploads\\images.png",
+      "PackagePath": "staticwebassets\\uploads\\images.png"
     },
     {
       "Id": "obj\\Debug\\net8.0\\staticwebassets\\msbuild.build.scg_clinicasur.props",

@@ -4,32 +4,67 @@
     ViewData["Title"] = "Historial de Ingresos y Gastos";
 }
 
-<h1>@ViewData["Title"]</h1>
+<div class="container mt-5">
+    <!-- Encabezado -->
+    <div class="text-center mb-4">
+        <h1 class="display-5 fw-bold text-primary">@ViewData["Title"]</h1>
+        <p class="lead text-muted">Consulta detallada de ingresos y gastos registrados.</p>
+    </div>
 
-<table class="table">
-    <thead>
-        <tr>
-            <th>ID</th>
-            <th>Tipo</th>
-            <th>Concepto</th>
-            <th>Monto (₡)</th>
-            <th>Fecha</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var item in Model)
-        {
-            <tr>
-                <td>CON-@item.IdContabilidad</td>
-                <td>@item.Tipo</td>
-                <td>@item.Concepto</td>
-                <td>@item.Monto</td>
-                <td>@item.FechaRegistro.ToString("yyyy-MM-dd")</td>
-            </tr>
-        }
-    </tbody>
-</table>
+    <!-- Botones de Acción -->
+    <div class="d-flex justify-content-center gap-3 mb-4">
+        <a class="btn btn-success" href="@Url.Action("AgregarEntrada")">
+            <i class="bi bi-plus-circle"></i> Agregar Ingreso
+        </a>
+        <a class="btn btn-danger" href="@Url.Action("RegistrarSalida")">
+            <i class="bi bi-dash-circle"></i> Registrar Gasto
+        </a>
+        <a class="btn btn-info text-white" href="@Url.Action("ReporteMensual", "Contabilidad")">
+            <i class="bi bi-file-earmark-bar-graph"></i> Generar Reporte Mensual
+        </a>
+    </div>
 
-<a class="btn btn-primary" href="@Url.Action("AgregarEntrada")">Agregar Ingreso</a>
-<a class="btn btn-primary" href="@Url.Action("RegistrarSalida")">Registrar Gasto</a>
-<a class="btn btn-primary" href="@Url.Action("ReporteMensual", "Contabilidad")">Generar Reporte Mensual</a>
+    <!-- Tabla de Historial -->
+    <div class="table-responsive shadow-lg">
+        <table class="table table-hover table-bordered align-middle text-center">
+            <thead class="table-primary">
+                <tr>
+                    <th>ID</th>
+                    <th>Tipo</th>
+                    <th>Concepto</th>
+                    <th>Monto (₡)</th>
+                    <th>Fecha</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td><strong>CON-@item.IdContabilidad</strong></td>
+                        <td>
+                            @if (item.Tipo == "Ingreso")
+                            {
+                                <span class="badge bg-success text-white">Ingreso</span>
+                            }
+                            else
+                            {
+                                <span class="badge bg-danger text-white">Gasto</span>
+                            }
+                        </td>
+                        <td>@item.Concepto</td>
+                        <td><span class="fw-bold">₡ @item.Monto.ToString("N2")</span></td>
+                        <td>@item.FechaRegistro.ToString("dd/MM/yyyy")</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Mensaje si no hay registros -->
+    @if (!Model.Any())
+    {
+        <div class="alert alert-warning text-center mt-4">
+            <i class="bi bi-exclamation-circle"></i> No hay registros disponibles en el historial.
+        </div>
+    }
+</div

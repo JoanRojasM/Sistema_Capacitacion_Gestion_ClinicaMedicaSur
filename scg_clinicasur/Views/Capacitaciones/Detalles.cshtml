@@ -4,46 +4,88 @@
     ViewData["Title"] = "Detalles de Capacitación";
 }
 
-<h1>Detalles de Capacitación</h1>
+<div class="container mt-5">
+    <!-- Encabezado -->
+    <div class="text-center mb-4">
+        <h1 class="display-5 fw-bold text-primary">Detalles de Capacitación</h1>
+        <p class="lead text-muted">Información detallada de la capacitación: @Model.titulo</p>
+    </div>
 
-<div class="form-group">
-    <label><strong>ID de Capacitación:</strong></label>
-    <p>@Model.id_capacitacion</p>
+    <!-- Tarjeta con Información -->
+    <div class="card shadow-sm border-0">
+        <div class="card-body p-4">
+            <div class="row">
+                <!-- Ícono Central -->
+                <div class="col-md-4 text-center mb-3 mb-md-0">
+                    <i class="bi bi-journal-text text-primary" style="font-size: 8rem;"></i>
+                </div>
+
+                <!-- Información -->
+                <div class="col-md-8">
+                    <dl class="row">
+                        <dt class="col-sm-4 text-muted">ID de Capacitación:</dt>
+                        <dd class="col-sm-8 fw-bold">@Model.id_capacitacion</dd>
+
+                        <dt class="col-sm-4 text-muted">Título:</dt>
+                        <dd class="col-sm-8 fw-bold">@Model.titulo</dd>
+
+                        <dt class="col-sm-4 text-muted">Descripción:</dt>
+                        <dd class="col-sm-8">@Model.descripcion</dd>
+
+                        <dt class="col-sm-4 text-muted">Duración:</dt>
+                        <dd class="col-sm-8">
+                            @(string.IsNullOrEmpty(Model.duracion) ? "No especificada" : Model.duracion)
+                        </dd>
+
+                        <dt class="col-sm-4 text-muted">Usuario Asignado:</dt>
+                        <dd class="col-sm-8">
+                            @(Model.Usuario != null ? Model.Usuario.nombre + " " + Model.Usuario.apellido : "No asignado")
+                        </dd>
+
+                        <dt class="col-sm-4 text-muted">Rol del Usuario:</dt>
+                        <dd class="col-sm-8">
+                            @if (Model.Usuario != null && Model.Usuario.roles != null)
+                            {
+                                <span class="badge bg-info text-dark">@Model.Usuario.roles.nombre_rol</span>
+                            }
+                            else
+                            {
+                                <span class="text-muted">No asignado</span>
+                            }
+                        </dd>
+
+                        <dt class="col-sm-4 text-muted">Fecha de Creación:</dt>
+                        <dd class="col-sm-8">
+                            <i class="bi bi-calendar"></i> @Model.fecha_creacion.ToString("dd/MM/yyyy")
+                        </dd>
+
+                        <dt class="col-sm-4 text-muted">Estado:</dt>
+                        <dd class="col-sm-8">
+                            @if (Model.estado == "activo")
+                            {
+                                <span class="badge bg-success">Completada</span>
+                            }
+                            else
+                            {
+                                <span class="badge bg-secondary">Pendiente</span>
+                            }
+                        </dd>
+                    </dl>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Botones de Acción -->
+    <div class="text-center mt-4">
+        <a asp-action="Index" class="btn btn-secondary me-2">
+            <i class="bi bi-arrow-left"></i> Volver a la lista
+        </a>
+        <a asp-action="Editar" asp-route-id="@Model.id_capacitacion" class="btn btn-warning text-white me-2">
+            <i class="bi bi-pencil-square"></i> Editar
+        </a>
+        <a asp-action="Eliminar" asp-route-id="@Model.id_capacitacion" class="btn btn-danger">
+            <i class="bi bi-trash"></i> Eliminar
+        </a>
+    </div>
 </div>
-
-<div class="form-group">
-    <label><strong>Título:</strong></label>
-    <p>@Model.titulo</p>
-</div>
-
-<div class="form-group">
-    <label><strong>Descripción:</strong></label>
-    <p>@Model.descripcion</p>
-</div>
-
-<div class="form-group">
-    <label><strong>Duración:</strong></label>
-    <p>@(!string.IsNullOrEmpty(Model.duracion) ? Model.duracion : "No especificada")</p>
-</div>
-
-<div class="form-group">
-    <label><strong>Usuario Asignado:</strong></label>
-    <p>@(Model.Usuario != null ? Model.Usuario.nombre + " " + Model.Usuario.apellido : "No asignado")</p>
-</div>
-
-<div class="form-group">
-    <label><strong>Rol del Usuario:</strong></label>
-    <p>@(Model.Usuario != null && Model.Usuario.roles != null ? Model.Usuario.roles.nombre_rol : "No asignado")</p>
-</div>
-
-<div class="form-group">
-    <label><strong>Fecha de Creación:</strong></label>
-    <p>@Model.fecha_creacion.ToString("dd/MM/yyyy")</p>
-</div>
-
-<div class="form-group">
-    <label><strong>Estado:</strong></label>
-    <p>@(string.IsNullOrEmpty(Model.estado) ? "No especificado" : Model.estado)</p>
-</div>
-
-<a asp-action="Index" class="btn btn-secondary">Volver a la lista</a>

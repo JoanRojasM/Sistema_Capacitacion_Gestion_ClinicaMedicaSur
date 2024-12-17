@@ -4,64 +4,96 @@
     ViewData["Title"] = "Editar Usuario";
 }
 
-<!DOCTYPE html>
-<html>
-<head>
-    <link rel="stylesheet" href="~/css/site.css">
-    <title>@ViewData["Title"]</title>
-</head>
-<body>
-    <header>
-        <h1>@ViewData["Title"]</h1>
-        <nav>
-            <a asp-action="Index" class="button">Volver al Listado</a>
-        </nav>
-    </header>
-    <main>
-        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-        <form method="post" asp-action="Editar" asp-route-id="@Model.id_usuario">
-            <input type="hidden" asp-for="id_usuario" /> <!-- Campo oculto para enviar el ID -->
+<div class="container mt-5">
+    <!-- Encabezado -->
+    <div class="text-center mb-4">
+        <h1 class="display-5 fw-bold text-primary">Editar Usuario</h1>
+        <p class="lead text-muted">Actualiza la información del usuario en el sistema</p>
+    </div>
 
-            <label asp-for="nombre">Nombre:</label>
-            <input asp-for="nombre" class="form-control" />
-            <span asp-validation-for="nombre" class="text-danger"></span>
+    <!-- Tarjeta del Formulario -->
+    <div class="card shadow-sm border-0">
+        <div class="card-body p-4">
+            <!-- Mensajes de validación -->
+            @Html.ValidationSummary(true, "", new { @class = "alert alert-danger" })
 
-            <label asp-for="apellido">Apellido:</label>
-            <input asp-for="apellido" class="form-control" />
-            <span asp-validation-for="apellido" class="text-danger"></span>
+            <!-- Formulario -->
+            <form method="post" asp-action="Editar" asp-route-id="@Model.id_usuario">
+                <input type="hidden" asp-for="id_usuario" />
 
-            <label asp-for="contraseña">Contraseña (deja en blanco si no deseas cambiar la contraseña):</label>
-            <input asp-for="contraseña" type="password" class="form-control" placeholder="Deja en blanco si no deseas cambiar la contraseña" />
-            <span asp-validation-for="contraseña" class="text-danger"></span>
+                <!-- Campo Nombre -->
+                <div class="mb-3">
+                    <label asp-for="nombre" class="form-label">Nombre</label>
+                    <input asp-for="nombre" class="form-control" placeholder="Ingrese el nombre" />
+                    <span asp-validation-for="nombre" class="text-danger"></span>
+                </div>
 
-            <label asp-for="correo">Correo electrónico:</label>
-            <input asp-for="correo" type="email" class="form-control" />
-            <span asp-validation-for="correo" class="text-danger"></span>
+                <!-- Campo Apellido -->
+                <div class="mb-3">
+                    <label asp-for="apellido" class="form-label">Apellido</label>
+                    <input asp-for="apellido" class="form-control" placeholder="Ingrese el apellido" />
+                    <span asp-validation-for="apellido" class="text-danger"></span>
+                </div>
 
-            <label asp-for="telefono">Teléfono:</label>
-            <input asp-for="telefono" class="form-control" />
-            <span asp-validation-for="telefono" class="text-danger"></span>
+                <!-- Campo Contraseña -->
+                <div class="mb-3">
+                    <label asp-for="contraseña" class="form-label">Contraseña</label>
+                    <input asp-for="contraseña" type="password" class="form-control" placeholder="Dejar en blanco para no cambiar" />
+                    <span asp-validation-for="contraseña" class="text-danger"></span>
+                </div>
 
-            <label asp-for="id_rol">Rol:</label>
-            <select asp-for="id_rol" class="form-control" asp-items="ViewBag.Roles"></select>
-            <span asp-validation-for="id_rol" class="text-danger"></span>
+                <!-- Campo Correo -->
+                <div class="mb-3">
+                    <label asp-for="correo" class="form-label">Correo Electrónico</label>
+                    <input asp-for="correo" type="email" class="form-control" placeholder="usuario@ejemplo.com" />
+                    <span asp-validation-for="correo" class="text-danger"></span>
+                </div>
 
-            <label asp-for="estado">Estado:</label>
-            <select asp-for="estado" class="form-control" asp-items="ViewBag.Estados"></select>
-            <span asp-validation-for="estado" class="text-danger"></span>
+                <!-- Campo Teléfono -->
+                <div class="mb-3">
+                    <label asp-for="telefono" class="form-label">Teléfono</label>
+                    <input asp-for="telefono" class="form-control" placeholder="Ingrese el número de teléfono" />
+                    <span asp-validation-for="telefono" class="text-danger"></span>
+                </div>
 
-            <button type="submit" class="btn btn-primary">Actualizar</button>
-        </form>
-    </main>
+                <!-- Campo Rol -->
+                <div class="mb-3">
+                    <label asp-for="id_rol" class="form-label">Rol</label>
+                    <select asp-for="id_rol" class="form-select" asp-items="ViewBag.Roles">
+                        <option value="">Seleccione un rol</option>
+                    </select>
+                    <span asp-validation-for="id_rol" class="text-danger"></span>
+                </div>
 
-    <script src="~/lib/jquery/dist/jquery.min.js"></script>
-    <script>
-        $(document).ready(function () {
-            // Desactivar validación del campo "contraseña" al cargar la página
-            $('input[name="contraseña"]').removeAttr('data-val');
-            $('input[name="contraseña"]').removeAttr('data-val-required');
-        });
-    </script>
+                <!-- Campo Estado -->
+                <div class="mb-4">
+                    <label asp-for="estado" class="form-label">Estado</label>
+                    <select asp-for="estado" class="form-select" asp-items="ViewBag.Estados">
+                        <option value="">Seleccione un estado</option>
+                    </select>
+                    <span asp-validation-for="estado" class="text-danger"></span>
+                </div>
 
-</body>
-</html>
+                <!-- Botones de Acción -->
+                <div class="text-center">
+                    <a asp-action="Index" class="btn btn-secondary me-2">
+                        <i class="bi bi-arrow-left"></i> Volver al Listado
+                    </a>
+                    <button type="submit" class="btn btn-primary">
+                        <i class="bi bi-save"></i> Actualizar
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Scripts -->
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+<script>
+    $(document).ready(function () {
+        // Desactivar validación del campo "contraseña" al cargar la página
+        $('input[name="contraseña"]').removeAttr('data-val');
+        $('input[name="contraseña"]').removeAttr('data-val-required');
+    });
+</script>

@@ -1,36 +1,51 @@
 ﻿@model scg_clinicasur.Models.Capacitacion
 
 @{
-    ViewData["Title"] = "Eliminar Capacitacion";
+    ViewData["Title"] = "Eliminar Capacitación";
 }
 
-<h2>¿Estás seguro de que deseas eliminar esta capacitación?</h2>
-
-<div class="alert alert-danger">
-    Esta acción no se puede deshacer.
-</div>
-
-<div>
-    <h4>Detalles de la capacitación</h4>
-    <dl class="row">
-        <dt class="col-sm-2">Nombre</dt>
-        <dd class="col-sm-10">@Model.titulo</dd>
-
-        <dt class="col-sm-2">Descripción</dt>
-        <dd class="col-sm-10">@Model.descripcion</dd>
-
-        <dt class="col-sm-2">Duración</dt>
-        <dd class="col-sm-10">@Model.duracion</dd>
-
-        <dt class="col-sm-2">Usuario Responsable</dt>
-        <dd class="col-sm-10">@Model.Usuario.nombre @Model.Usuario.apellido</dd>
-    </dl>
-</div>
-
-<form asp-action="Eliminar" method="post">
-    <input type="hidden" asp-for="id_capacitacion" />
-    <div class="form-group">
-        <input type="submit" value="Eliminar" class="btn btn-danger" />
-        <a asp-action="Index" class="btn btn-secondary">Cancelar</a>
+<div class="container mt-5">
+    <!-- Encabezado -->
+    <div class="text-center mb-4">
+        <h1 class="display-5 fw-bold text-danger">@ViewData["Title"]</h1>
+        <p class="lead text-muted">Esta acción no se puede deshacer. Por favor, confirme su decisión.</p>
     </div>
-</form>
+
+    <!-- Tarjeta con detalles de la capacitación -->
+    <div class="card border-danger shadow-sm">
+        <div class="card-body">
+            <div class="alert alert-danger text-center fw-bold" role="alert">
+                <i class="bi bi-exclamation-triangle-fill"></i> ¡Atención! Esta acción eliminará permanentemente la capacitación.
+            </div>
+
+            <!-- Detalles de la capacitación -->
+            <h4 class="text-center text-primary mb-4">Detalles de la Capacitación</h4>
+            <dl class="row mb-0">
+                <dt class="col-sm-4 text-muted">Título:</dt>
+                <dd class="col-sm-8 fw-bold">@Model.titulo</dd>
+
+                <dt class="col-sm-4 text-muted">Descripción:</dt>
+                <dd class="col-sm-8">@Model.descripcion</dd>
+
+                <dt class="col-sm-4 text-muted">Duración:</dt>
+                <dd class="col-sm-8">@(!string.IsNullOrEmpty(Model.duracion) ? Model.duracion : "No especificada")</dd>
+
+                <dt class="col-sm-4 text-muted">Usuario Responsable:</dt>
+                <dd class="col-sm-8">@Model.Usuario.nombre @Model.Usuario.apellido</dd>
+            </dl>
+        </div>
+    </div>
+
+    <!-- Botones de Acción -->
+    <div class="text-center mt-4">
+        <form asp-action="Eliminar" method="post" class="d-inline">
+            <input type="hidden" asp-for="id_capacitacion" />
+            <button type="submit" class="btn btn-danger me-2">
+                <i class="bi bi-trash-fill"></i> Confirmar Eliminación
+            </button>
+        </form>
+        <a asp-action="Index" class="btn btn-secondary">
+            <i class="bi bi-arrow-left-circle"></i> Cancelar
+        </a>
+    </div>
+</div>

@@ -4,44 +4,97 @@
     ViewData["Title"] = "Reporte Mensual";
 }
 
-<h1>@ViewData["Title"]</h1>
-
-<form asp-action="ReporteMensual" method="post">
-    <div class="mb-3">
-        <label for="mes" class="form-label">Mes</label>
-        <input type="month" name="mes" class="form-control" id="mes" />
+<div class="container mt-5">
+    <!-- Encabezado -->
+    <div class="text-center mb-4">
+        <h1 class="display-5 fw-bold text-primary">
+            <i class="bi bi-calendar2-check"></i> @ViewData["Title"]
+        </h1>
+        <p class="lead text-muted">Seleccione un mes para generar el reporte de ingresos y gastos.</p>
     </div>
-    <button type="submit" class="btn btn-primary">Generar Reporte</button>
-    <a href="@Url.Action("Historial", "Contabilidad")" class="btn btn-secondary">Cancelar</a>
-</form>
 
-@if (ViewBag.MesSeleccionado != null)
-{
-    <h2>Reporte para el mes: @ViewBag.MesSeleccionado</h2>
+    <!-- Formulario para seleccionar el mes -->
+    <div class="card shadow border-0 mb-4">
+        <div class="card-body">
+            <form asp-action="ReporteMensual" method="post">
+                <div class="row g-3 align-items-center">
+                    <div class="col-md-8">
+                        <label for="mes" class="form-label fw-bold">Seleccione el Mes</label>
+                        <input type="month" name="mes" class="form-control" id="mes" required />
+                    </div>
+                    <div class="col-md-4 text-end">
+                        <button type="submit" class="btn btn-success btn-lg">
+                            <i class="bi bi-bar-chart-line"></i> Generar Reporte
+                        </button>
+                        <a href="@Url.Action("Historial", "Contabilidad")" class="btn btn-secondary btn-lg">
+                            <i class="bi bi-arrow-left-circle"></i> Cancelar
+                        </a>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
 
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Tipo</th>
-                <th>Descripción</th>
-                <th>Monto (₡)</th>
-                <th>Fecha</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var item in Model)
-            {
-                <tr>
-                    <td>@item.Tipo</td>
-                    <td>@item.Concepto</td>
-                    <td>@item.Monto</td>
-                    <td>@item.FechaRegistro.ToString("yyyy-MM-dd")</td>
-                </tr>
-            }
-        </tbody>
-    </table>
-}
-else
-{
-    <p>Seleccione un mes para generar el reporte.</p>
+    <!-- Resultados del Reporte -->
+    @if (ViewBag.MesSeleccionado != null)
+    {
+        <div class="card shadow border-0">
+            <div class="card-header bg-primary text-white">
+                <h4 class="mb-0">
+                    <i class="bi bi-file-earmark-text"></i> Reporte Mensual: @ViewBag.MesSeleccionado
+                </h4>
+            </div>
+            <div class="card-body">
+                @if (Model.Any())
+                {
+                    <div class="table-responsive">
+                        <table class="table table-hover table-striped align-middle text-center">
+                            <thead class="table-primary">
+                                <tr>
+                                    <th>Tipo</th>
+                                    <th>Descripción</th>
+                                    <th>Monto (₡)</th>
+                                    <th>Fecha</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var item in Model)
+                                {
+                                    <tr>
+                                        <td>
+                                            @if (item.Tipo == "Ingreso")
+                                            {
+                                                <span class="badge bg-success">Ingreso</span>
+                                            }
+                                            else
+                                            {
+                                                <span class="badge bg-danger">Gasto</span>
+                                            }
+                                        </td>
+                                        <td>@item.Concepto</td>
+                                        <td>₡@item.Monto.ToString("N2")</td>
+                                        <td>@item.FechaRegistro.ToString("dd/MM/yyyy")</td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                }
+                else
+                {
+                    <p class="text-muted text-center fs-5">No se encontraron registros para el mes seleccionado.</p>
+                }
+            </div>
+        </div>
+    }
+    else
+    {
+        <div class="text-center text-muted mt-4">
+            <p class="fs-5">Seleccione un mes para visualizar el reporte mensual.</p>
+        </div>
+    }
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
 }

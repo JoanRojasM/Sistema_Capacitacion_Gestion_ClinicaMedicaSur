@@ -1,50 +1,68 @@
 ﻿@model scg_clinicasur.Models.Capacitacion
 @{
-    ViewData["Title"] = "Crear Capacitacion";
+    ViewData["Title"] = "Crear Capacitación";
 }
 
-<h1>@ViewData["Title"]</h1>
-
-<form asp-action="Crear" method="post" enctype="multipart/form-data">
-    <div class="form-group">
-        <label asp-for="titulo" class="control-label">Título:</label>
-        <input asp-for="titulo" class="form-control" />
-        <span asp-validation-for="titulo" class="text-danger"></span>
+<div class="container mt-5">
+    <!-- Encabezado -->
+    <div class="text-center mb-4">
+        <h1 class="display-5 fw-bold text-primary">@ViewData["Title"]</h1>
+        <p class="lead text-muted">Complete la información para registrar una nueva capacitación.</p>
     </div>
 
-    <div class="form-group">
-        <label asp-for="descripcion" class="control-label">Descripción:</label>
-        <textarea asp-for="descripcion" class="form-control"></textarea>
-        <span asp-validation-for="descripcion" class="text-danger"></span>
-    </div>
+    <!-- Formulario -->
+    <div class="card shadow-sm border-0">
+        <div class="card-body p-4">
+            <form asp-action="Crear" method="post" enctype="multipart/form-data">
+                <div class="mb-3">
+                    <label asp-for="titulo" class="form-label fw-bold">Título:</label>
+                    <input asp-for="titulo" class="form-control" placeholder="Ingrese el título de la capacitación" />
+                    <span asp-validation-for="titulo" class="text-danger"></span>
+                </div>
 
-    <div class="form-group">
-        <label asp-for="duracion" class="control-label">Duración de Capacitación:</label>
-        <input asp-for="duracion" type="text" class="form-control"/>
-        <span asp-validation-for="duracion" class="text-danger"></span>
-    </div>
+                <div class="mb-3">
+                    <label asp-for="descripcion" class="form-label fw-bold">Descripción:</label>
+                    <textarea asp-for="descripcion" class="form-control" rows="4" placeholder="Ingrese una descripción detallada"></textarea>
+                    <span asp-validation-for="descripcion" class="text-danger"></span>
+                </div>
 
-    <div class="form-group">
-        <label asp-for="id_usuario" class="control-label">Usuario:</label>
-        <select asp-for="id_usuario" class="form-control" asp-items="ViewBag.Usuarios"></select>
-        <span asp-validation-for="id_usuario" class="text-danger"></span>
-    </div>
+                <div class="mb-3">
+                    <label asp-for="duracion" class="form-label fw-bold">Duración:</label>
+                    <input asp-for="duracion" type="text" class="form-control" placeholder="Ej. 2 horas, 3 días, etc." />
+                    <span asp-validation-for="duracion" class="text-danger"></span>
+                </div>
 
-    <div class="form-group">
-        <label asp-for="estado" class="control-label">Estado:</label>
-        <select asp-for="estado" class="form-control">
-            <option value="">Seleccione un estado</option>
-            <option value="Pendiente">Pendiente</option>
-            <option value="Completada">Completada</option>
-        </select>
-        <span asp-validation-for="estado" class="text-danger"></span>
-    </div>
+                <div class="mb-3">
+                    <label asp-for="id_usuario" class="form-label fw-bold">Usuario Asignado:</label>
+                    <select asp-for="id_usuario" class="form-select" asp-items="ViewBag.Usuarios">
+                        <option value="">Seleccione un usuario</option>
+                    </select>
+                    <span asp-validation-for="id_usuario" class="text-danger"></span>
+                </div>
 
-    <div class="form-group">
-        <input type="submit" value="Guardar" class="btn btn-primary" />
-        <a asp-action="Index" class="btn btn-secondary">Cancelar</a>
+                <div class="mb-3">
+                    <label asp-for="estado" class="form-label fw-bold">Estado:</label>
+                    <select asp-for="estado" class="form-select">
+                        <option value="">Seleccione un estado</option>
+                        <option value="Pendiente">Pendiente</option>
+                        <option value="Completada">Completada</option>
+                    </select>
+                    <span asp-validation-for="estado" class="text-danger"></span>
+                </div>
+
+                <!-- Botones -->
+                <div class="text-center mt-4">
+                    <button type="submit" class="btn btn-success me-2">
+                        <i class="bi bi-save"></i> Guardar
+                    </button>
+                    <a asp-action="Index" class="btn btn-secondary">
+                        <i class="bi bi-x-circle"></i> Cancelar
+                    </a>
+                </div>
+            </form>
+        </div>
     </div>
-</form>
+</div>
 
 @section Scripts {
     @{

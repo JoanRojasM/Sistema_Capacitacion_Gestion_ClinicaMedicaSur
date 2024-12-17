@@ -4,36 +4,88 @@
     ViewData["Title"] = "Mis Capacitaciones";
 }
 
-<h2 class="mb-4">Mis Capacitaciones</h2>
+<div class="container mt-5">
+    <!-- Título Principal -->
+    <div class="text-center mb-4">
+        <h1 class="display-5 fw-bold text-primary">@ViewData["Title"]</h1>
+        <p class="lead text-muted">Aquí puedes revisar tus capacitaciones y acceder a sus recursos.</p>
+    </div>
 
-<table class="table table-striped table-bordered table-hover">
-    <thead class="thead-dark">
-        <tr>
-            <th>Título de la Capacitación</th>
-            <th>Descripción</th>
-            <th>Duración</th>
-            <th>Estado</th>
-            <th>Acciones</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var capacitacion in Model)
-        {
-            <tr>
-                <td>@capacitacion.titulo</td>
-                <td>@capacitacion.descripcion</td>
-                <td>@capacitacion.duracion</td>
-                <td>@capacitacion.estado</td>
-                <td class="text-center">
-                    <form asp-action="SolicitarCancelacion" asp-controller="AsistenteLimpieza" method="post" class="d-inline">
-                        <input type="hidden" name="capacitacionId" value="@capacitacion.id_capacitacion" />
-                        <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('¿Estás seguro de que deseas solicitar la cancelación de esta capacitación?');">
-                            Solicitar Cancelación
-                        </button>
-                    </form>
-                    <a asp-controller="Capacitaciones" asp-action="Recursos" asp-route-id="@capacitacion.id_capacitacion" class="btn btn-info">Recursos de Aprendizaje</a>
-                </td>
-            </tr>
-        }
-    </tbody>
-</table>
+    <!-- Tabla de Capacitaciones -->
+    <div class="card shadow-sm p-3 bg-white rounded">
+        <div class="card-body">
+            @if (Model.Any())
+            {
+                <table class="table table-hover table-striped text-center align-middle">
+                    <thead class="table-dark">
+                        <tr>
+                            <th scope="col">Título</th>
+                            <th scope="col">Descripción</th>
+                            <th scope="col">Duración</th>
+                            <th scope="col">Estado</th>
+                            <th scope="col">Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var capacitacion in Model)
+                        {
+                            <tr>
+                                <td>@capacitacion.titulo</td>
+                                <td>@capacitacion.descripcion</td>
+                                <td>@capacitacion.duracion</td>
+                                <td>
+                                    @if (capacitacion.estado == "Completada")
+                                    {
+                                        <span class="badge bg-success">Completada</span>
+                                    }
+                                    else if (capacitacion.estado == "En Progreso")
+                                    {
+                                        <span class="badge bg-warning text-dark">En Progreso</span>
+                                    }
+                                    else
+                                    {
+                                        <span class="badge bg-secondary">Pendiente</span>
+                                    }
+                                </td>
+                                <td>
+                                    <div class="d-grid gap-2 d-md-flex justify-content-center">
+                                        <!-- Solicitar Cancelación -->
+                                        <form asp-action="SolicitarCancelacion" asp-controller="AsistenteLimpieza" method="post" class="d-inline">
+                                            <input type="hidden" name="capacitacionId" value="@capacitacion.id_capacitacion" />
+                                            <button type="submit" class="btn btn-sm btn-danger me-2"
+                                                    onclick="return confirm('¿Estás seguro de que deseas solicitar la cancelación de esta capacitación?');">
+                                                <i class="bi bi-x-circle"></i> Cancelar
+                                            </button>
+                                        </form>
+
+                                        <!-- Recursos de Aprendizaje -->
+                                        <a asp-controller="Capacitaciones" asp-action="Recursos" asp-route-id="@capacitacion.id_capacitacion"
+                                           class="btn btn-sm btn-info">
+                                            <i class="bi bi-book"></i> Recursos
+                                        </a>
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            }
+            else
+            {
+                <div class="alert alert-warning text-center" role="alert">
+                    <i class="bi bi-exclamation-circle-fill"></i> No tienes capacitaciones registradas actualmente.
+                </div>
+            }
+        </div>
+    </div>
+
+    <!-- Botón de Regreso -->
+    <div class="text-center mt-4">
+        <a href="@Url.Action("Index", "Home")" class="btn btn-secondary">
+            <i class="bi bi-arrow-left-circle"></i> Volver
+        </a>
+    </div>
+</div>
+
+<!-- Bootstrap Icons -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css">
