@@ -12,7 +12,6 @@
             <th>Nombre</th>
             <th>Descripción</th>
             <th>Tiempo de Prueba</th>
-            <th>Archivo</th>
             <th>Capacitación</th>
             <th>Acciones</th>
         </tr>
@@ -24,8 +23,8 @@
                 <td>@evaluacion.nombre</td>
                 <td>@evaluacion.descripcion</td>
                 <td>@evaluacion.tiempo_prueba</td>
-                <td>@evaluacion.archivo</td>
                 <td>@evaluacion.Capacitacion.titulo</td>
+
                 <td>
                     <a href="@Url.Action("Detalles", new { id = evaluacion.id_evaluacion })" class="btn btn-info">Detalles</a>
                     <a href="@Url.Action("Editar", new { id = evaluacion.id_evaluacion })" class="btn btn-warning">Editar</a>

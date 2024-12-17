@@ -24,14 +24,6 @@
                 <td>@evaluacion.descripcion</td>
                 <td>@evaluacion.tiempo_prueba</td>
                 <td>
-                    @if (!string.IsNullOrEmpty(evaluacion.archivo))
-                    {
-                        <a href="@Url.Content($"~/archivos/{evaluacion.archivo}")" target="_blank">Ver archivo</a>
-                    }
-                    else
-                    {
-                        <span>No disponible</span>
-                    }
                 </td>
             </tr>
         }

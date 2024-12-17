@@ -2,31 +2,25 @@
 
 <h1>Crear Evaluación</h1>
 
-<form asp-action="Crear" method="post" enctype="multipart/form-data">
+<form method="post" enctype="multipart/form-data" asp-controller="Evaluaciones" asp-action="Crear">
     <div class="form-group">
         <label for="nombre">Nombre</label>
         <input asp-for="nombre" class="form-control" />
         <span asp-validation-for="nombre" class="text-danger"></span>
     </div>
-
     <div class="form-group">
         <label for="descripcion">Descripción</label>
         <textarea asp-for="descripcion" class="form-control"></textarea>
         <span asp-validation-for="descripcion" class="text-danger"></span>
     </div>
-
     <div class="form-group">
         <label for="tiempo_prueba">Tiempo de la Prueba</label>
         <input asp-for="tiempo_prueba" class="form-control" />
         <span asp-validation-for="tiempo_prueba" class="text-danger"></span>
     </div>
-
-    <div class="form-group">
-        <label for="archivo">Archivo</label>
-        <input type="file" name="archivo" class="form-control" />
-        <span asp-validation-for="archivo" class="text-danger"></span>
+    <div class="mb-3">
+        <input type="file" name="file" class="form-control"/>
     </div>
-
     <div class="form-group">
         <label for="id_capacitacion">Capacitación</label>
         <select asp-for="id_capacitacion" class="form-control">
@@ -38,7 +32,6 @@
         </select>
         <span asp-validation-for="id_capacitacion" class="text-danger"></span>
     </div>
-
     <div class="form-group">
         <label for="id_usuario">Usuario</label>
         <select asp-for="id_usuario" class="form-control">
@@ -51,5 +44,8 @@
         <span asp-validation-for="id_usuario" class="text-danger"></span>
     </div>
 
-    <button type="submit" class="btn btn-primary">Guardar</button>
+    <div class="form-group">
+        <input type="submit" value="Guardar" class="btn btn-primary" />
+        <a asp-action="Index" class="btn btn-secondary">Cancelar</a>
+    </div>
 </form>
