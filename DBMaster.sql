@@ -30,24 +30,35 @@ CREATE TABLE usuarios (
 CREATE TABLE capacitacion (
     id_capacitacion INT PRIMARY KEY IDENTITY(1,1),
     titulo NVARCHAR(255) NOT NULL,
-    descripcion NVARCHAR(1000) NULL,
-    duracion TIME(7) NULL,
+    descripcion NVARCHAR(255) NULL,
+    duracion NVARCHAR(255) NULL,
     id_usuario INT NULL,
     fecha_creacion DATETIME DEFAULT GETDATE(),
-    archivo NVARCHAR(255) NULL,
     estado VARCHAR(10) NULL,
-	FOREIGN KEY (id_usuario) REFERENCES usuarios(id_usuario)
+    FOREIGN KEY (id_usuario) REFERENCES usuarios(id_usuario)
+);
+
+CREATE TABLE recursos_aprendizaje (
+    id_recurso INT PRIMARY KEY IDENTITY(1,1),
+    id_capacitacion INT NOT NULL,
+	titulo NVARCHAR(255) NOT NULL,
+    archivo NVARCHAR(255) NULL,
+    enlace NVARCHAR(500) NULL,
+    fecha_creacion DATETIME DEFAULT GETDATE(),
+    FOREIGN KEY (id_capacitacion) REFERENCES capacitacion(id_capacitacion)
 );
 
 CREATE TABLE evaluacion (
     id_evaluacion INT PRIMARY KEY IDENTITY(1,1),
+	id_capacitacion INT NOT NULL,
     nombre VARCHAR(100),
     descripcion TEXT,
-    tiempo_prueba TIME(7),
+    tiempo_prueba VARCHAR(255),
     archivo VARCHAR(255),
     id_usuario INT,
     fecha_creacion DATETIME DEFAULT GETDATE(),
-	FOREIGN KEY (id_usuario) REFERENCES usuarios(id_usuario)
+	FOREIGN KEY (id_usuario) REFERENCES usuarios(id_usuario),
+	FOREIGN KEY (id_capacitacion) REFERENCES capacitacion(id_capacitacion)
 );
 
 CREATE TABLE estado_citas (
@@ -95,6 +106,15 @@ CREATE TABLE tickets_citas (
     CONSTRAINT unique_ticket_num UNIQUE (numero_ticket) -- Restricción de unicidad para el número de ticket
 );
 
+CREATE TABLE disponibilidad_doctor (
+    id_disponibilidad INT PRIMARY KEY IDENTITY(1,1),
+    id_doctor INT,
+    dia_semana VARCHAR(10), -- Día de la semana (ejemplo: 'Lunes', 'Martes', etc.)
+    hora_inicio TIME, -- Hora de inicio de disponibilidad
+    hora_fin TIME, -- Hora de fin de disponibilidad
+    FOREIGN KEY (id_doctor) REFERENCES usuarios(id_usuario)
+);
+
 CREATE TABLE expedientes (
     id_expediente INT PRIMARY KEY IDENTITY(1,1),
     id_paciente INT NOT NULL,
@@ -110,30 +130,102 @@ CREATE TABLE expedientes (
 
 CREATE TABLE contabilidad (
     id_contabilidad INT PRIMARY KEY IDENTITY(1,1),
-    id_usuario INT,
-    concepto VARCHAR(255),
-    monto DECIMAL(10, 2),
-    fecha_registro DATETIME DEFAULT GETDATE(),
-    FOREIGN KEY (id_usuario) REFERENCES usuarios(id_usuario)
+    concepto VARCHAR(255) NOT NULL,
+    monto DECIMAL(10, 2) NOT NULL,
+    tipo VARCHAR(50) NOT NULL, -- "Ingreso" o "Gasto"
+    fecha_registro DATETIME DEFAULT GETDATE()
 );
 
 CREATE TABLE notificacion (
-    id_recordatorio INT PRIMARY KEY IDENTITY(1,1),
-    id_usuario INT,
-    tipo_recordatorio VARCHAR(50), -- 'cita' o 'capacitacion'
-    id_referencia INT, -- Referencia a una cita o capacitación
-    fecha_envio DATETIME,
-    mensaje VARCHAR(255),
+    id_notificacion INT PRIMARY KEY IDENTITY(1,1),
+    id_usuario INT NOT NULL,
+    titulo NVARCHAR(255) NOT NULL,
+    mensaje NVARCHAR(1000) NOT NULL,
+    fecha_envio DATETIME NOT NULL DEFAULT GETDATE(),
     FOREIGN KEY (id_usuario) REFERENCES usuarios(id_usuario)
 );
 
 CREATE TABLE resultadoslaboratorio (
-    IdResultado INT PRIMARY KEY IDENTITY(1,1),
-    IdPaciente INT NOT NULL,
-    TipoPrueba VARCHAR(255) NOT NULL,
-    Resultado VARCHAR(255) NOT NULL,
-    FechaPrueba DATETIME NOT NULL,
-    FOREIGN KEY (IdPaciente) REFERENCES usuarios(id_usuario) -- Relación con la tabla usuarios
+    id_resultado INT PRIMARY KEY IDENTITY(1,1),
+    id_paciente INT NOT NULL,
+    id_expediente INT NOT NULL, -- Nueva columna para relacionar con expedientes
+    fechaPrueba DATETIME NOT NULL,
+    ArchivoPDF VARBINARY(MAX) NOT NULL, -- Columna para almacenar el archivo PDF
+    FOREIGN KEY (id_paciente) REFERENCES usuarios(id_usuario), -- Relación con la tabla usuarios
+    FOREIGN KEY (id_expediente) REFERENCES expedientes(id_expediente) -- Relación con la tabla expedientes
+);
+
+CREATE TABLE Alergias (
+    id_alergia INT PRIMARY KEY IDENTITY(1,1),
+    nombre_alergia VARCHAR(255) NOT NULL
+);
+
+CREATE TABLE pacientealergias (
+    id_pacientealergias INT PRIMARY KEY IDENTITY(1,1),
+    id_paciente INT NOT NULL,
+    id_alergia INT NOT NULL,
+	fecha_registro DATETIME NOT NULL DEFAULT GETDATE(),
+    FOREIGN KEY (id_paciente) REFERENCES usuarios(id_usuario),
+    FOREIGN KEY (id_alergia) REFERENCES alergias(id_alergia)
+);
+
+CREATE TABLE contactosemergencia (
+    id_contacto_emergencia INT PRIMARY KEY IDENTITY(1,1),
+    id_paciente INT NOT NULL,
+    nombre_contacto VARCHAR(100) NOT NULL,
+    relacion VARCHAR(50) NOT NULL,
+    telefono_contacto VARCHAR(15) NOT NULL,
+    fecha_registro DATETIME NOT NULL DEFAULT GETDATE(),
+    FOREIGN KEY (id_paciente) REFERENCES usuarios(id_usuario)
+);
+
+CREATE TABLE antecedentesfamiliares (
+    id_antecedente INT PRIMARY KEY IDENTITY(1,1),
+    id_paciente INT NOT NULL,
+    descripcion NVARCHAR(1000) NOT NULL,
+    fecha_registro DATETIME NOT NULL DEFAULT GETDATE(),
+    FOREIGN KEY (id_paciente) REFERENCES usuarios(id_usuario)
+);
+
+CREATE TABLE habitosvida (
+    id_habito INT PRIMARY KEY IDENTITY(1,1),
+    id_paciente INT NOT NULL,
+    descripcion NVARCHAR(1000) NOT NULL,
+    fecha_registro DATETIME NOT NULL DEFAULT GETDATE(),
+    FOREIGN KEY (id_paciente) REFERENCES usuarios(id_usuario)
+);
+
+CREATE TABLE medicamentosprescritos (
+    id_medicamento INT PRIMARY KEY IDENTITY(1,1),
+    id_paciente INT NOT NULL,
+    nombre_medicamento NVARCHAR(255) NOT NULL,
+    dosis NVARCHAR(100) NOT NULL,
+    fecha_prescripcion DATETIME NOT NULL DEFAULT GETDATE(),
+    estado NVARCHAR(20) NOT NULL DEFAULT 'activo',  -- activo o descontinuado
+    FOREIGN KEY (id_paciente) REFERENCES usuarios(id_usuario)
+);
+
+CREATE TABLE especialidades (
+    id_especialidad INT PRIMARY KEY IDENTITY(1,1),
+    nombre_especialidad NVARCHAR(255) NOT NULL
+);
+
+INSERT INTO especialidades (nombre_especialidad)
+VALUES 
+('Cirugía Menor'),
+('Consulta de Medicina General'),
+('Control de Enfermedades Crónicas'),
+('Electrocardiograma'),
+('Nebulizaciones'),
+('Papanicolaou'),
+('Terapia Física');
+
+CREATE TABLE doctor_especialidades (
+    id_doctor_especialidad INT PRIMARY KEY IDENTITY(1,1),
+    id_usuario INT NOT NULL,
+    id_especialidad INT NOT NULL,
+    FOREIGN KEY (id_usuario) REFERENCES usuarios(id_usuario),
+    FOREIGN KEY (id_especialidad) REFERENCES especialidades(id_especialidad)
 );
 
 -- Insertar un usuario para cada rol con estado "activo"
@@ -162,3 +254,130 @@ VALUES
 (3, 2, '2024-11-02 09:30:00', '2024-11-02 10:30:00', 'Consulta de Seguimiento', 1, GETDATE()),
 
 (2, 1, '2024-11-03 11:00:00', '2024-11-03 12:00:00', 'Consulta de Resultados', 3, GETDATE());
+
+-- Disponibilidad para el Dr. Francisco Rodríguez
+INSERT INTO disponibilidad_doctor (id_doctor, dia_semana, hora_inicio, hora_fin) VALUES
+((SELECT id_usuario FROM usuarios WHERE correo = 'francisco.rodriguez@mail.com'), 'Lunes', '09:00', '11:00'),
+((SELECT id_usuario FROM usuarios WHERE correo = 'francisco.rodriguez@mail.com'), 'Lunes', '14:00', '16:00'),
+((SELECT id_usuario FROM usuarios WHERE correo = 'francisco.rodriguez@mail.com'), 'Martes', '09:00', '11:00'),
+((SELECT id_usuario FROM usuarios WHERE correo = 'francisco.rodriguez@mail.com'), 'Martes', '14:00', '16:00'),
+((SELECT id_usuario FROM usuarios WHERE correo = 'francisco.rodriguez@mail.com'), 'Miércoles', '09:00', '11:00'),
+((SELECT id_usuario FROM usuarios WHERE correo = 'francisco.rodriguez@mail.com'), 'Miércoles', '14:00', '16:00'),
+((SELECT id_usuario FROM usuarios WHERE correo = 'francisco.rodriguez@mail.com'), 'Jueves', '09:00', '11:00'),
+((SELECT id_usuario FROM usuarios WHERE correo = 'francisco.rodriguez@mail.com'), 'Jueves', '14:00', '16:00'),
+((SELECT id_usuario FROM usuarios WHERE correo = 'francisco.rodriguez@mail.com'), 'Viernes', '09:00', '11:00'),
+((SELECT id_usuario FROM usuarios WHERE correo = 'francisco.rodriguez@mail.com'), 'Viernes', '14:00', '16:00');
+
+-- Disponibilidad para la Dra. Pepe Lopez
+INSERT INTO disponibilidad_doctor (id_doctor, dia_semana, hora_inicio, hora_fin) VALUES
+((SELECT id_usuario FROM usuarios WHERE correo = 'pepe.lopez@mail.com'), 'Lunes', '10:00', '12:00'),
+((SELECT id_usuario FROM usuarios WHERE correo = 'pepe.lopez@mail.com'), 'Lunes', '15:00', '17:00'),
+((SELECT id_usuario FROM usuarios WHERE correo = 'pepe.lopez@mail.com'), 'Martes', '10:00', '12:00'),
+((SELECT id_usuario FROM usuarios WHERE correo = 'pepe.lopez@mail.com'), 'Martes', '15:00', '17:00'),
+((SELECT id_usuario FROM usuarios WHERE correo = 'pepe.lopez@mail.com'), 'Miércoles', '10:00', '12:00'),
+((SELECT id_usuario FROM usuarios WHERE correo = 'pepe.lopez@mail.com'), 'Miércoles', '15:00', '17:00'),
+((SELECT id_usuario FROM usuarios WHERE correo = 'pepe.lopez@mail.com'), 'Jueves', '10:00', '12:00'),
+((SELECT id_usuario FROM usuarios WHERE correo = 'pepe.lopez@mail.com'), 'Jueves', '15:00', '17:00'),
+((SELECT id_usuario FROM usuarios WHERE correo = 'pepe.lopez@mail.com'), 'Viernes', '10:00', '12:00'),
+((SELECT id_usuario FROM usuarios WHERE correo = 'pepe.lopez@mail.com'), 'Viernes', '15:00', '17:00');
+
+INSERT INTO Alergias (nombre_alergia) VALUES 
+('Penicilina'),
+('Polen'),
+('Polvo'),
+('Gluten'),
+('Mariscos'),
+('Frutos secos'),
+('Picadura de abeja'),
+('Leche'),
+('Huevo'),
+('Sulfatos'),
+('Aspirina'),
+('Antibióticos'),
+('Frutas cítricas'),
+('Chocolate'),
+('Pescado'),
+('Soya'),
+('Aditivos alimentarios'),
+('Moho'),
+('Látex'),
+('Gatos');
+
+INSERT INTO capacitacion (titulo, descripcion, duracion, id_usuario, estado) VALUES
+('Introducción a la Seguridad Laboral', 'Capacitación básica sobre medidas de seguridad en el trabajo para prevenir accidentes.', '02:00:00', 1, 'activo'),
+('Limpieza y Desinfección en Áreas Críticas', 'Técnicas adecuadas para la limpieza y desinfección de quirófanos y áreas críticas.', '02:00:00', 1, 'activo'),
+('Primeros Auxilios Básicos', 'Capacitación para aprender técnicas de primeros auxilios en situaciones de emergencia.', '02:00:00', 2, 'activo'),
+('Manejo de Residuos Médicos', 'Procedimientos correctos para manejar y desechar residuos médicos de forma segura.', '02:00:00', 2, 'activo'),
+('Uso Seguro de Productos Químicos', 'Precauciones y manejo adecuado de productos químicos utilizados en limpieza.', '02:00:00', 1, 'activo'),
+('Relaciones Interpersonales en el Trabajo', 'Mejora de las habilidades de comunicación y trabajo en equipo.', '02:00:00', 2, 'activo'),
+('Prevención de Infecciones', 'Técnicas para prevenir la propagación de infecciones en el entorno hospitalario.', '02:00:00', 2, 'activo'),
+('Manejo de Herramientas de Limpieza', 'Uso y mantenimiento correcto de equipos de limpieza.', '02:00:00', 1, 'activo'),
+('Protocolos de Emergencia en Hospitales', 'Cómo actuar en caso de emergencias dentro del hospital.', '02:00:00', 2, 'activo'),
+('Convivencia y Respeto en el Entorno Laboral', 'Fomentar el respeto y la convivencia pacífica en el entorno de trabajo.', '02:00:00', 1, 'activo'),
+('Capacitación en Ergonomía', 'Cómo evitar lesiones relacionadas con malas posturas o esfuerzos innecesarios.', '02:00:00', 1, 'activo'),
+('Higiene Personal y Profesional', 'Buenas prácticas de higiene personal para garantizar un entorno limpio.', '02:00:00', 2, 'activo'),
+('Control de Plagas en Instalaciones Médicas', 'Métodos para prevenir y controlar plagas en instalaciones de salud.', '02:00:00', 1, 'activo'),
+('Atención al Paciente con Movilidad Reducida', 'Técnicas para asistir de manera segura a pacientes con movilidad limitada.', '02:00:00', 2, 'activo'),
+('Recolección y Separación de Residuos', 'Normas para la recolección y separación correcta de residuos.', '02:00:00', 1, 'activo'),
+('Actualización en Protocolos de Bioseguridad', 'Nuevas normativas y protocolos de bioseguridad en el entorno hospitalario.', '02:00:00', 2, 'activo'),
+('Técnicas de Desinfección Avanzada', 'Métodos avanzados para desinfectar áreas críticas.', '02:00:00', 1, 'activo'),
+('Identificación de Riesgos Laborales', 'Cómo identificar y mitigar riesgos en el entorno laboral.', '02:00:00', 2, 'activo'),
+('Capacitación en Manejo de Equipos de Protección', 'Uso adecuado de equipos de protección personal en el trabajo.', '02:00:00', 2, 'activo'),
+('Organización y Planeación de Tareas', 'Cómo organizar de manera eficiente las tareas diarias.', '02:00:00', 1, 'activo');
+
+INSERT INTO citas (id_paciente, id_doctor, fecha_inicio, fecha_fin, motivo_cita, id_estado_cita, fecha_creacion) 
+VALUES 
+(3, 4, '2024-11-04 08:00:00', '2024-11-04 09:00:00', 'Consulta de Seguimiento', 1, GETDATE()),
+(3, 4, '2024-11-04 10:00:00', '2024-11-04 11:00:00', 'Chequeo Preventivo', 2, GETDATE()),
+(3, 4, '2024-11-05 14:00:00', '2024-11-05 15:00:00', 'Revisión General', 1, GETDATE()),
+(3, 4, '2024-11-06 09:00:00', '2024-11-06 10:00:00', 'Consulta Inicial', 1, GETDATE()),
+(3, 4, '2024-11-06 11:30:00', '2024-11-06 12:30:00', 'Evaluación de Tratamiento', 3, GETDATE()),
+(3, 4, '2024-11-07 15:00:00', '2024-11-07 16:00:00', 'Control de Peso', 1, GETDATE()),
+(3, 4, '2024-11-08 08:30:00', '2024-11-08 09:30:00', 'Chequeo Preventivo', 2, GETDATE());
+
+INSERT INTO contabilidad (concepto, monto, tipo, fecha_registro) 
+VALUES 
+('Pago de Suministros Médicos', 150000, 'Gasto', GETDATE()),
+('Ingreso por Consulta Médica', 20000, 'Ingreso', GETDATE()),
+('Compra de Material de Limpieza', 30000, 'Gasto', GETDATE()),
+('Ingreso por Consulta de Seguimiento', 25000, 'Ingreso', GETDATE()),
+('Pago a Proveedores de Equipos Médicos', 500000, 'Gasto', GETDATE()),
+('Ingreso por Revisión General', 18000, 'Ingreso', GETDATE()),
+('Pago de Servicios de Mantenimiento de Equipos', 120000, 'Gasto', GETDATE()),
+('Ingreso por Consulta Inicial', 22000, 'Ingreso', GETDATE()),
+('Compra de Medicamentos', 80000, 'Gasto', GETDATE()),
+('Ingreso por Consulta de Resultados', 20000, 'Ingreso', GETDATE()),
+('Pago de Salarios al Personal', 1500000, 'Gasto', GETDATE()),
+('Ingreso por Chequeo Preventivo', 15000, 'Ingreso', GETDATE()),
+('Pago de Servicios de Limpieza', 60000, 'Gasto', GETDATE()),
+('Ingreso por Control de Peso', 18000, 'Ingreso', GETDATE()),
+('Compra de Insumos para Emergencias', 70000, 'Gasto', GETDATE()),
+('Ingreso por Evaluación de Tratamiento', 23000, 'Ingreso', GETDATE()),
+('Pago de Seguros Médicos', 200000, 'Gasto', GETDATE()),
+('Ingreso por Control de Plagas', 50000, 'Ingreso', GETDATE()),
+('Compra de Equipos de Protección Personal', 120000, 'Gasto', GETDATE()),
+('Ingreso por Capacitación a Personal', 35000, 'Ingreso', GETDATE());
+
+INSERT INTO usuarios (nombre, apellido, correo, contraseña, telefono, id_rol, fecha_registro, estado)
+VALUES ('Joan', 'Rojas', 'joanda0804@gmail.com', 'IaSw3izPQ21dyC4/iEyvyoPcxdbKPx2NeFIb/YMq8ko=:UxQo8LX8x/CeYISiLAWY4w==', '1234567890', 5, '2024-12-10 11:16:16.267', 'activo'); --123--
+
+INSERT INTO doctor_especialidades (id_usuario, id_especialidad)
+VALUES 
+(8, 5),
+(8, 6),
+(8, 2),
+(9, 7),
+(9, 6),
+(9, 4);
+
+CREATE PROCEDURE [dbo].[RegistrarNotificacion]
+    @id_usuario INT,
+    @titulo NVARCHAR(255),
+    @mensaje NVARCHAR(1000),
+    @fecha_envio DATETIME = NULL
+AS
+BEGIN
+
+    INSERT INTO notificacion (id_usuario, titulo, mensaje, fecha_envio)
+    VALUES (@id_usuario, @titulo, @mensaje, GETDATE());
+END;
