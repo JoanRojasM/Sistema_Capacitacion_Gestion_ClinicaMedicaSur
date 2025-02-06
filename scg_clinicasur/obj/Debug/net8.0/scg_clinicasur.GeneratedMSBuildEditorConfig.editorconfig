@@ -132,6 +132,18 @@ build_metadata.AdditionalFiles.CssScope =
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ29udGFiaWxpZGFkXEFncmVnYXJFbnRyYWRhLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
+[C:/Users/Usuario/OneDrive/Documentos/GitHub/Sistema_Capacitacion_Gestion_ClinicaMedicaSur/scg_clinicasur/Views/Contabilidad/EditarEntrada.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ29udGFiaWxpZGFkXEVkaXRhckVudHJhZGEuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Usuario/OneDrive/Documentos/GitHub/Sistema_Capacitacion_Gestion_ClinicaMedicaSur/scg_clinicasur/Views/Contabilidad/EditarSalida.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ29udGFiaWxpZGFkXEVkaXRhclNhbGlkYS5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Usuario/OneDrive/Documentos/GitHub/Sistema_Capacitacion_Gestion_ClinicaMedicaSur/scg_clinicasur/Views/Contabilidad/EliminarConfirmacion.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ29udGFiaWxpZGFkXEVsaW1pbmFyQ29uZmlybWFjaW9uLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
 [C:/Users/Usuario/OneDrive/Documentos/GitHub/Sistema_Capacitacion_Gestion_ClinicaMedicaSur/scg_clinicasur/Views/Contabilidad/Historial.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ29udGFiaWxpZGFkXEhpc3RvcmlhbC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 

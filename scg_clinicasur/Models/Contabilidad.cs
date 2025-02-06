@@ -26,7 +26,9 @@ namespace scg_clinicasur.Models
         [StringLength(50)]
         public string Tipo { get; set; } // Solo puede ser "Gasto" o "Ingreso"
 
+        [Required]
         [Column("fecha_registro")]
-        public DateTime FechaRegistro { get; set; } = DateTime.Now;
+        [DataType(DataType.Date)]
+        public DateTime FechaRegistro { get; set; } = DateTime.Now; // Permitir edición
     }
 }

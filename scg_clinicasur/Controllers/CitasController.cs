@@ -148,14 +148,12 @@ namespace scg_clinicasur.Controllers
                 return RedirectToAction("AccessDenied", "Home");
             }
 
-            // Validar si el modelo tiene errores
             if (!ModelState.IsValid)
             {
                 await CargarViewBagUsuarios();
                 return View(cita);
             }
 
-            // 🔹 Validar que los datos obligatorios no sean nulos o vacíos
             if (cita.IdDoctor == 0 || cita.IdPaciente == 0 || cita.FechaInicio == default || cita.FechaFin == default)
             {
                 ModelState.AddModelError("", "Debe seleccionar un doctor, un paciente y definir la fecha correctamente.");
@@ -163,7 +161,6 @@ namespace scg_clinicasur.Controllers
                 return View(cita);
             }
 
-            // Verificar si el doctor ya tiene otra cita en el mismo horario
             bool existeConflicto = await _context.Citas
                 .AnyAsync(c => c.IdDoctor == cita.IdDoctor
                             && c.FechaInicio < cita.FechaFin
@@ -185,18 +182,24 @@ namespace scg_clinicasur.Controllers
 
                 TempData["SuccessMessage"] = "La cita se ha guardado correctamente.";
 
-                // Obtener nombres de doctor y paciente para notificación
+                // Obtener nombres y correos de doctor y paciente
                 var doctor = await _context.Usuarios
                     .Where(u => u.id_usuario == cita.IdDoctor)
-                    .Select(u => new { NombreCompleto = u.nombre + " " + u.apellido })
-                    .FirstOrDefaultAsync() ?? new { NombreCompleto = "Doctor desconocido" };
+                    .Select(u => new { u.id_usuario, NombreCompleto = u.nombre + " " + u.apellido, u.correo })
+                    .FirstOrDefaultAsync();
 
                 var paciente = await _context.Usuarios
                     .Where(u => u.id_usuario == cita.IdPaciente)
-                    .Select(u => new { NombreCompleto = u.nombre + " " + u.apellido })
-                    .FirstOrDefaultAsync() ?? new { NombreCompleto = "Paciente desconocido" };
+                    .Select(u => new { u.id_usuario, NombreCompleto = u.nombre + " " + u.apellido, u.correo })
+                    .FirstOrDefaultAsync();
 
-                // Obtener ID del usuario actual desde la sesión
+                if (doctor == null || paciente == null)
+                {
+                    TempData["ErrorMessage"] = "No se pudo encontrar el doctor o el paciente en la base de datos.";
+                    return RedirectToAction("Index");
+                }
+
+                // Obtener ID y rol del usuario actual desde la sesión
                 var userIdString = HttpContext.Session.GetString("UserId");
                 var userRole = HttpContext.Session.GetString("UserRole");
 
@@ -206,29 +209,42 @@ namespace scg_clinicasur.Controllers
                     return RedirectToAction("Index");
                 }
 
-                int userId = int.Parse(userIdString);
-                int idDestinatario;
-                string mensajeNotificacion;
-
-                if (userId == cita.IdDoctor)
+                if (!int.TryParse(userIdString, out int userId))
                 {
-                    idDestinatario = cita.IdPaciente;
-                    mensajeNotificacion = $"Estimado {paciente.NombreCompleto}, el doctor {doctor.NombreCompleto} ha programado una cita contigo para el {cita.FechaInicio}.";
-                }
-                else if (userId == cita.IdPaciente)
-                {
-                    idDestinatario = cita.IdDoctor;
-                    mensajeNotificacion = $"Estimado {doctor.NombreCompleto}, el paciente {paciente.NombreCompleto} ha programado una cita contigo para el {cita.FechaInicio}.";
-                }
-                else
-                {
-                    TempData["ErrorMessage"] = "No se pudo determinar el destinatario de la notificación.";
+                    TempData["ErrorMessage"] = "El ID del usuario actual no es válido.";
                     return RedirectToAction("Index");
                 }
 
-                // Registrar notificación en la base de datos
-                try
+                Console.WriteLine($"[DEBUG] Usuario actual: {userId}, Doctor: {doctor.id_usuario}, Paciente: {paciente.id_usuario}, Rol: {userRole}");
+
+                // 🔹 Notificaciones para el Doctor y Paciente según el rol del usuario actual
+                if (userRole == "administrador")
                 {
+                    // Notificación para el paciente
+                    await _context.Database.ExecuteSqlRawAsync(
+                        "EXEC [dbo].[RegistrarNotificacion] @id_usuario = {0}, @titulo = {1}, @mensaje = {2}, @fecha_envio = {3}",
+                        paciente.id_usuario,
+                        "Cita Agendada",
+                        $"Estimado {paciente.NombreCompleto}, el administrador ha programado una cita para usted con el doctor {doctor.NombreCompleto} el {cita.FechaInicio}.",
+                        DateTime.Now
+                    );
+
+                    // Notificación para el doctor
+                    await _context.Database.ExecuteSqlRawAsync(
+                        "EXEC [dbo].[RegistrarNotificacion] @id_usuario = {0}, @titulo = {1}, @mensaje = {2}, @fecha_envio = {3}",
+                        doctor.id_usuario,
+                        "Cita Agendada",
+                        $"Estimado {doctor.NombreCompleto}, el administrador ha programado una cita con usted para el paciente {paciente.NombreCompleto} el {cita.FechaInicio}.",
+                        DateTime.Now
+                    );
+                }
+                else
+                {
+                    int idDestinatario = (userId == doctor.id_usuario) ? paciente.id_usuario : doctor.id_usuario;
+                    string mensajeNotificacion = (userId == doctor.id_usuario) ?
+                        $"Estimado {paciente.NombreCompleto}, el doctor {doctor.NombreCompleto} ha programado una cita contigo para el {cita.FechaInicio}." :
+                        $"Estimado {doctor.NombreCompleto}, el paciente {paciente.NombreCompleto} ha programado una cita contigo para el {cita.FechaInicio}.";
+
                     await _context.Database.ExecuteSqlRawAsync(
                         "EXEC [dbo].[RegistrarNotificacion] @id_usuario = {0}, @titulo = {1}, @mensaje = {2}, @fecha_envio = {3}",
                         idDestinatario,
@@ -237,18 +253,14 @@ namespace scg_clinicasur.Controllers
                         DateTime.Now
                     );
                 }
-                catch (Exception ex)
-                {
-                    TempData["ErrorMessage"] = $"Error al registrar la notificación: {ex.Message}";
-                }
 
-                // Enviar correo de confirmación
+                // 🔹 Envío de correos al doctor y paciente
                 try
                 {
                     var smtpClient = new SmtpClient("smtp.outlook.com")
                     {
                         Port = 587,
-                        Credentials = new NetworkCredential("jrojas30463@ufide.ac.cr", "QsEfT0809*"), // Reemplazar ### con la contraseña real
+                        Credentials = new NetworkCredential("jrojas30463@ufide.ac.cr", "QsEfT0809*"), // Reemplazar con credenciales reales
                         EnableSsl = true,
                     };
 
@@ -268,25 +280,30 @@ namespace scg_clinicasur.Controllers
                         IsBodyHtml = true,
                     };
 
-                    mailMessage.To.Add("jrojas30463@ufide.ac.cr");
+                    // Agregar los correos del doctor y del paciente como destinatarios
+                    mailMessage.To.Add(paciente.correo);
+                    mailMessage.To.Add(doctor.correo);
 
                     await smtpClient.SendMailAsync(mailMessage);
+                    Console.WriteLine("[DEBUG] Correo enviado con éxito a paciente y doctor.");
                 }
                 catch (Exception ex)
                 {
                     TempData["ErrorMessage"] = $"Error al enviar el correo: {ex.Message}";
+                    Console.WriteLine($"[DEBUG] Error en envío de correo: {ex.Message}");
                 }
 
-                // Mensaje de éxito y redirección a Index
-                TempData["SuccessMessage"] = "La cita se ha programado correctamente.";
+                // 🔹 Redirección a `Index`
                 return RedirectToAction("Index");
             }
             catch (Exception ex)
             {
                 TempData["ErrorMessage"] = $"Error inesperado: {ex.Message}";
+                Console.WriteLine($"[DEBUG] Error inesperado: {ex.Message}");
                 return RedirectToAction("Index");
             }
         }
+
 
         private async Task CargarViewBagUsuarios()
         {
@@ -346,7 +363,7 @@ namespace scg_clinicasur.Controllers
                 return View(cita);
             }
 
-            // Verificar conflictos de horario con otras citas
+            // 🔹 Verificar conflictos de horario con otras citas
             bool conflictoHorario = await _context.Citas
                 .AnyAsync(c => c.IdDoctor == cita.IdDoctor
                                && c.IdCita != cita.IdCita
@@ -366,18 +383,24 @@ namespace scg_clinicasur.Controllers
 
                 TempData["SuccessMessage"] = "La cita se ha actualizado correctamente.";
 
-                // Obtener nombres de Doctor y Paciente para la notificación
+                // 🔹 Obtener nombres y correos de Doctor y Paciente
                 var doctor = await _context.Usuarios
                     .Where(u => u.id_usuario == cita.IdDoctor)
-                    .Select(u => new { NombreCompleto = u.nombre + " " + u.apellido })
-                    .FirstOrDefaultAsync() ?? new { NombreCompleto = "Doctor desconocido" };
+                    .Select(u => new { u.id_usuario, NombreCompleto = u.nombre + " " + u.apellido, u.correo })
+                    .FirstOrDefaultAsync();
 
                 var paciente = await _context.Usuarios
                     .Where(u => u.id_usuario == cita.IdPaciente)
-                    .Select(u => new { NombreCompleto = u.nombre + " " + u.apellido })
-                    .FirstOrDefaultAsync() ?? new { NombreCompleto = "Paciente desconocido" };
+                    .Select(u => new { u.id_usuario, NombreCompleto = u.nombre + " " + u.apellido, u.correo })
+                    .FirstOrDefaultAsync();
 
-                // Obtener el ID del usuario actual
+                if (doctor == null || paciente == null)
+                {
+                    TempData["ErrorMessage"] = "No se pudo encontrar el doctor o el paciente en la base de datos.";
+                    return RedirectToAction("Index");
+                }
+
+                // 🔹 Obtener el ID del usuario actual
                 var userIdString = HttpContext.Session.GetString("UserId");
                 var userRole = HttpContext.Session.GetString("UserRole");
 
@@ -387,29 +410,42 @@ namespace scg_clinicasur.Controllers
                     return RedirectToAction("Index");
                 }
 
-                int userId = int.Parse(userIdString);
-                int idDestinatario;
-                string mensajeNotificacion;
-
-                if (userId == cita.IdDoctor)
+                if (!int.TryParse(userIdString, out int userId))
                 {
-                    idDestinatario = cita.IdPaciente;
-                    mensajeNotificacion = $"Estimado {paciente.NombreCompleto}, el doctor {doctor.NombreCompleto} ha modificado una cita contigo para el {cita.FechaInicio}.";
-                }
-                else if (userId == cita.IdPaciente)
-                {
-                    idDestinatario = cita.IdDoctor;
-                    mensajeNotificacion = $"Estimado {doctor.NombreCompleto}, el paciente {paciente.NombreCompleto} ha modificado una cita contigo para el {cita.FechaInicio}.";
-                }
-                else
-                {
-                    TempData["ErrorMessage"] = "No se pudo determinar el destinatario de la notificación.";
+                    TempData["ErrorMessage"] = "El ID del usuario actual no es válido.";
                     return RedirectToAction("Index");
                 }
 
-                // Registrar notificación en la base de datos
-                try
+                Console.WriteLine($"[DEBUG] Usuario actual: {userId}, Doctor: {doctor.id_usuario}, Paciente: {paciente.id_usuario}, Rol: {userRole}");
+
+                // 🔹 Notificaciones para el Doctor y Paciente según el rol del usuario actual
+                if (userRole == "administrador")
                 {
+                    // Notificación para el paciente
+                    await _context.Database.ExecuteSqlRawAsync(
+                        "EXEC [dbo].[RegistrarNotificacion] @id_usuario = {0}, @titulo = {1}, @mensaje = {2}, @fecha_envio = {3}",
+                        paciente.id_usuario,
+                        "Cita Modificada",
+                        $"Estimado {paciente.NombreCompleto}, el administrador ha modificado su cita con el doctor {doctor.NombreCompleto} para el {cita.FechaInicio}.",
+                        DateTime.Now
+                    );
+
+                    // Notificación para el doctor
+                    await _context.Database.ExecuteSqlRawAsync(
+                        "EXEC [dbo].[RegistrarNotificacion] @id_usuario = {0}, @titulo = {1}, @mensaje = {2}, @fecha_envio = {3}",
+                        doctor.id_usuario,
+                        "Cita Modificada",
+                        $"Estimado {doctor.NombreCompleto}, el administrador ha modificado su cita con el paciente {paciente.NombreCompleto} para el {cita.FechaInicio}.",
+                        DateTime.Now
+                    );
+                }
+                else
+                {
+                    int idDestinatario = (userId == doctor.id_usuario) ? paciente.id_usuario : doctor.id_usuario;
+                    string mensajeNotificacion = (userId == doctor.id_usuario) ?
+                        $"Estimado {paciente.NombreCompleto}, el doctor {doctor.NombreCompleto} ha modificado una cita contigo para el {cita.FechaInicio}." :
+                        $"Estimado {doctor.NombreCompleto}, el paciente {paciente.NombreCompleto} ha modificado una cita contigo para el {cita.FechaInicio}.";
+
                     await _context.Database.ExecuteSqlRawAsync(
                         "EXEC [dbo].[RegistrarNotificacion] @id_usuario = {0}, @titulo = {1}, @mensaje = {2}, @fecha_envio = {3}",
                         idDestinatario,
@@ -418,18 +454,14 @@ namespace scg_clinicasur.Controllers
                         DateTime.Now
                     );
                 }
-                catch (Exception ex)
-                {
-                    TempData["ErrorMessage"] = $"Error al registrar la notificación: {ex.Message}";
-                }
 
-                // Enviar correo de notificación
+                // 🔹 Envío de correos al doctor y paciente
                 try
                 {
                     var smtpClient = new SmtpClient("smtp.outlook.com")
                     {
                         Port = 587,
-                        Credentials = new NetworkCredential("jrojas30463@ufide.ac.cr", "QsEfT0809*"), // Reemplazar ### con la contraseña real
+                        Credentials = new NetworkCredential("jrojas30463@ufide.ac.cr", "QsEfT0809*"), // Reemplazar con credenciales reales
                         EnableSsl = true,
                     };
 
@@ -449,16 +481,20 @@ namespace scg_clinicasur.Controllers
                         IsBodyHtml = true,
                     };
 
-                    mailMessage.To.Add("jrojas30463@ufide.ac.cr");
+                    // Agregar los correos del doctor y del paciente como destinatarios
+                    mailMessage.To.Add(paciente.correo);
+                    mailMessage.To.Add(doctor.correo);
 
                     await smtpClient.SendMailAsync(mailMessage);
+                    Console.WriteLine("[DEBUG] Correo enviado con éxito a paciente y doctor.");
                 }
                 catch (Exception ex)
                 {
                     TempData["ErrorMessage"] = $"Error al enviar el correo: {ex.Message}";
+                    Console.WriteLine($"[DEBUG] Error en envío de correo: {ex.Message}");
                 }
 
-                // Redirección a `Index` con mensaje de éxito
+                // 🔹 Redirección a `Index`
                 return RedirectToAction("Index");
             }
             catch (DbUpdateException)
@@ -468,11 +504,13 @@ namespace scg_clinicasur.Controllers
             catch (Exception ex)
             {
                 TempData["ErrorMessage"] = $"Ocurrió un error interno: {ex.Message}";
+                Console.WriteLine($"[DEBUG] Error inesperado: {ex.Message}");
             }
 
             await CargarDatosParaEditar(cita.IdEstadoCita);
             return View(cita);
         }
+
 
         private async Task CargarDatosParaEditar(int? idEstadoSeleccionado)
         {
@@ -530,26 +568,34 @@ namespace scg_clinicasur.Controllers
             if (cita == null)
             {
                 TempData["ErrorMessage"] = "No se pudo encontrar la cita.";
-                return RedirectToAction("Index"); // ⬅️ Redirigir en lugar de mostrar una vista inexistente
+                return RedirectToAction("Index");
             }
 
             try
             {
                 _context.Citas.Remove(cita);
                 await _context.SaveChangesAsync();
+
                 TempData["SuccessMessage"] = "La cita se ha eliminado correctamente.";
 
-                // Notificación al paciente o doctor
+                // 🔹 Obtener nombres y correos de Doctor y Paciente
                 var doctor = await _context.Usuarios
                     .Where(u => u.id_usuario == cita.IdDoctor)
-                    .Select(u => new { NombreCompleto = u.nombre + " " + u.apellido })
+                    .Select(u => new { u.id_usuario, NombreCompleto = u.nombre + " " + u.apellido, u.correo })
                     .FirstOrDefaultAsync();
 
                 var paciente = await _context.Usuarios
                     .Where(u => u.id_usuario == cita.IdPaciente)
-                    .Select(u => new { NombreCompleto = u.nombre + " " + u.apellido })
+                    .Select(u => new { u.id_usuario, NombreCompleto = u.nombre + " " + u.apellido, u.correo })
                     .FirstOrDefaultAsync();
 
+                if (doctor == null || paciente == null)
+                {
+                    TempData["ErrorMessage"] = "No se pudo encontrar el doctor o el paciente en la base de datos.";
+                    return RedirectToAction("Index");
+                }
+
+                // 🔹 Obtener el ID del usuario actual
                 var userIdString = HttpContext.Session.GetString("UserId");
                 var userRole = HttpContext.Session.GetString("UserRole");
 
@@ -559,29 +605,42 @@ namespace scg_clinicasur.Controllers
                     return RedirectToAction("Index");
                 }
 
-                int userId = int.Parse(userIdString);
-                int idDestinatario;
-                string mensajeNotificacion;
-
-                if (userId == cita.IdDoctor)
+                if (!int.TryParse(userIdString, out int userId))
                 {
-                    idDestinatario = cita.IdPaciente;
-                    mensajeNotificacion = $"Estimado {paciente?.NombreCompleto}, el doctor {doctor?.NombreCompleto} ha eliminado una cita contigo para el {cita.FechaInicio}.";
-                }
-                else if (userId == cita.IdPaciente)
-                {
-                    idDestinatario = cita.IdDoctor;
-                    mensajeNotificacion = $"Estimado {doctor?.NombreCompleto}, el paciente {paciente?.NombreCompleto} ha eliminado una cita contigo para el {cita.FechaInicio}.";
-                }
-                else
-                {
-                    TempData["ErrorMessage"] = "No se pudo determinar el destinatario de la notificación.";
+                    TempData["ErrorMessage"] = "El ID del usuario actual no es válido.";
                     return RedirectToAction("Index");
                 }
 
-                // Ejecutar procedimiento almacenado de notificación
-                try
+                Console.WriteLine($"[DEBUG] Usuario actual: {userId}, Doctor: {doctor.id_usuario}, Paciente: {paciente.id_usuario}, Rol: {userRole}");
+
+                // 🔹 Notificaciones para el Doctor y Paciente según el rol del usuario actual
+                if (userRole == "administrador")
                 {
+                    // Notificación para el paciente
+                    await _context.Database.ExecuteSqlRawAsync(
+                        "EXEC [dbo].[RegistrarNotificacion] @id_usuario = {0}, @titulo = {1}, @mensaje = {2}, @fecha_envio = {3}",
+                        paciente.id_usuario,
+                        "Cita Eliminada",
+                        $"Estimado {paciente.NombreCompleto}, el administrador ha eliminado su cita con el doctor {doctor.NombreCompleto} que estaba programada para el {cita.FechaInicio}.",
+                        DateTime.Now
+                    );
+
+                    // Notificación para el doctor
+                    await _context.Database.ExecuteSqlRawAsync(
+                        "EXEC [dbo].[RegistrarNotificacion] @id_usuario = {0}, @titulo = {1}, @mensaje = {2}, @fecha_envio = {3}",
+                        doctor.id_usuario,
+                        "Cita Eliminada",
+                        $"Estimado {doctor.NombreCompleto}, el administrador ha eliminado su cita con el paciente {paciente.NombreCompleto} que estaba programada para el {cita.FechaInicio}.",
+                        DateTime.Now
+                    );
+                }
+                else
+                {
+                    int idDestinatario = (userId == doctor.id_usuario) ? paciente.id_usuario : doctor.id_usuario;
+                    string mensajeNotificacion = (userId == doctor.id_usuario) ?
+                        $"Estimado {paciente.NombreCompleto}, el doctor {doctor.NombreCompleto} ha eliminado una cita contigo que estaba programada para el {cita.FechaInicio}." :
+                        $"Estimado {doctor.NombreCompleto}, el paciente {paciente.NombreCompleto} ha eliminado una cita contigo que estaba programada para el {cita.FechaInicio}.";
+
                     await _context.Database.ExecuteSqlRawAsync(
                         "EXEC [dbo].[RegistrarNotificacion] @id_usuario = {0}, @titulo = {1}, @mensaje = {2}, @fecha_envio = {3}",
                         idDestinatario,
@@ -590,47 +649,47 @@ namespace scg_clinicasur.Controllers
                         DateTime.Now
                     );
                 }
-                catch (Exception ex)
-                {
-                    TempData["ErrorMessage"] = $"Error al registrar la notificación: {ex.Message}";
-                }
 
-                // Enviar correo de notificación
-                var smtpClient = new SmtpClient("smtp.outlook.com")
-                {
-                    Port = 587,
-                    Credentials = new NetworkCredential("jrojas30463@ufide.ac.cr", "QsEfT0809*"), // Cambia por la contraseña real
-                    EnableSsl = true,
-                };
-
-                var mailMessage = new MailMessage
-                {
-                    From = new MailAddress("jrojas30463@ufide.ac.cr"),
-                    Subject = "Cita Eliminada",
-                    Body = $"Estimado usuario,<br/><br/>" +
-                           $"Se ha eliminado una de sus citas en el sistema.<br/><br/>" +
-                           $"Detalles de la cita:<br/>" +
-                           $"<strong>Paciente:</strong> {paciente?.NombreCompleto}<br/>" +
-                           $"<strong>Doctor:</strong> {doctor?.NombreCompleto}<br/>" +
-                           $"<strong>Motivo:</strong> {cita.MotivoCita}<br/>" +
-                           $"<strong>Fecha de la Cita:</strong> {cita.FechaInicio}<br/><br/>" +
-                           $"Por favor, ingresa al sistema para más detalles.<br/>" +
-                           $"Gracias.",
-                    IsBodyHtml = true,
-                };
-
-                mailMessage.To.Add("jrojas30463@ufide.ac.cr");
-
+                // 🔹 Envío de correos al doctor y paciente
                 try
                 {
+                    var smtpClient = new SmtpClient("smtp.outlook.com")
+                    {
+                        Port = 587,
+                        Credentials = new NetworkCredential("jrojas30463@ufide.ac.cr", "QsEfT0809*"), // Reemplazar con credenciales reales
+                        EnableSsl = true,
+                    };
+
+                    var mailMessage = new MailMessage
+                    {
+                        From = new MailAddress("jrojas30463@ufide.ac.cr"),
+                        Subject = "Cita Eliminada",
+                        Body = $"Estimado usuario,<br/><br/>" +
+                               $"Se ha eliminado una de sus citas en el sistema.<br/><br/>" +
+                               $"Detalles de la cita:<br/>" +
+                               $"<strong>Paciente:</strong> {paciente.NombreCompleto}<br/>" +
+                               $"<strong>Doctor:</strong> {doctor.NombreCompleto}<br/>" +
+                               $"<strong>Motivo:</strong> {cita.MotivoCita}<br/>" +
+                               $"<strong>Fecha de la Cita:</strong> {cita.FechaInicio}<br/><br/>" +
+                               $"Por favor, ingresa al sistema para más detalles.<br/>" +
+                               $"Gracias.",
+                        IsBodyHtml = true,
+                    };
+
+                    // Agregar los correos del doctor y del paciente como destinatarios
+                    mailMessage.To.Add(paciente.correo);
+                    mailMessage.To.Add(doctor.correo);
+
                     await smtpClient.SendMailAsync(mailMessage);
+                    Console.WriteLine("[DEBUG] Correo enviado con éxito a paciente y doctor.");
                 }
                 catch (Exception ex)
                 {
                     TempData["ErrorMessage"] = $"Error al enviar el correo: {ex.Message}";
+                    Console.WriteLine($"[DEBUG] Error en envío de correo: {ex.Message}");
                 }
 
-                // ⬇️ Redirigir a la lista de citas con mensaje de éxito
+                // 🔹 Redirección a `Index`
                 return RedirectToAction("Index");
             }
             catch (DbUpdateException)
@@ -639,8 +698,8 @@ namespace scg_clinicasur.Controllers
             }
             catch (Exception ex)
             {
-                TempData["ErrorMessage"] = "Ocurrió un error al intentar eliminar la cita.";
-                TempData["ErrorDetails"] = ex.Message;
+                TempData["ErrorMessage"] = $"Ocurrió un error interno: {ex.Message}";
+                Console.WriteLine($"[DEBUG] Error inesperado: {ex.Message}");
             }
 
             return RedirectToAction("Index");

@@ -34,6 +34,7 @@
                     <th>Concepto</th>
                     <th>Monto (₡)</th>
                     <th>Fecha</th>
+                    <th>Acciones</th>
                 </tr>
             </thead>
             <tbody>
@@ -54,6 +55,21 @@
                         <td>@item.Concepto</td>
                         <td><span class="fw-bold">₡ @item.Monto.ToString("N2")</span></td>
                         <td>@item.FechaRegistro.ToString("dd/MM/yyyy")</td>
+                        <td>
+                            <div class="btn-group" role="group">
+                                <!-- Botón Editar -->
+                                <a href="@Url.Action(item.Tipo == "Ingreso" ? "EditarEntrada" : "EditarSalida", new { id = item.IdContabilidad })"
+                                   class="btn btn-warning btn-sm text-white">
+                                    <i class="bi bi-pencil-square"></i> Editar
+                                </a>
+
+                                <!-- Botón Eliminar que redirige a la vista de confirmación -->
+                                <a href="@Url.Action("Eliminar", new { id = item.IdContabilidad })"
+                                   class="btn btn-danger btn-sm">
+                                    <i class="bi bi-trash"></i> Eliminar
+                                </a>
+                            </div>
+                        </td>
                     </tr>
                 }
             </tbody>
@@ -67,4 +83,4 @@
             <i class="bi bi-exclamation-circle"></i> No hay registros disponibles en el historial.
         </div>
     }
-</div
+</div>

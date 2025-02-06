@@ -1,0 +1,33 @@
+﻿@model scg_clinicasur.Models.Contabilidad
+
+@{
+    ViewData["Title"] = "Confirmar Eliminación";
+}
+
+<div class="container mt-5">
+    <div class="card shadow-lg border-0">
+        <div class="card-body text-center p-4">
+            <h1 class="display-6 text-danger"><i class="bi bi-exclamation-triangle-fill"></i> Confirmar Eliminación</h1>
+            <p class="lead text-muted">
+                ¿Estás seguro de que deseas eliminar el siguiente registro?
+            </p>
+
+            <div class="alert alert-warning">
+                <p><strong>Concepto:</strong> @Model.Concepto</p>
+                <p><strong>Monto:</strong> ₡ @Model.Monto.ToString("N2")</p>
+                <p><strong>Fecha:</strong> @Model.FechaRegistro.ToString("dd/MM/yyyy")</p>
+            </div>
+
+            <!-- Botones de Confirmación -->
+            <form asp-action="EliminarConfirmado" method="post">
+                <input type="hidden" name="id" value="@Model.IdContabilidad" />
+                <button type="submit" class="btn btn-danger btn-lg">
+                    <i class="bi bi-trash"></i> Sí, Eliminar
+                </button>
+                <a asp-action="Historial" class="btn btn-secondary btn-lg">
+                    <i class="bi bi-arrow-left"></i> Cancelar
+                </a>
+            </form>
+        </div>
+    </div>
+</div>

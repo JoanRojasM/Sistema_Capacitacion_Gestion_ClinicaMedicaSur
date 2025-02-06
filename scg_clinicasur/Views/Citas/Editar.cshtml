@@ -5,7 +5,6 @@
 }
 
 <div class="container mt-5">
-    <!-- Encabezado -->
     <div class="text-center mb-4">
         <h1 class="display-5 fw-bold text-primary">@ViewData["Title"]</h1>
         <p class="lead text-muted">Actualiza la información de la cita seleccionada.</p>
@@ -51,7 +50,7 @@
                 <!-- Seleccionar Doctor -->
                 <div class="mb-3">
                     <label for="IdDoctor" class="form-label fw-bold">Doctor</label>
-                    <select asp-for="IdDoctor" class="form-select">
+                    <select asp-for="IdDoctor" id="doctorSelect" class="form-select">
                         <option value="">Seleccionar Doctor</option>
                         @foreach (var doctor in ViewBag.Doctores)
                         {
@@ -63,18 +62,19 @@
                     <span asp-validation-for="IdDoctor" class="text-danger"></span>
                 </div>
 
-                <!-- Fecha de Inicio -->
+                <!-- Fecha de Cita -->
                 <div class="mb-3">
-                    <label for="FechaInicio" class="form-label fw-bold">Fecha de Inicio</label>
-                    <input type="datetime-local" asp-for="FechaInicio" class="form-control" required />
-                    <span asp-validation-for="FechaInicio" class="text-danger"></span>
+                    <label for="fechaCita" class="form-label fw-bold">Fecha de la Cita</label>
+                    <input type="date" id="fechaCita" class="form-control" name="FechaInicio"
+                           value="@Model.FechaInicio.ToString("yyyy-MM-dd")" min="@DateTime.Now.ToString("yyyy-MM-dd")" />
                 </div>
 
-                <!-- Fecha de Fin -->
+                <!-- Horas Disponibles -->
                 <div class="mb-3">
-                    <label for="FechaFin" class="form-label fw-bold">Fecha de Fin</label>
-                    <input type="datetime-local" asp-for="FechaFin" class="form-control" required />
-                    <span asp-validation-for="FechaFin" class="text-danger"></span>
+                    <label class="form-label fw-bold">Horas Disponibles</label>
+                    <div id="horasContainer" class="d-flex flex-wrap gap-2"></div>
+                    <input type="hidden" id="FechaInicio" name="FechaInicio" value="@Model.FechaInicio.ToString("yyyy-MM-ddTHH:mm")" />
+                    <input type="hidden" id="FechaFin" name="FechaFin" value="@Model.FechaFin.ToString("yyyy-MM-ddTHH:mm")" />
                 </div>
 
                 <!-- Motivo de la Cita -->
@@ -104,6 +104,57 @@
         </div>
     </div>
 </div>
+
+<!-- Script para cargar horas disponibles y marcar la seleccionada -->
+<script>
+    document.getElementById('doctorSelect').addEventListener('change', cargarHorasDisponibles);
+    document.getElementById('fechaCita').addEventListener('change', cargarHorasDisponibles);
+
+    function cargarHorasDisponibles() {
+        var idDoctor = document.getElementById('doctorSelect').value;
+        var fecha = document.getElementById('fechaCita').value;
+
+        if (idDoctor && fecha) {
+            fetch(`/Citas/ObtenerHorasDisponibles?idDoctor=${idDoctor}&fecha=${fecha}`)
+                .then(response => response.json())
+                .then(data => {
+                    var horasContainer = document.getElementById('horasContainer');
+                    horasContainer.innerHTML = '';
+                    var horaSeleccionada = document.getElementById('FechaInicio').value.split('T')[1]; // Obtener hora seleccionada
+
+                    data.forEach(hora => {
+                        var horaBtn = document.createElement('button');
+                        horaBtn.classList.add('hora-bloque', 'btn', 'btn-sm');
+                        horaBtn.innerText = `${hora.horaInicio} - ${hora.horaFin}`;
+                        horaBtn.type = 'button';
+
+                        if (hora.ocupada) {
+                            horaBtn.classList.add('btn-secondary', 'disabled');
+                        } else {
+                            horaBtn.classList.add('btn-outline-success');
+                            horaBtn.onclick = function () {
+                                document.getElementById('FechaInicio').value = `${fecha}T${hora.horaInicio}`;
+                                document.getElementById('FechaFin').value = `${fecha}T${hora.horaFin}`;
+                                document.querySelectorAll('.hora-bloque').forEach(b => b.classList.remove('btn-success', 'text-white'));
+                                horaBtn.classList.add('btn-success', 'text-white');
+                            };
+
+                            // Marcar la hora previamente seleccionada en verde
+                            if (hora.horaInicio === horaSeleccionada) {
+                                horaBtn.classList.add('btn-success', 'text-white');
+                            }
+                        }
+                        horasContainer.appendChild(horaBtn);
+                    });
+                });
+        }
+    }
+
+    // Cargar horas al iniciar si hay valores existentes
+    window.onload = function () {
+        cargarHorasDisponibles();
+    };
+</script>
 
 @section Scripts {
     @{
