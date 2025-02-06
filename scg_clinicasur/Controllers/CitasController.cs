@@ -135,16 +135,7 @@ namespace scg_clinicasur.Controllers
                 return RedirectToAction("AccessDenied", "Home");
             }
 
-            ViewBag.Pacientes = await _context.Usuarios
-                .Where(u => u.roles.nombre_rol == "paciente")
-                .Select(u => new { u.id_usuario, u.nombre, u.apellido })
-                .ToListAsync();
-
-            ViewBag.Doctores = await _context.Usuarios
-                .Where(u => u.roles.nombre_rol == "doctor")
-                .Select(u => new { u.id_usuario, u.nombre, u.apellido })
-                .ToListAsync();
-
+            await CargarViewBagUsuarios();
             return View();
         }
 
@@ -157,52 +148,62 @@ namespace scg_clinicasur.Controllers
                 return RedirectToAction("AccessDenied", "Home");
             }
 
-            if (ModelState.IsValid)
+            // Validar si el modelo tiene errores
+            if (!ModelState.IsValid)
             {
-                bool existeConflicto = await _context.Citas
-                    .AnyAsync(c => c.IdDoctor == cita.IdDoctor
-                                && c.FechaInicio < cita.FechaFin
-                                && c.FechaFin > cita.FechaInicio);
+                await CargarViewBagUsuarios();
+                return View(cita);
+            }
 
-                if (existeConflicto)
-                {
-                    ModelState.AddModelError("", "No se puede programar la cita, ya que el doctor tiene un conflicto de horario.");
-                    ViewBag.Pacientes = await _context.Usuarios
-                        .Where(u => u.roles.nombre_rol == "paciente")
-                        .Select(u => new { u.id_usuario, u.nombre, u.apellido })
-                        .ToListAsync();
+            // 🔹 Validar que los datos obligatorios no sean nulos o vacíos
+            if (cita.IdDoctor == 0 || cita.IdPaciente == 0 || cita.FechaInicio == default || cita.FechaFin == default)
+            {
+                ModelState.AddModelError("", "Debe seleccionar un doctor, un paciente y definir la fecha correctamente.");
+                await CargarViewBagUsuarios();
+                return View(cita);
+            }
 
-                    ViewBag.Doctores = await _context.Usuarios
-                        .Where(u => u.roles.nombre_rol == "doctor")
-                        .Select(u => new { u.id_usuario, u.nombre, u.apellido })
-                        .ToListAsync();
+            // Verificar si el doctor ya tiene otra cita en el mismo horario
+            bool existeConflicto = await _context.Citas
+                .AnyAsync(c => c.IdDoctor == cita.IdDoctor
+                            && c.FechaInicio < cita.FechaFin
+                            && c.FechaFin > cita.FechaInicio);
 
-                    return View(cita);
-                }
+            if (existeConflicto)
+            {
+                ModelState.AddModelError("", "El doctor ya tiene una cita programada en este horario.");
+                await CargarViewBagUsuarios();
+                return View(cita);
+            }
 
+            try
+            {
+                // Guardar la cita en la base de datos
                 cita.FechaCreacion = DateTime.Now;
                 _context.Citas.Add(cita);
                 await _context.SaveChangesAsync();
 
-                // Obtener nombres de Doctor y Paciente
+                TempData["SuccessMessage"] = "La cita se ha guardado correctamente.";
+
+                // Obtener nombres de doctor y paciente para notificación
                 var doctor = await _context.Usuarios
                     .Where(u => u.id_usuario == cita.IdDoctor)
                     .Select(u => new { NombreCompleto = u.nombre + " " + u.apellido })
-                    .FirstOrDefaultAsync();
+                    .FirstOrDefaultAsync() ?? new { NombreCompleto = "Doctor desconocido" };
 
                 var paciente = await _context.Usuarios
                     .Where(u => u.id_usuario == cita.IdPaciente)
                     .Select(u => new { NombreCompleto = u.nombre + " " + u.apellido })
-                    .FirstOrDefaultAsync();
+                    .FirstOrDefaultAsync() ?? new { NombreCompleto = "Paciente desconocido" };
 
-                // Determinar la contraparte (destinatario de la notificación)
+                // Obtener ID del usuario actual desde la sesión
                 var userIdString = HttpContext.Session.GetString("UserId");
                 var userRole = HttpContext.Session.GetString("UserRole");
 
                 if (string.IsNullOrEmpty(userIdString) || string.IsNullOrEmpty(userRole))
                 {
-                    ModelState.AddModelError("", "No se pudo determinar el usuario actual.");
-                    return View(cita);
+                    TempData["ErrorMessage"] = "No se pudo determinar el usuario actual.";
+                    return RedirectToAction("Index");
                 }
 
                 int userId = int.Parse(userIdString);
@@ -211,25 +212,23 @@ namespace scg_clinicasur.Controllers
 
                 if (userId == cita.IdDoctor)
                 {
-                    // Notificación al paciente
                     idDestinatario = cita.IdPaciente;
-                    mensajeNotificacion = $"Estimado {paciente?.NombreCompleto}, el doctor {doctor?.NombreCompleto} ha programado una cita contigo para el {cita.FechaInicio}.";
+                    mensajeNotificacion = $"Estimado {paciente.NombreCompleto}, el doctor {doctor.NombreCompleto} ha programado una cita contigo para el {cita.FechaInicio}.";
                 }
                 else if (userId == cita.IdPaciente)
                 {
-                    // Notificación al doctor
                     idDestinatario = cita.IdDoctor;
-                    mensajeNotificacion = $"Estimado {doctor?.NombreCompleto}, el paciente {paciente?.NombreCompleto} ha programado una cita contigo para el {cita.FechaInicio}.";
+                    mensajeNotificacion = $"Estimado {doctor.NombreCompleto}, el paciente {paciente.NombreCompleto} ha programado una cita contigo para el {cita.FechaInicio}.";
                 }
                 else
                 {
-                    ModelState.AddModelError("", "No se pudo determinar el destinatario de la notificación.");
-                    return View(cita);
+                    TempData["ErrorMessage"] = "No se pudo determinar el destinatario de la notificación.";
+                    return RedirectToAction("Index");
                 }
 
+                // Registrar notificación en la base de datos
                 try
                 {
-                    // Registrar notificación
                     await _context.Database.ExecuteSqlRawAsync(
                         "EXEC [dbo].[RegistrarNotificacion] @id_usuario = {0}, @titulo = {1}, @mensaje = {2}, @fecha_envio = {3}",
                         idDestinatario,
@@ -240,58 +239,72 @@ namespace scg_clinicasur.Controllers
                 }
                 catch (Exception ex)
                 {
-                    ModelState.AddModelError("", $"Error al registrar la notificación: {ex.Message}");
+                    TempData["ErrorMessage"] = $"Error al registrar la notificación: {ex.Message}";
                 }
 
-                var smtpClient = new SmtpClient("smtp.outlook.com")
-                {
-                    Port = 587,
-                    Credentials = new NetworkCredential("daharoni90459@ufide.ac.cr", "###"), // Cambiar ### por la contraseña real
-                    EnableSsl = true,
-                };
-
-                var mailMessage = new MailMessage
-                {
-                    From = new MailAddress("daharoni90459@ufide.ac.cr"),
-                    Subject = "Cita Agendada",
-                    Body = $"Estimado usuario,<br/><br/>" +
-                           $"Se ha agendado una nueva cita en el sistema.<br/><br/>" +
-                           $"Detalles de la cita:<br/>" +
-                           $"<strong>Paciente:</strong> {paciente?.NombreCompleto}<br/>" +
-                           $"<strong>Doctor:</strong> {doctor?.NombreCompleto}<br/>" +
-                           $"<strong>Motivo:</strong> {cita.MotivoCita}<br/>" +
-                           $"<strong>Fecha de la Cita:</strong> {cita.FechaInicio}<br/><br/>" +
-                           $"Por favor, ingresa al sistema para más detalles.<br/>" +
-                           $"Gracias.",
-                    IsBodyHtml = true,
-                };
-
-                mailMessage.To.Add("daharoni90459@ufide.ac.cr");
-
+                // Enviar correo de confirmación
                 try
                 {
+                    var smtpClient = new SmtpClient("smtp.outlook.com")
+                    {
+                        Port = 587,
+                        Credentials = new NetworkCredential("jrojas30463@ufide.ac.cr", "QsEfT0809*"), // Reemplazar ### con la contraseña real
+                        EnableSsl = true,
+                    };
+
+                    var mailMessage = new MailMessage
+                    {
+                        From = new MailAddress("jrojas30463@ufide.ac.cr"),
+                        Subject = "Cita Agendada",
+                        Body = $"Estimado usuario,<br/><br/>" +
+                               $"Se ha agendado una nueva cita en el sistema.<br/><br/>" +
+                               $"Detalles de la cita:<br/>" +
+                               $"<strong>Paciente:</strong> {paciente.NombreCompleto}<br/>" +
+                               $"<strong>Doctor:</strong> {doctor.NombreCompleto}<br/>" +
+                               $"<strong>Motivo:</strong> {cita.MotivoCita}<br/>" +
+                               $"<strong>Fecha de la Cita:</strong> {cita.FechaInicio}<br/><br/>" +
+                               $"Por favor, ingresa al sistema para más detalles.<br/>" +
+                               $"Gracias.",
+                        IsBodyHtml = true,
+                    };
+
+                    mailMessage.To.Add("jrojas30463@ufide.ac.cr");
+
                     await smtpClient.SendMailAsync(mailMessage);
-                    ViewBag.Message = "Correo de notificación enviado correctamente.";
                 }
                 catch (Exception ex)
                 {
-                    ViewBag.Message = $"Error al enviar el correo: {ex.Message}";
+                    TempData["ErrorMessage"] = $"Error al enviar el correo: {ex.Message}";
                 }
 
-                return RedirectToAction(nameof(Index));
+                // Mensaje de éxito y redirección a Index
+                TempData["SuccessMessage"] = "La cita se ha programado correctamente.";
+                return RedirectToAction("Index");
             }
+            catch (Exception ex)
+            {
+                TempData["ErrorMessage"] = $"Error inesperado: {ex.Message}";
+                return RedirectToAction("Index");
+            }
+        }
 
-            ViewBag.Pacientes = await _context.Usuarios
+        private async Task CargarViewBagUsuarios()
+        {
+            ViewBag.Pacientes = new List<dynamic>(); // Inicializar como lista vacía
+            ViewBag.Doctores = new List<dynamic>();
+
+            var pacientes = await _context.Usuarios
                 .Where(u => u.roles.nombre_rol == "paciente")
                 .Select(u => new { u.id_usuario, u.nombre, u.apellido })
                 .ToListAsync();
 
-            ViewBag.Doctores = await _context.Usuarios
+            var doctores = await _context.Usuarios
                 .Where(u => u.roles.nombre_rol == "doctor")
                 .Select(u => new { u.id_usuario, u.nombre, u.apellido })
                 .ToListAsync();
 
-            return View(cita);
+            if (pacientes != null) ViewBag.Pacientes = pacientes;
+            if (doctores != null) ViewBag.Doctores = doctores;
         }
 
         [HttpGet]
@@ -310,8 +323,8 @@ namespace scg_clinicasur.Controllers
 
             if (cita == null)
             {
-                ViewBag.ErrorMessage = "No se pudo encontrar la cita.";
-                return View("ErrorCita");
+                TempData["ErrorMessage"] = "No se pudo encontrar la cita.";
+                return RedirectToAction("Index");
             }
 
             await CargarDatosParaEditar(cita.IdEstadoCita);
@@ -327,100 +340,108 @@ namespace scg_clinicasur.Controllers
                 return RedirectToAction("AccessDenied", "Home");
             }
 
-            if (ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
-                bool conflictoHorario = await _context.Citas
-                    .AnyAsync(c => c.IdDoctor == cita.IdDoctor
-                                   && c.IdCita != cita.IdCita
-                                   && (c.FechaInicio < cita.FechaFin && c.FechaFin > cita.FechaInicio));
+                await CargarDatosParaEditar(cita.IdEstadoCita);
+                return View(cita);
+            }
 
-                if (conflictoHorario)
+            // Verificar conflictos de horario con otras citas
+            bool conflictoHorario = await _context.Citas
+                .AnyAsync(c => c.IdDoctor == cita.IdDoctor
+                               && c.IdCita != cita.IdCita
+                               && (c.FechaInicio < cita.FechaFin && c.FechaFin > cita.FechaInicio));
+
+            if (conflictoHorario)
+            {
+                ModelState.AddModelError("FechaInicio", "El horario seleccionado ya está ocupado por otra cita.");
+                await CargarDatosParaEditar(cita.IdEstadoCita);
+                return View(cita);
+            }
+
+            try
+            {
+                _context.Citas.Update(cita);
+                await _context.SaveChangesAsync();
+
+                TempData["SuccessMessage"] = "La cita se ha actualizado correctamente.";
+
+                // Obtener nombres de Doctor y Paciente para la notificación
+                var doctor = await _context.Usuarios
+                    .Where(u => u.id_usuario == cita.IdDoctor)
+                    .Select(u => new { NombreCompleto = u.nombre + " " + u.apellido })
+                    .FirstOrDefaultAsync() ?? new { NombreCompleto = "Doctor desconocido" };
+
+                var paciente = await _context.Usuarios
+                    .Where(u => u.id_usuario == cita.IdPaciente)
+                    .Select(u => new { NombreCompleto = u.nombre + " " + u.apellido })
+                    .FirstOrDefaultAsync() ?? new { NombreCompleto = "Paciente desconocido" };
+
+                // Obtener el ID del usuario actual
+                var userIdString = HttpContext.Session.GetString("UserId");
+                var userRole = HttpContext.Session.GetString("UserRole");
+
+                if (string.IsNullOrEmpty(userIdString) || string.IsNullOrEmpty(userRole))
                 {
-                    ModelState.AddModelError("FechaInicio", "El horario seleccionado ya está ocupado por otra cita.");
-                    await CargarDatosParaEditar(cita.IdEstadoCita);
-                    return View(cita);
+                    TempData["ErrorMessage"] = "No se pudo determinar el usuario actual.";
+                    return RedirectToAction("Index");
                 }
 
+                int userId = int.Parse(userIdString);
+                int idDestinatario;
+                string mensajeNotificacion;
+
+                if (userId == cita.IdDoctor)
+                {
+                    idDestinatario = cita.IdPaciente;
+                    mensajeNotificacion = $"Estimado {paciente.NombreCompleto}, el doctor {doctor.NombreCompleto} ha modificado una cita contigo para el {cita.FechaInicio}.";
+                }
+                else if (userId == cita.IdPaciente)
+                {
+                    idDestinatario = cita.IdDoctor;
+                    mensajeNotificacion = $"Estimado {doctor.NombreCompleto}, el paciente {paciente.NombreCompleto} ha modificado una cita contigo para el {cita.FechaInicio}.";
+                }
+                else
+                {
+                    TempData["ErrorMessage"] = "No se pudo determinar el destinatario de la notificación.";
+                    return RedirectToAction("Index");
+                }
+
+                // Registrar notificación en la base de datos
                 try
                 {
-                    _context.Citas.Update(cita);
-                    await _context.SaveChangesAsync();
-                    TempData["SuccessMessage"] = "La cita se ha actualizado correctamente.";
+                    await _context.Database.ExecuteSqlRawAsync(
+                        "EXEC [dbo].[RegistrarNotificacion] @id_usuario = {0}, @titulo = {1}, @mensaje = {2}, @fecha_envio = {3}",
+                        idDestinatario,
+                        "Cita Modificada",
+                        mensajeNotificacion,
+                        DateTime.Now
+                    );
+                }
+                catch (Exception ex)
+                {
+                    TempData["ErrorMessage"] = $"Error al registrar la notificación: {ex.Message}";
+                }
 
-                    // Obtener nombres de Doctor y Paciente
-                    var doctor = await _context.Usuarios
-                        .Where(u => u.id_usuario == cita.IdDoctor)
-                        .Select(u => new { NombreCompleto = u.nombre + " " + u.apellido })
-                        .FirstOrDefaultAsync();
-
-                    var paciente = await _context.Usuarios
-                        .Where(u => u.id_usuario == cita.IdPaciente)
-                        .Select(u => new { NombreCompleto = u.nombre + " " + u.apellido })
-                        .FirstOrDefaultAsync();
-
-                    // Determinar la contraparte (destinatario de la notificación)
-                    var userIdString = HttpContext.Session.GetString("UserId");
-                    var userRole = HttpContext.Session.GetString("UserRole");
-
-                    if (string.IsNullOrEmpty(userIdString) || string.IsNullOrEmpty(userRole))
-                    {
-                        ModelState.AddModelError("", "No se pudo determinar el usuario actual.");
-                        return View(cita);
-                    }
-
-                    int userId = int.Parse(userIdString);
-                    int idDestinatario;
-                    string mensajeNotificacion;
-
-                    if (userId == cita.IdDoctor)
-                    {
-                        // Notificación al paciente
-                        idDestinatario = cita.IdPaciente;
-                        mensajeNotificacion = $"Estimado {paciente?.NombreCompleto}, el doctor {doctor?.NombreCompleto} ha modificado una cita contigo para el {cita.FechaInicio}.";
-                    }
-                    else if (userId == cita.IdPaciente)
-                    {
-                        // Notificación al doctor
-                        idDestinatario = cita.IdDoctor;
-                        mensajeNotificacion = $"Estimado {doctor?.NombreCompleto}, el paciente {paciente?.NombreCompleto} ha modificado una cita contigo para el {cita.FechaInicio}.";
-                    }
-                    else
-                    {
-                        ModelState.AddModelError("", "No se pudo determinar el destinatario de la notificación.");
-                        return View(cita);
-                    }
-
-                    try
-                    {
-                        await _context.Database.ExecuteSqlRawAsync(
-                            "EXEC [dbo].[RegistrarNotificacion] @id_usuario = {0}, @titulo = {1}, @mensaje = {2}, @fecha_envio = {3}",
-                            idDestinatario,
-                            "Cita Modificada",
-                            mensajeNotificacion,
-                            DateTime.Now
-                        );
-                    }
-                    catch (Exception ex)
-                    {
-                        ModelState.AddModelError("", $"Error al registrar la notificación: {ex.Message}");
-                    }
-
+                // Enviar correo de notificación
+                try
+                {
                     var smtpClient = new SmtpClient("smtp.outlook.com")
                     {
                         Port = 587,
-                        Credentials = new NetworkCredential("daharoni90459@ufide.ac.cr", "###"), // Cambiar ### por la contraseña real
+                        Credentials = new NetworkCredential("jrojas30463@ufide.ac.cr", "QsEfT0809*"), // Reemplazar ### con la contraseña real
                         EnableSsl = true,
                     };
 
                     var mailMessage = new MailMessage
                     {
-                        From = new MailAddress("daharoni90459@ufide.ac.cr"),
+                        From = new MailAddress("jrojas30463@ufide.ac.cr"),
                         Subject = "Cita Modificada",
                         Body = $"Estimado usuario,<br/><br/>" +
                                $"Se ha modificado una de sus citas en el sistema.<br/><br/>" +
                                $"Detalles de la cita:<br/>" +
-                               $"<strong>Paciente:</strong> {paciente?.NombreCompleto}<br/>" +
-                               $"<strong>Doctor:</strong> {doctor?.NombreCompleto}<br/>" +
+                               $"<strong>Paciente:</strong> {paciente.NombreCompleto}<br/>" +
+                               $"<strong>Doctor:</strong> {doctor.NombreCompleto}<br/>" +
                                $"<strong>Motivo:</strong> {cita.MotivoCita}<br/>" +
                                $"<strong>Fecha de la Cita:</strong> {cita.FechaInicio}<br/><br/>" +
                                $"Por favor, ingresa al sistema para más detalles.<br/>" +
@@ -428,28 +449,25 @@ namespace scg_clinicasur.Controllers
                         IsBodyHtml = true,
                     };
 
-                    mailMessage.To.Add("daharoni90459@ufide.ac.cr");
+                    mailMessage.To.Add("jrojas30463@ufide.ac.cr");
 
-                    try
-                    {
-                        await smtpClient.SendMailAsync(mailMessage);
-                        ViewBag.Message = "Correo de notificación enviado correctamente.";
-                    }
-                    catch (Exception ex)
-                    {
-                        ViewBag.Message = $"Error al enviar el correo: {ex.Message}";
-                    }
+                    await smtpClient.SendMailAsync(mailMessage);
+                }
+                catch (Exception ex)
+                {
+                    TempData["ErrorMessage"] = $"Error al enviar el correo: {ex.Message}";
+                }
 
-                    return RedirectToAction(nameof(Index));
-                }
-                catch (DbUpdateException)
-                {
-                    ViewBag.ErrorMessage = "Error de base de datos: No se pudieron guardar los cambios.";
-                }
-                catch (Exception)
-                {
-                    ViewBag.ErrorMessage = "Ocurrió un error interno.";
-                }
+                // Redirección a `Index` con mensaje de éxito
+                return RedirectToAction("Index");
+            }
+            catch (DbUpdateException)
+            {
+                TempData["ErrorMessage"] = "Error de base de datos: No se pudieron guardar los cambios.";
+            }
+            catch (Exception ex)
+            {
+                TempData["ErrorMessage"] = $"Ocurrió un error interno: {ex.Message}";
             }
 
             await CargarDatosParaEditar(cita.IdEstadoCita);
@@ -511,8 +529,8 @@ namespace scg_clinicasur.Controllers
 
             if (cita == null)
             {
-                ViewBag.ErrorMessage = "No se pudo encontrar la cita.";
-                return View("ErrorCita");
+                TempData["ErrorMessage"] = "No se pudo encontrar la cita.";
+                return RedirectToAction("Index"); // ⬅️ Redirigir en lugar de mostrar una vista inexistente
             }
 
             try
@@ -521,6 +539,7 @@ namespace scg_clinicasur.Controllers
                 await _context.SaveChangesAsync();
                 TempData["SuccessMessage"] = "La cita se ha eliminado correctamente.";
 
+                // Notificación al paciente o doctor
                 var doctor = await _context.Usuarios
                     .Where(u => u.id_usuario == cita.IdDoctor)
                     .Select(u => new { NombreCompleto = u.nombre + " " + u.apellido })
@@ -536,8 +555,8 @@ namespace scg_clinicasur.Controllers
 
                 if (string.IsNullOrEmpty(userIdString) || string.IsNullOrEmpty(userRole))
                 {
-                    ModelState.AddModelError("", "No se pudo determinar el usuario actual.");
-                    return View(cita);
+                    TempData["ErrorMessage"] = "No se pudo determinar el usuario actual.";
+                    return RedirectToAction("Index");
                 }
 
                 int userId = int.Parse(userIdString);
@@ -556,10 +575,11 @@ namespace scg_clinicasur.Controllers
                 }
                 else
                 {
-                    ModelState.AddModelError("", "No se pudo determinar el destinatario de la notificación.");
-                    return View(cita);
+                    TempData["ErrorMessage"] = "No se pudo determinar el destinatario de la notificación.";
+                    return RedirectToAction("Index");
                 }
 
+                // Ejecutar procedimiento almacenado de notificación
                 try
                 {
                     await _context.Database.ExecuteSqlRawAsync(
@@ -572,19 +592,20 @@ namespace scg_clinicasur.Controllers
                 }
                 catch (Exception ex)
                 {
-                    ModelState.AddModelError("", $"Error al registrar la notificación: {ex.Message}");
+                    TempData["ErrorMessage"] = $"Error al registrar la notificación: {ex.Message}";
                 }
 
+                // Enviar correo de notificación
                 var smtpClient = new SmtpClient("smtp.outlook.com")
                 {
                     Port = 587,
-                    Credentials = new NetworkCredential("daharoni90459@ufide.ac.cr", "###"), // Cambiar ### por la contraseña real
+                    Credentials = new NetworkCredential("jrojas30463@ufide.ac.cr", "QsEfT0809*"), // Cambia por la contraseña real
                     EnableSsl = true,
                 };
 
                 var mailMessage = new MailMessage
                 {
-                    From = new MailAddress("daharoni90459@ufide.ac.cr"),
+                    From = new MailAddress("jrojas30463@ufide.ac.cr"),
                     Subject = "Cita Eliminada",
                     Body = $"Estimado usuario,<br/><br/>" +
                            $"Se ha eliminado una de sus citas en el sistema.<br/><br/>" +
@@ -598,31 +619,31 @@ namespace scg_clinicasur.Controllers
                     IsBodyHtml = true,
                 };
 
-                mailMessage.To.Add("daharoni90459@ufide.ac.cr");
+                mailMessage.To.Add("jrojas30463@ufide.ac.cr");
 
                 try
                 {
                     await smtpClient.SendMailAsync(mailMessage);
-                    ViewBag.Message = "Correo de notificación enviado correctamente.";
                 }
                 catch (Exception ex)
                 {
-                    ViewBag.Message = $"Error al enviar el correo: {ex.Message}";
+                    TempData["ErrorMessage"] = $"Error al enviar el correo: {ex.Message}";
                 }
 
-                return RedirectToAction(nameof(Index));
+                // ⬇️ Redirigir a la lista de citas con mensaje de éxito
+                return RedirectToAction("Index");
             }
             catch (DbUpdateException)
             {
-                ViewBag.ErrorMessage = "Error de base de datos: No se pudo eliminar la cita.";
+                TempData["ErrorMessage"] = "Error de base de datos: No se pudo eliminar la cita.";
             }
             catch (Exception ex)
             {
-                ViewBag.ErrorMessage = "Ocurrió un error al intentar eliminar la cita.";
-                ViewBag.ErrorDetails = ex.Message;
+                TempData["ErrorMessage"] = "Ocurrió un error al intentar eliminar la cita.";
+                TempData["ErrorDetails"] = ex.Message;
             }
 
-            return View("ErrorCita");
+            return RedirectToAction("Index");
         }
 
         [HttpGet]

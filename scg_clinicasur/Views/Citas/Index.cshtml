@@ -5,6 +5,22 @@
 }
 
 <div class="container mt-5">
+    <!-- Mensajes -->
+    @if (TempData["SuccessMessage"] != null)
+    {
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            @TempData["SuccessMessage"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    }
+    @if (TempData["ErrorMessage"] != null)
+    {
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            @TempData["ErrorMessage"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    }
+
     <!-- Encabezado -->
     <div class="text-center mb-4">
         <h1 class="display-5 fw-bold text-primary">@ViewData["Title"]</h1>
@@ -101,7 +117,7 @@
                                 <a asp-action="Editar" asp-route-id="@cita.IdCita" class="btn btn-sm btn-warning text-white">
                                     <i class="bi bi-pencil-square"></i> Editar
                                 </a>
-                                <a asp-action="Eliminar" asp-route-id="@cita.IdCita" class="btn btn-sm btn-danger" onclick="return confirm('¿Estás seguro de que deseas eliminar esta cita?');">
+                                <a asp-action="Eliminar" asp-route-id="@cita.IdCita" class="btn btn-sm btn-danger">
                                     <i class="bi bi-trash"></i> Eliminar
                                 </a>
                             </div>

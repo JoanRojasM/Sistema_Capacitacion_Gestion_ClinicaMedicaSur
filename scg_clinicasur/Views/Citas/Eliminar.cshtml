@@ -43,7 +43,7 @@
         </script>
 
         <!-- Formulario de eliminación -->
-        <form id="formEliminar" method="post" asp-action="EliminarConfirmado">
+        <form id="formEliminar" method="post" asp-controller="Citas" asp-action="EliminarConfirmado">
             <input type="hidden" name="id" value="@Model.IdCita" />
         </form>
     </main>
