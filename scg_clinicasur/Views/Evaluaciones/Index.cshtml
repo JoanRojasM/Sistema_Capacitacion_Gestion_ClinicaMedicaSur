@@ -26,6 +26,7 @@
                     <th>Descripción</th>
                     <th>Tiempo de Prueba</th>
                     <th>Capacitación</th>
+                    <th>Archivo</th>
                     <th>Acciones</th>
                 </tr>
             </thead>
@@ -39,6 +40,18 @@
                             <td>@evaluacion.descripcion</td>
                             <td>@evaluacion.tiempo_prueba</td>
                             <td>@evaluacion.Capacitacion.titulo</td>
+                            <td>
+                                @if (!string.IsNullOrEmpty(evaluacion.archivo))
+                                {
+                                    <a href="@Url.Content(evaluacion.archivo)" target="_blank" class="btn btn-sm btn-outline-success">
+                                        <i class="bi bi-file-earmark"></i> Ver Archivo
+                                    </a>
+                                }
+                                else
+                                {
+                                    <span class="text-muted">No disponible</span>
+                                }
+                            </td>
                             <td>
                                 <!-- Botones de Acción -->
                                 <div class="btn-group" role="group">

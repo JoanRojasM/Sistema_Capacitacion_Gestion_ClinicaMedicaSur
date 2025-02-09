@@ -34,16 +34,16 @@ namespace scg_clinicasur.Controllers
         [HttpGet]
         public IActionResult Crear()
         {
-            var usuarios = _context.Usuarios
-                           .Where(u => u.id_rol == 1 || u.id_rol == 2)
-                           .ToList();
-
-            var capacitaciones = _context.Capacitaciones.ToList();
-
-            if (usuarios == null || capacitaciones == null)
+            // Verificar si el rol del usuario es administrador
+            var userRole = HttpContext.Session.GetString("UserRole");
+            if (userRole != "administrador")
             {
-                return RedirectToAction("Error");
+                return RedirectToAction("AccessDenied", "Home"); // Redirigir a una página de acceso denegado
             }
+
+            // Cargar la lista de usuarios y capacitaciones para las listas desplegables
+            var usuarios = _context.Usuarios.Where(u => u.id_rol == 1 || u.id_rol == 2).ToList();
+            var capacitaciones = _context.Capacitaciones.ToList();
 
             ViewData["Usuarios"] = usuarios;
             ViewData["Capacitaciones"] = capacitaciones;
@@ -53,77 +53,142 @@ namespace scg_clinicasur.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Crear([Bind("nombre,descripcion,tiempo_prueba,id_usuario,id_capacitacion")] Evaluacion evaluacion, IFormFile file)
+        public async Task<IActionResult> Crear(Evaluacion evaluacion, IFormFile? archivo)
         {
+            // Verificar si el rol del usuario es administrador
+            var userRole = HttpContext.Session.GetString("UserRole");
+            if (userRole != "administrador")
+            {
+                return RedirectToAction("AccessDenied", "Home"); // Redirigir a una página de acceso denegado
+            }
+
             if (ModelState.IsValid)
             {
-
-                string uploadsFolder = Path.Combine(_webHost.WebRootPath, "uploads");
-                if (!Directory.Exists(uploadsFolder))
-                {
-                    Directory.CreateDirectory(uploadsFolder);
-                }
-                if (file != null && file.Length > 0)
-                {
-                    string fileName = Path.GetFileName(file.FileName);
-                    string fileSavePath = Path.Combine(uploadsFolder, fileName);
-
-
-                    using (FileStream stream = new FileStream(fileSavePath, FileMode.Create))
-                    {
-                        await file.CopyToAsync(stream);
-                    }
-
-                    ViewBag.Message = fileName + "bien subido";
-                }
-
-                evaluacion.fecha_creacion = DateTime.Now;
-                _context.Add(evaluacion);
-                await _context.SaveChangesAsync();
-
-
-                // Enviar correo
-                var smtpClient = new SmtpClient("smtp.outlook.com")
-                {
-                    Port = 587,
-                    Credentials = new NetworkCredential("daharoni90459@ufide.ac.cr", "###"), // Cambiar ### por contraseña
-                    EnableSsl = true,
-                };
-
-                var mailMessage = new MailMessage
-                {
-                    From = new MailAddress("daharoni90459@ufide.ac.cr"),
-                    Subject = $"Nueva Evaluación Disponible: {evaluacion.nombre}",
-                    Body = $"Estimado usuario,<br/><br/>" +
-                           $"Se te ha asignado una nueva evaluación en el sistema.<br/><br/>" +
-                           $"Detalles de la capacitación:<br/>" +
-                           $"<strong>Título:</strong> {evaluacion.nombre}<br/>" +
-                           $"<strong>Descripción:</strong> {evaluacion.descripcion}<br/>" +
-                           $"<strong>Duración:</strong> {evaluacion.tiempo_prueba}<br/>" +
-                           $"<strong>Fecha de Creación:</strong> {evaluacion.fecha_creacion.ToShortDateString()}<br/><br/>" +
-                           $"Por favor, ingresa al sistema para más detalles.<br/><br/>" +
-                           $"Gracias.",
-                    IsBodyHtml = true,
-                };
-                mailMessage.To.Add("daharoni90459@ufide.ac.cr");
-
                 try
                 {
-                    await smtpClient.SendMailAsync(mailMessage);
-                    ViewBag.Message = "Correo de notificación enviado correctamente.";
+                    evaluacion.fecha_creacion = DateTime.Now;
+
+                    // Guardar el archivo si se proporciona
+                    if (archivo != null && archivo.Length > 0)
+                    {
+                        var uploadsFolder = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "evaluaciones");
+                        if (!Directory.Exists(uploadsFolder))
+                        {
+                            Directory.CreateDirectory(uploadsFolder);
+                        }
+
+                        var fileName = Path.GetFileName(archivo.FileName);
+                        var filePath = Path.Combine(uploadsFolder, fileName);
+
+                        using (var stream = new FileStream(filePath, FileMode.Create))
+                        {
+                            await archivo.CopyToAsync(stream);
+                        }
+
+                        evaluacion.archivo = Path.Combine("/evaluaciones", fileName);
+                    }
+
+                    // Guardar la evaluación en la base de datos
+                    _context.Evaluaciones.Add(evaluacion);
+                    await _context.SaveChangesAsync();
+
+                    return RedirectToAction("Index");
                 }
                 catch (Exception ex)
                 {
-                    ViewBag.Message = $"Error al enviar el correo: {ex.Message}";
+                    ModelState.AddModelError("", $"Error al guardar la evaluación: {ex.Message}");
                 }
-
-                return RedirectToAction(nameof(Index));
             }
 
-            ViewData["Capacitaciones"] = _context.Capacitaciones.ToList();
-            ViewData["Usuarios"] = _context.Usuarios.ToList();
+            // Recargar los datos en caso de error
+            ViewBag.Usuarios = new SelectList(_context.Usuarios.Where(u => u.id_rol == 1 || u.id_rol == 2).ToList(), "id_usuario", "nombre");
+            ViewBag.Capacitaciones = new SelectList(_context.Capacitaciones.ToList(), "id_capacitacion", "titulo");
+
             return View(evaluacion);
         }
+
+        [HttpGet]
+        public async Task<IActionResult> Editar(int? id)
+        {
+            // Verificar si el rol del usuario es administrador
+            var userRole = HttpContext.Session.GetString("UserRole");
+            if (userRole != "administrador")
+            {
+                return RedirectToAction("AccessDenied", "Home"); // Redirigir a una página de acceso denegado
+            }
+
+            var evaluacion = await _context.Evaluaciones.FindAsync(id);
+            if (evaluacion == null)
+            {
+                return NotFound();
+            }
+
+            ViewData["Usuarios"] = _context.Usuarios.Where(u => u.id_rol == 1 || u.id_rol == 2).ToList();
+            ViewData["Capacitaciones"] = _context.Capacitaciones.ToList();
+            return View(evaluacion);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Editar(int id, Evaluacion evaluacion, IFormFile? archivo)
+        {
+            // Verificar si el rol del usuario es administrador
+            var userRole = HttpContext.Session.GetString("UserRole");
+            if (userRole != "administrador")
+            {
+                return RedirectToAction("AccessDenied", "Home"); // Redirigir a una página de acceso denegado
+            }
+
+            if (id != evaluacion.id_evaluacion)
+            {
+                return NotFound();
+            }
+
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    // Actualizar archivo si se proporciona
+                    if (archivo != null)
+                    {
+                        var carpetaDestino = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "evaluaciones");
+                        if (!Directory.Exists(carpetaDestino))
+                        {
+                            Directory.CreateDirectory(carpetaDestino);
+                        }
+
+                        var nombreArchivo = Path.GetFileName(archivo.FileName);
+                        var rutaArchivo = Path.Combine(carpetaDestino, nombreArchivo);
+
+                        using (var stream = new FileStream(rutaArchivo, FileMode.Create))
+                        {
+                            await archivo.CopyToAsync(stream);
+                        }
+
+                        evaluacion.archivo = Path.Combine("/evaluaciones", nombreArchivo);                        
+                    }
+
+                    _context.Update(evaluacion);
+                    await _context.SaveChangesAsync();
+                }
+                catch (DbUpdateConcurrencyException)
+                {
+                    if (!_context.Evaluaciones.Any(e => e.id_evaluacion == id))
+                    {
+                        return NotFound();
+                    }
+                    else
+                    {
+                        throw;
+                    }
+                }
+                return RedirectToAction(nameof(Index));
+            }
+            ViewData["Usuarios"] = _context.Usuarios.Where(u => u.id_rol == 1 || u.id_rol == 2).ToList();
+            ViewData["Capacitaciones"] = _context.Capacitaciones.ToList();
+            return View(evaluacion);
+        }
+
         [HttpGet]
         public async Task<IActionResult> Eliminar(int? id)
         {
@@ -147,18 +212,38 @@ namespace scg_clinicasur.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> EliminarConfirmado(int id)
         {
-            var evaluacion = await _context.Evaluaciones.FindAsync(id);
-
-            if (evaluacion == null)
+            // Verificar si el rol del usuario es administrador
+            var userRole = HttpContext.Session.GetString("UserRole");
+            if (userRole != "administrador")
             {
-                return NotFound();
+                return RedirectToAction("AccessDenied", "Home"); // Redirigir a una página de acceso denegado
             }
 
-            // Eliminar la evaluación
-            _context.Evaluaciones.Remove(evaluacion);
-            await _context.SaveChangesAsync();
+            try
+            {
+                var evaluacion = await _context.Evaluaciones.FindAsync(id);
+                if (evaluacion != null)
+                {
+                    if (!string.IsNullOrEmpty(evaluacion.archivo))
+                    {
+                        var rutaArchivo = Path.Combine(Directory.GetCurrentDirectory(), "evaluaciones", evaluacion.archivo.TrimStart('/'));
+                        if (System.IO.File.Exists(rutaArchivo))
+                        {
+                            System.IO.File.Delete(rutaArchivo);
+                        }
+                    }
 
-            return RedirectToAction(nameof(Index));
+                    _context.Evaluaciones.Remove(evaluacion);
+                    await _context.SaveChangesAsync();
+                }
+
+                return RedirectToAction(nameof(Index));
+            }
+            catch (Exception ex)
+            {
+                ModelState.AddModelError("", $"Error al eliminar la evaluacion: {ex.Message}");
+                return RedirectToAction(nameof(Index));
+            }
         }
 
         public async Task<IActionResult> Detalles(int? id)
@@ -180,7 +265,5 @@ namespace scg_clinicasur.Controllers
 
             return View(evaluacion);
         }
-
     }
-
 }

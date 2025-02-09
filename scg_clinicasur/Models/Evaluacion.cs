@@ -28,6 +28,10 @@ namespace scg_clinicasur.Models
         [StringLength(255)]
         public string tiempo_prueba { get; set; }
 
+        [StringLength(255)]
+        [Column("archivo")]
+        public string? archivo { get; set; }
+
         [ForeignKey("Usuario")]
         public int? id_usuario { get; set; }
         public Usuario? Usuario { get; set; }

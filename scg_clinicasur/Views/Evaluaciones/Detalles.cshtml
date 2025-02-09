@@ -37,6 +37,22 @@
                             <span class="badge bg-info text-dark">@Model.Capacitacion.titulo</span>
                         </dd>
 
+                        <dt class="col-sm-4 text-muted">Archivo:</dt>
+                        <dd class="col-sm-8">
+                            <span class="badge bg-info text-dark">
+                                @if (!string.IsNullOrEmpty(@Model.archivo))
+                                {
+                                    <a href="@Url.Content(@Model.archivo)" target="_blank" class="btn btn-sm btn-outline-success">
+                                        <i class="bi bi-file-earmark"></i> Ver Archivo
+                                    </a>
+                                }
+                                else
+                                {
+                                    <span class="text-muted">No disponible</span>
+                                }
+                            </span>
+                        </dd>
+
                         <dt class="col-sm-4 text-muted">Usuario:</dt>
                         <dd class="col-sm-8">@Model.Usuario.nombre</dd>
 

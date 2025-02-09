@@ -39,9 +39,9 @@
 
                 <!-- Archivo -->
                 <div class="mb-3">
-                    <label class="form-label fw-bold">Adjuntar Archivo</label>
-                    <input type="file" name="file" class="form-control" />
-                    <small class="text-muted">Formatos permitidos: PDF, Word, Excel</small>
+                    <label asp-for="archivo" class="form-label fw-bold">Archivo</label>
+                    <input asp-for="archivo" type="file" class="form-control" />
+                    <span asp-validation-for="archivo" class="text-danger"></span>
                 </div>
 
                 <div class="row mb-3">

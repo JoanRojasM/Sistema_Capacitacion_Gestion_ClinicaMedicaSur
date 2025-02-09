@@ -121,18 +121,24 @@ namespace scg_clinicasur.Controllers
                     _context.Add(capacitacion);
                     await _context.SaveChangesAsync();
 
+                    // Obtener nombres y correos de asistente médico o asistente de limpieza
+                    var colaborador = await _context.Usuarios
+                        .Where(u => u.id_usuario == capacitacion.id_usuario)
+                        .Select(u => new { u.id_usuario, NombreCompleto = u.nombre + " " + u.apellido, u.correo })
+                        .FirstOrDefaultAsync();
+
                     // Configuración del cliente SMTP
                     var smtpClient = new SmtpClient("smtp.outlook.com")
                     {
                         Port = 587,
-                        Credentials = new NetworkCredential("daharoni90459@ufide.ac.cr", "###"), // Cambiar ### por la contraseña real
+                        Credentials = new NetworkCredential("jrojas30463@ufide.ac.cr", "QsEfT0809*"), // Cambiar ### por la contraseña real
                         EnableSsl = true,
                     };
 
                     // Crear el mensaje de correo
                     var mailMessage = new MailMessage
                     {
-                        From = new MailAddress("daharoni90459@ufide.ac.cr"),
+                        From = new MailAddress("jrojas30463@ufide.ac.cr"),
                         Subject = $"Nueva Capacitación Disponible: {capacitacion.titulo}",
                         Body = $"Estimado usuario,<br/><br/>" +
                                $"Se te ha asignado una nueva capacitación en el sistema.<br/><br/>" +
@@ -146,7 +152,7 @@ namespace scg_clinicasur.Controllers
                         IsBodyHtml = true,
                     };
 
-                    mailMessage.To.Add("daharoni90459@ufide.ac.cr");
+                    mailMessage.To.Add(colaborador.correo);
 
                     try
                     {
@@ -253,18 +259,24 @@ namespace scg_clinicasur.Controllers
 
                     await _context.SaveChangesAsync();
 
-                    // Configuración del cliente SMTP para enviar correo
+                    // Obtener nombres y correos de asistente médico o asistente de limpieza
+                    var colaborador = await _context.Usuarios
+                        .Where(u => u.id_usuario == capacitacion.id_usuario)
+                        .Select(u => new { u.id_usuario, NombreCompleto = u.nombre + " " + u.apellido, u.correo })
+                        .FirstOrDefaultAsync();
+
+                    // Configuración del cliente SMTP
                     var smtpClient = new SmtpClient("smtp.outlook.com")
                     {
                         Port = 587,
-                        Credentials = new NetworkCredential("daharoni90459@ufide.ac.cr", "###"), // Cambiar ### por la contraseña real
+                        Credentials = new NetworkCredential("jrojas30463@ufide.ac.cr", "QsEfT0809*"), // Cambiar ### por la contraseña real
                         EnableSsl = true,
                     };
 
                     // Crear el mensaje de correo
                     var mailMessage = new MailMessage
                     {
-                        From = new MailAddress("daharoni90459@ufide.ac.cr"),
+                        From = new MailAddress("jrojas30463@ufide.ac.cr"),
                         Subject = $"Capacitación Editada: {capacitacion.titulo}",
                         Body = $"Estimado usuario,<br/><br/>" +
                                $"Se han realizado modificaciones en la capacitación: <strong>{capacitacion.titulo}</strong><br/><br/>" +
@@ -273,8 +285,7 @@ namespace scg_clinicasur.Controllers
                         IsBodyHtml = true,
                     };
 
-                    // Aquí puedes agregar correos específicos o dinámicos si tienes el correo del usuario responsable
-                    mailMessage.To.Add("daharoni90459@ufide.ac.cr");
+                    mailMessage.To.Add(colaborador.correo);
 
                     try
                     {
@@ -370,17 +381,24 @@ namespace scg_clinicasur.Controllers
                 _context.Capacitaciones.Remove(capacitacion);
                 await _context.SaveChangesAsync();
 
-                // Notificación por correo (opcional)
+                // Obtener nombres y correos de asistente médico o asistente de limpieza
+                var colaborador = await _context.Usuarios
+                    .Where(u => u.id_usuario == capacitacion.id_usuario)
+                    .Select(u => new { u.id_usuario, NombreCompleto = u.nombre + " " + u.apellido, u.correo })
+                    .FirstOrDefaultAsync();
+
+                // Configuración del cliente SMTP
                 var smtpClient = new SmtpClient("smtp.outlook.com")
                 {
                     Port = 587,
-                    Credentials = new NetworkCredential("daharoni90459@ufide.ac.cr", "###"), // Cambiar ###
+                    Credentials = new NetworkCredential("jrojas30463@ufide.ac.cr", "QsEfT0809*"), // Cambiar ### por la contraseña real
                     EnableSsl = true,
                 };
 
+                // Crear el mensaje de correo
                 var mailMessage = new MailMessage
                 {
-                    From = new MailAddress("daharoni90459@ufide.ac.cr"),
+                    From = new MailAddress("jrojas30463@ufide.ac.cr"),
                     Subject = $"Capacitación Eliminada: {capacitacion.titulo}",
                     Body = $"Estimado usuario,<br/><br/>" +
                            $"Se ha eliminado la capacitación: <strong>{capacitacion.titulo}</strong>.<br/><br/>" +
@@ -388,7 +406,7 @@ namespace scg_clinicasur.Controllers
                     IsBodyHtml = true,
                 };
 
-                mailMessage.To.Add("daharoni90459@ufide.ac.cr");
+                mailMessage.To.Add(colaborador.correo);
 
                 try
                 {
@@ -489,7 +507,7 @@ namespace scg_clinicasur.Controllers
                     // Guardar el archivo si se proporciona
                     if (archivo != null)
                     {
-                        var carpetaDestino = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "archivos");
+                        var carpetaDestino = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "recursos");
                         if (!Directory.Exists(carpetaDestino))
                         {
                             Directory.CreateDirectory(carpetaDestino);
@@ -594,7 +612,7 @@ namespace scg_clinicasur.Controllers
                     // Actualizar archivo si se proporciona
                     if (archivo != null)
                     {
-                        var carpetaDestino = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "archivos");
+                        var carpetaDestino = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "recursos");
                         if (!Directory.Exists(carpetaDestino))
                         {
                             Directory.CreateDirectory(carpetaDestino);
@@ -608,7 +626,7 @@ namespace scg_clinicasur.Controllers
                             await archivo.CopyToAsync(stream);
                         }
 
-                        recurso.archivo = Path.Combine("/archivos", nombreArchivo);
+                        recurso.archivo = Path.Combine("/recursos", nombreArchivo);
                         recurso.enlace = null; // Limpiar enlace si se carga un archivo
                     }
                     else if (!string.IsNullOrEmpty(enlace))
@@ -676,6 +694,15 @@ namespace scg_clinicasur.Controllers
                 var recurso = await _context.RecursosAprendizaje.FindAsync(id);
                 if (recurso != null)
                 {
+                    if (!string.IsNullOrEmpty(recurso.archivo))
+                    {
+                        var rutaArchivo = Path.Combine(Directory.GetCurrentDirectory(), "recursos", recurso.archivo.TrimStart('/'));
+                        if (System.IO.File.Exists(rutaArchivo))
+                        {
+                            System.IO.File.Delete(rutaArchivo);
+                        }
+                    }
+
                     _context.RecursosAprendizaje.Remove(recurso);
                     await _context.SaveChangesAsync();
                 }

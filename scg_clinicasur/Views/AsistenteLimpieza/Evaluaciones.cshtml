@@ -4,62 +4,61 @@
     ViewData["Title"] = "Mis Evaluaciones";
 }
 
-<div class="container mt-5">
-    <!-- Título principal -->
+<div class="container mt-4">
+    <!-- Encabezado -->
     <div class="text-center mb-4">
         <h1 class="display-5 fw-bold text-primary">@ViewData["Title"]</h1>
         <p class="lead text-muted">Revisa tus evaluaciones y sus detalles.</p>
     </div>
 
     <!-- Tabla de Evaluaciones -->
-    <div class="card shadow-sm p-3 mb-5 bg-body rounded">
-        <div class="card-body">
-            @if (Model.Any())
-            {
-                <table class="table table-bordered table-striped text-center align-middle">
-                    <thead class="table-dark">
+    <div class="table-responsive">
+        <table class="table table-striped table-hover align-middle shadow-sm">
+            <thead class="table-primary">
+                <tr>
+                    <th>Nombre</th>
+                    <th>Descripción</th>
+                    <th>Tiempo de Prueba</th>
+                    <th>Archivo</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model.Any())
+                {
+                    @foreach (var evaluacion in Model)
+                    {
                         <tr>
-                            <th>Nombre</th>
-                            <th>Descripción</th>
-                            <th>Tiempo de Prueba</th>
-                            <th>Archivo</th>
-                            <th>Acciones</th>
+                            <td>@evaluacion.nombre</td>
+                            <td>@evaluacion.descripcion</td>
+                            <td>@evaluacion.tiempo_prueba minutos</td>
+                            <td>
+                                @if (!string.IsNullOrEmpty(evaluacion.archivo))
+                                {
+                                    <a href="@Url.Content(evaluacion.archivo)" target="_blank" class="btn btn-sm btn-outline-success">
+                                        <i class="bi bi-file-earmark"></i> Ver Archivo
+                                    </a>
+                                }
+                                else
+                                {
+                                    <span class="text-muted">No disponible</span>
+                                }
+                            </td>
                         </tr>
-                    </thead>
-                    <tbody>
-                        @foreach (var evaluacion in Model)
-                        {
-                            <tr>
-                                <td>@evaluacion.nombre</td>
-                                <td>@evaluacion.descripcion</td>
-                                <td>@evaluacion.tiempo_prueba minutos</td>
-                                <td>
-                                    <a href="@Url.Action("Detalles", "Evaluaciones", new { id = evaluacion.id_evaluacion })"
-                                       class="btn btn-info btn-sm">
-                                        <i class="bi bi-info-circle"></i> Detalles
-                                    </a>
-                                    <a href="@Url.Action("Iniciar", "Evaluaciones", new { id = evaluacion.id_evaluacion })"
-                                       class="btn btn-primary btn-sm">
-                                        <i class="bi bi-play-circle"></i> Iniciar
-                                    </a>
-                                </td>
-                            </tr>
-                        }
-                    </tbody>
-                </table>
-            }
-            else
-            {
-                <div class="alert alert-warning text-center" role="alert">
-                    <i class="bi bi-exclamation-triangle-fill"></i> No tienes evaluaciones asignadas en este momento.
-                </div>
-            }
-        </div>
+                    }
+                }
+                else
+                {
+                    <div class="alert alert-warning text-center" role="alert">
+                        <i class="bi bi-exclamation-triangle-fill"></i> No tienes evaluaciones asignadas en este momento.
+                    </div>
+                }
+            </tbody>
+        </table>
     </div>
 
     <!-- Botón para regresar -->
-    <div class="text-center">
-        <a href="@Url.Action("Index", "Home")" class="btn btn-secondary">
+    <div class="text-center mt-4">
+        <a href="@Url.Action("Index", "AsistenteLimpieza")" class="btn btn-secondary">
             <i class="bi bi-arrow-left-circle"></i> Volver
         </a>
     </div>

@@ -111,9 +111,29 @@
     </div>
 
     <!-- Botón Volver -->
-    <div class="text-center mt-4">
-        <a asp-action="Index" class="btn btn-secondary">
-            <i class="bi bi-arrow-left-circle"></i> Volver a Capacitaciones
-        </a>
-    </div>
+    @if (userRole == "administrador")
+    {
+        <div class="text-center mt-4">
+            <a asp-action="Index" class="btn btn-secondary">
+                <i class="bi bi-arrow-left-circle"></i> Volver a Capacitaciones
+            </a>
+        </div>
+    }
+    @if (userRole == "asistente_limpieza")
+    {
+        <div class="text-center mt-4">
+            <a href="@Url.Action("Capacitaciones", "AsistenteLimpieza")" class="btn btn-secondary">
+                <i class="bi bi-arrow-left-circle"></i> Volver a Capacitaciones
+            </a>
+        </div>
+    }
+    @if (userRole == "asistente_medico")
+    {
+        <div class="text-center mt-4">
+            <a href="@Url.Action("Capacitaciones", "AsistentMedico")" class="btn btn-secondary">
+                <i class="bi bi-arrow-left-circle"></i> Volver a Capacitaciones
+            </a>
+        </div>
+    }
+    
 </div>

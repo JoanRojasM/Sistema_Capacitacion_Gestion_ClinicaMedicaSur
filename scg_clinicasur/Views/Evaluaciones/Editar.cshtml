@@ -6,8 +6,10 @@
 
 <h1>Editar Evaluación</h1>
 
-<form asp-action="Editar" method="post">
+<form asp-action="Editar" method="post" enctype="multipart/form-data">
     @Html.AntiForgeryToken()
+
+    <input type="hidden" asp-for="id_evaluacion" />
 
     <div class="form-group">
         <label asp-for="nombre" class="control-label"></label>
@@ -40,11 +42,28 @@
     </div>
 
     <div class="form-group">
+        <<label asp-for="archivo" class="form-label fw-bold">Archivo (Opcional)</label>
+        <input asp-for="archivo" type="file" class="form-control" />
+        <span asp-validation-for="archivo" class="text-danger"></span>
+        @if (!string.IsNullOrEmpty(Model.archivo))
+        {
+            <p class="mt-2">
+                <strong>Archivo actual:</strong>
+                <a href="@Model.archivo" target="_blank" class="text-primary fw-bold">
+                    <i class="bi bi-file-earmark"></i> Ver archivo
+                </a>
+            </p>
+        }
+    </div>
+
+    <div class="form-group">
         <button type="submit" class="btn btn-primary">Guardar Cambios</button>
         <a href="@Url.Action("Index")" class="btn btn-secondary">Cancelar</a>
     </div>
 </form>
 
 @section Scripts {
-    @{ await Html.RenderPartialAsync("_ValidationScriptsPartial"); }
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
 }
