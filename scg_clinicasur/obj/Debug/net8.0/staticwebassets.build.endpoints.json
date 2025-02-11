@@ -3,6 +3,88 @@
   "ManifestType": "Build",
   "Endpoints": [
     {
+      "Route": "archivos/AN701_HistoriaEmprendimiento_G8_MN1.25guzhju3p.pdf",
+      "AssetFile": "archivos/AN701_HistoriaEmprendimiento_G8_MN1.pdf",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=31536000, immutable"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "1532461"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "application/pdf"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"NkRc8yLDzTFnkF6oOvHZkCgA/3xFYKLrrI3Avk6tgy4=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Thu, 06 Feb 2025 21:31:35 GMT"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "fingerprint",
+          "Value": "25guzhju3p"
+        },
+        {
+          "Name": "integrity",
+          "Value": "sha256-NkRc8yLDzTFnkF6oOvHZkCgA/3xFYKLrrI3Avk6tgy4="
+        },
+        {
+          "Name": "label",
+          "Value": "archivos/AN701_HistoriaEmprendimiento_G8_MN1.pdf"
+        }
+      ]
+    },
+    {
+      "Route": "archivos/AN701_HistoriaEmprendimiento_G8_MN1.pdf",
+      "AssetFile": "archivos/AN701_HistoriaEmprendimiento_G8_MN1.pdf",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "no-cache"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "1532461"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "application/pdf"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"NkRc8yLDzTFnkF6oOvHZkCgA/3xFYKLrrI3Avk6tgy4=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Thu, 06 Feb 2025 21:31:35 GMT"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "integrity",
+          "Value": "sha256-NkRc8yLDzTFnkF6oOvHZkCgA/3xFYKLrrI3Avk6tgy4="
+        }
+      ]
+    },
+    {
       "Route": "archivos/Caso Practico 2 G6 2024.8fa0nb72mf.pdf",
       "AssetFile": "archivos/Caso Practico 2 G6 2024.pdf",
       "Selectors": [],
@@ -5083,6 +5165,170 @@
         {
           "Name": "integrity",
           "Value": "sha256-vBBxfL1BUAyoajKHLbtpaotg4xjGRQLU9of6VzRebm0="
+        }
+      ]
+    },
+    {
+      "Route": "uploads/AN701_HistoriaEmprendimiento_G8_MN.oki0nnsowm.pdf",
+      "AssetFile": "uploads/AN701_HistoriaEmprendimiento_G8_MN.pdf",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=31536000, immutable"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "1532741"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "application/pdf"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"+K4ZqYEzECWCsu7rg04vvArQiQLH4MSCDM3gJYugnh4=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Thu, 06 Feb 2025 21:42:16 GMT"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "fingerprint",
+          "Value": "oki0nnsowm"
+        },
+        {
+          "Name": "integrity",
+          "Value": "sha256-+K4ZqYEzECWCsu7rg04vvArQiQLH4MSCDM3gJYugnh4="
+        },
+        {
+          "Name": "label",
+          "Value": "uploads/AN701_HistoriaEmprendimiento_G8_MN.pdf"
+        }
+      ]
+    },
+    {
+      "Route": "uploads/AN701_HistoriaEmprendimiento_G8_MN.pdf",
+      "AssetFile": "uploads/AN701_HistoriaEmprendimiento_G8_MN.pdf",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "no-cache"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "1532741"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "application/pdf"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"+K4ZqYEzECWCsu7rg04vvArQiQLH4MSCDM3gJYugnh4=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Thu, 06 Feb 2025 21:42:16 GMT"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "integrity",
+          "Value": "sha256-+K4ZqYEzECWCsu7rg04vvArQiQLH4MSCDM3gJYugnh4="
+        }
+      ]
+    },
+    {
+      "Route": "uploads/AN701_HistoriaEmprendimiento_G8_MN1.25guzhju3p.pdf",
+      "AssetFile": "uploads/AN701_HistoriaEmprendimiento_G8_MN1.pdf",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=31536000, immutable"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "1532461"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "application/pdf"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"NkRc8yLDzTFnkF6oOvHZkCgA/3xFYKLrrI3Avk6tgy4=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Thu, 06 Feb 2025 21:47:58 GMT"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "fingerprint",
+          "Value": "25guzhju3p"
+        },
+        {
+          "Name": "integrity",
+          "Value": "sha256-NkRc8yLDzTFnkF6oOvHZkCgA/3xFYKLrrI3Avk6tgy4="
+        },
+        {
+          "Name": "label",
+          "Value": "uploads/AN701_HistoriaEmprendimiento_G8_MN1.pdf"
+        }
+      ]
+    },
+    {
+      "Route": "uploads/AN701_HistoriaEmprendimiento_G8_MN1.pdf",
+      "AssetFile": "uploads/AN701_HistoriaEmprendimiento_G8_MN1.pdf",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "no-cache"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "1532461"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "application/pdf"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"NkRc8yLDzTFnkF6oOvHZkCgA/3xFYKLrrI3Avk6tgy4=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Thu, 06 Feb 2025 21:47:58 GMT"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "integrity",
+          "Value": "sha256-NkRc8yLDzTFnkF6oOvHZkCgA/3xFYKLrrI3Avk6tgy4="
         }
       ]
     },

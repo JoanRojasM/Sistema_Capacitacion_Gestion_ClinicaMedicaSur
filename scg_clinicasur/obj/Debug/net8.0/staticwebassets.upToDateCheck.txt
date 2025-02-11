@@ -1,3 +1,4 @@
+wwwroot\archivos\AN701_HistoriaEmprendimiento_G8_MN1.pdf
 wwwroot\archivos\Caso Practico 2 G6 2024.pdf
 wwwroot\css\site.css
 wwwroot\favicon.ico
@@ -59,5 +60,7 @@ wwwroot\lib\jquery-validation\LICENSE.md
 wwwroot\lib\jquery-validation-unobtrusive\jquery.validate.unobtrusive.js
 wwwroot\lib\jquery-validation-unobtrusive\jquery.validate.unobtrusive.min.js
 wwwroot\lib\jquery-validation-unobtrusive\LICENSE.txt
+wwwroot\uploads\AN701_HistoriaEmprendimiento_G8_MN.pdf
+wwwroot\uploads\AN701_HistoriaEmprendimiento_G8_MN1.pdf
 wwwroot\uploads\descarga.png
 wwwroot\uploads\images.png

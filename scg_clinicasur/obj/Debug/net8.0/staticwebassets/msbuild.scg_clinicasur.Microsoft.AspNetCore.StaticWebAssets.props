@@ -1,5 +1,23 @@
 ﻿<Project>
   <ItemGroup>
+    <StaticWebAsset Include="$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\archivos\AN701_HistoriaEmprendimiento_G8_MN1.pdf'))">
+      <SourceType>Package</SourceType>
+      <SourceId>scg_clinicasur</SourceId>
+      <ContentRoot>$(MSBuildThisFileDirectory)..\staticwebassets\</ContentRoot>
+      <BasePath>_content/scg_clinicasur</BasePath>
+      <RelativePath>archivos/AN701_HistoriaEmprendimiento_G8_MN1.pdf</RelativePath>
+      <AssetKind>All</AssetKind>
+      <AssetMode>All</AssetMode>
+      <AssetRole>Primary</AssetRole>
+      <RelatedAsset></RelatedAsset>
+      <AssetTraitName></AssetTraitName>
+      <AssetTraitValue></AssetTraitValue>
+      <Fingerprint>25guzhju3p</Fingerprint>
+      <Integrity>NkRc8yLDzTFnkF6oOvHZkCgA/3xFYKLrrI3Avk6tgy4=</Integrity>
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+      <OriginalItemSpec>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\archivos\AN701_HistoriaEmprendimiento_G8_MN1.pdf'))</OriginalItemSpec>
+    </StaticWebAsset>
     <StaticWebAsset Include="$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\archivos\Caso Practico 2 G6 2024.pdf'))">
       <SourceType>Package</SourceType>
       <SourceId>scg_clinicasur</SourceId>
@@ -1115,6 +1133,42 @@
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
       <OriginalItemSpec>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\scg_clinicasur.0xezdzykzl.bundle.scp.css'))</OriginalItemSpec>
+    </StaticWebAsset>
+    <StaticWebAsset Include="$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\uploads\AN701_HistoriaEmprendimiento_G8_MN.pdf'))">
+      <SourceType>Package</SourceType>
+      <SourceId>scg_clinicasur</SourceId>
+      <ContentRoot>$(MSBuildThisFileDirectory)..\staticwebassets\</ContentRoot>
+      <BasePath>_content/scg_clinicasur</BasePath>
+      <RelativePath>uploads/AN701_HistoriaEmprendimiento_G8_MN.pdf</RelativePath>
+      <AssetKind>All</AssetKind>
+      <AssetMode>All</AssetMode>
+      <AssetRole>Primary</AssetRole>
+      <RelatedAsset></RelatedAsset>
+      <AssetTraitName></AssetTraitName>
+      <AssetTraitValue></AssetTraitValue>
+      <Fingerprint>oki0nnsowm</Fingerprint>
+      <Integrity>+K4ZqYEzECWCsu7rg04vvArQiQLH4MSCDM3gJYugnh4=</Integrity>
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+      <OriginalItemSpec>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\uploads\AN701_HistoriaEmprendimiento_G8_MN.pdf'))</OriginalItemSpec>
+    </StaticWebAsset>
+    <StaticWebAsset Include="$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\uploads\AN701_HistoriaEmprendimiento_G8_MN1.pdf'))">
+      <SourceType>Package</SourceType>
+      <SourceId>scg_clinicasur</SourceId>
+      <ContentRoot>$(MSBuildThisFileDirectory)..\staticwebassets\</ContentRoot>
+      <BasePath>_content/scg_clinicasur</BasePath>
+      <RelativePath>uploads/AN701_HistoriaEmprendimiento_G8_MN1.pdf</RelativePath>
+      <AssetKind>All</AssetKind>
+      <AssetMode>All</AssetMode>
+      <AssetRole>Primary</AssetRole>
+      <RelatedAsset></RelatedAsset>
+      <AssetTraitName></AssetTraitName>
+      <AssetTraitValue></AssetTraitValue>
+      <Fingerprint>25guzhju3p</Fingerprint>
+      <Integrity>NkRc8yLDzTFnkF6oOvHZkCgA/3xFYKLrrI3Avk6tgy4=</Integrity>
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+      <OriginalItemSpec>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\uploads\AN701_HistoriaEmprendimiento_G8_MN1.pdf'))</OriginalItemSpec>
     </StaticWebAsset>
     <StaticWebAsset Include="$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\uploads\descarga.png'))">
       <SourceType>Package</SourceType>

@@ -57,73 +57,93 @@ namespace scg_clinicasur.Controllers
         {
             if (ModelState.IsValid)
             {
-
-                string uploadsFolder = Path.Combine(_webHost.WebRootPath, "uploads");
-                if (!Directory.Exists(uploadsFolder))
-                {
-                    Directory.CreateDirectory(uploadsFolder);
-                }
-                if (file != null && file.Length > 0)
-                {
-                    string fileName = Path.GetFileName(file.FileName);
-                    string fileSavePath = Path.Combine(uploadsFolder, fileName);
-
-
-                    using (FileStream stream = new FileStream(fileSavePath, FileMode.Create))
-                    {
-                        await file.CopyToAsync(stream);
-                    }
-
-                    ViewBag.Message = fileName + "bien subido";
-                }
-
-                evaluacion.fecha_creacion = DateTime.Now;
-                _context.Add(evaluacion);
-                await _context.SaveChangesAsync();
-
-
-                // Enviar correo
-                var smtpClient = new SmtpClient("smtp.outlook.com")
-                {
-                    Port = 587,
-                    Credentials = new NetworkCredential("daharoni90459@ufide.ac.cr", "###"), // Cambiar ### por contraseña
-                    EnableSsl = true,
-                };
-
-                var mailMessage = new MailMessage
-                {
-                    From = new MailAddress("daharoni90459@ufide.ac.cr"),
-                    Subject = $"Nueva Evaluación Disponible: {evaluacion.nombre}",
-                    Body = $"Estimado usuario,<br/><br/>" +
-                           $"Se te ha asignado una nueva evaluación en el sistema.<br/><br/>" +
-                           $"Detalles de la capacitación:<br/>" +
-                           $"<strong>Título:</strong> {evaluacion.nombre}<br/>" +
-                           $"<strong>Descripción:</strong> {evaluacion.descripcion}<br/>" +
-                           $"<strong>Duración:</strong> {evaluacion.tiempo_prueba}<br/>" +
-                           $"<strong>Fecha de Creación:</strong> {evaluacion.fecha_creacion.ToShortDateString()}<br/><br/>" +
-                           $"Por favor, ingresa al sistema para más detalles.<br/><br/>" +
-                           $"Gracias.",
-                    IsBodyHtml = true,
-                };
-                mailMessage.To.Add("daharoni90459@ufide.ac.cr");
-
                 try
                 {
-                    await smtpClient.SendMailAsync(mailMessage);
-                    ViewBag.Message = "Correo de notificación enviado correctamente.";
+                    // 📤 Subida de archivos
+                    if (file != null && file.Length > 0)
+                    {
+                        string uploadsFolder = Path.Combine(_webHost.WebRootPath, "uploads");
+                        if (!Directory.Exists(uploadsFolder))
+                        {
+                            Directory.CreateDirectory(uploadsFolder);
+                        }
+
+                        string fileName = Path.GetFileName(file.FileName);
+                        string fileSavePath = Path.Combine(uploadsFolder, fileName);
+
+                        using (FileStream stream = new FileStream(fileSavePath, FileMode.Create))
+                        {
+                            await file.CopyToAsync(stream);
+                        }
+
+                        TempData["SuccessMessage"] = $"El archivo '{fileName}' se ha subido correctamente.";
+                    }
+
+                    // 📋 Guardar la evaluación en la base de datos
+                    evaluacion.fecha_creacion = DateTime.Now;
+                    _context.Add(evaluacion);
+                    await _context.SaveChangesAsync();
+
+                    TempData["SuccessMessage"] = "La evaluación se ha creado correctamente.";
+
+                    // 🔍 Obtener el correo del usuario asignado
+                    var usuario = await _context.Usuarios.FindAsync(evaluacion.id_usuario);
+                    if (usuario == null || string.IsNullOrEmpty(usuario.correo))
+                    {
+                        TempData["WarningMessage"] = "Evaluación creada, pero no se pudo enviar el correo porque el usuario no tiene un correo registrado.";
+                        return RedirectToAction(nameof(Index));
+                    }
+
+                    // ✉️ Enviar correo de notificación
+                    var smtpClient = new SmtpClient("smtp.outlook.com")
+                    {
+                        Port = 587,
+                        Credentials = new NetworkCredential("jrojas30463@ufide.ac.cr", "QsEfT0809*"), // Cambiar la contraseña real
+                        EnableSsl = true,
+                    };
+
+                    var mailMessage = new MailMessage
+                    {
+                        From = new MailAddress("jrojas30463@ufide.ac.cr"),
+                        Subject = $"Nueva Evaluación Asignada: {evaluacion.nombre}",
+                        Body = $"Estimado/a {usuario.nombre} {usuario.apellido},<br/><br/>" +
+                               $"Se te ha asignado una nueva evaluación en el sistema.<br/><br/>" +
+                               $"<strong>Título:</strong> {evaluacion.nombre}<br/>" +
+                               $"<strong>Descripción:</strong> {evaluacion.descripcion}<br/>" +
+                               $"<strong>Duración de la prueba:</strong> {evaluacion.tiempo_prueba} minutos<br/>" +
+                               $"<strong>Fecha de creación:</strong> {evaluacion.fecha_creacion:yyyy-MM-dd}<br/><br/>" +
+                               $"Por favor, ingresa al sistema para más detalles.<br/><br/>" +
+                               $"Gracias.",
+                        IsBodyHtml = true,
+                    };
+
+                    mailMessage.To.Add(usuario.correo);
+
+                    try
+                    {
+                        await smtpClient.SendMailAsync(mailMessage);
+                        TempData["SuccessMessage"] += " El correo de notificación se envió correctamente.";
+                    }
+                    catch (Exception ex)
+                    {
+                        TempData["WarningMessage"] = $"La evaluación se creó, pero hubo un problema al enviar el correo: {ex.Message}";
+                    }
+
+                    return RedirectToAction(nameof(Index));
                 }
                 catch (Exception ex)
                 {
-                    ViewBag.Message = $"Error al enviar el correo: {ex.Message}";
+                    TempData["ErrorMessage"] = $"Ocurrió un error al guardar la evaluación: {ex.Message}";
+                    return RedirectToAction(nameof(Index));
                 }
-
-                return RedirectToAction(nameof(Index));
             }
 
+            // En caso de error en la validación del modelo
             ViewData["Capacitaciones"] = _context.Capacitaciones.ToList();
             ViewData["Usuarios"] = _context.Usuarios.ToList();
             return View(evaluacion);
         }
+
         [HttpGet]
         public async Task<IActionResult> Eliminar(int? id)
         {

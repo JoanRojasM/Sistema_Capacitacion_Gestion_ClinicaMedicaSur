@@ -4,47 +4,83 @@
     ViewData["Title"] = "Editar Evaluación";
 }
 
-<h1>Editar Evaluación</h1>
-
-<form asp-action="Editar" method="post">
-    @Html.AntiForgeryToken()
-
-    <div class="form-group">
-        <label asp-for="nombre" class="control-label"></label>
-        <input asp-for="nombre" class="form-control" />
-        <span asp-validation-for="nombre" class="text-danger"></span>
+<div class="container mt-5">
+    <!-- Encabezado -->
+    <div class="text-center mb-4">
+        <h1 class="display-5 fw-bold text-warning">
+            <i class="bi bi-pencil-square"></i> @ViewData["Title"]
+        </h1>
+        <p class="lead text-muted">Modifica la información de la evaluación seleccionada.</p>
     </div>
 
-    <div class="form-group">
-        <label asp-for="descripcion" class="control-label"></label>
-        <textarea asp-for="descripcion" class="form-control"></textarea>
-        <span asp-validation-for="descripcion" class="text-danger"></span>
-    </div>
+    <!-- Formulario -->
+    <div class="card shadow-lg border-0">
+        <div class="card-body p-4">
+            <form asp-action="Editar" method="post" enctype="multipart/form-data">
+                @Html.AntiForgeryToken()
+                <input type="hidden" asp-for="id_evaluacion" />
 
-    <div class="form-group">
-        <label asp-for="tiempo_prueba" class="control-label"></label>
-        <input asp-for="tiempo_prueba" class="form-control" />
-        <span asp-validation-for="tiempo_prueba" class="text-danger"></span>
-    </div>
+                <div class="row g-4">
+                    <!-- Nombre de la Evaluación -->
+                    <div class="col-md-12">
+                        <label for="nombre" class="form-label fw-bold">Nombre de la Evaluación</label>
+                        <input asp-for="nombre" id="nombre" class="form-control" placeholder="Ej. Evaluación de conocimientos" required />
+                        <span asp-validation-for="nombre" class="text-danger"></span>
+                    </div>
 
-    <div class="form-group">
-        <label asp-for="id_usuario" class="control-label"></label>
-        <select asp-for="id_usuario" class="form-control" asp-items="@(ViewData["Usuarios"] as SelectList)"></select>
-        <span asp-validation-for="id_usuario" class="text-danger"></span>
-    </div>
+                    <!-- Descripción -->
+                    <div class="col-md-12">
+                        <label for="descripcion" class="form-label fw-bold">Descripción</label>
+                        <textarea asp-for="descripcion" id="descripcion" class="form-control" placeholder="Breve descripción de la evaluación" required></textarea>
+                        <span asp-validation-for="descripcion" class="text-danger"></span>
+                    </div>
 
-    <div class="form-group">
-        <label asp-for="id_capacitacion" class="control-label"></label>
-        <select asp-for="id_capacitacion" class="form-control" asp-items="@(ViewData["Capacitaciones"] as SelectList)"></select>
-        <span asp-validation-for="id_capacitacion" class="text-danger"></span>
-    </div>
+                    <!-- Tiempo de Prueba -->
+                    <div class="col-md-6">
+                        <label for="tiempo_prueba" class="form-label fw-bold">Tiempo de Prueba</label>
+                        <input asp-for="tiempo_prueba" id="tiempo_prueba" type="text" class="form-control" placeholder="Ej. 60 minutos" required />
+                        <span asp-validation-for="tiempo_prueba" class="text-danger"></span>
+                    </div>
 
-    <div class="form-group">
-        <button type="submit" class="btn btn-primary">Guardar Cambios</button>
-        <a href="@Url.Action("Index")" class="btn btn-secondary">Cancelar</a>
+                    <!-- Usuario Asignado -->
+                    <div class="col-md-6">
+                        <label for="id_usuario" class="form-label fw-bold">Usuario Asignado</label>
+                        <select asp-for="id_usuario" id="id_usuario" class="form-select" asp-items="@(new SelectList(ViewData["Usuarios"] as IEnumerable<dynamic>, "id_usuario", "nombre", Model.id_usuario))" required>
+                            <option value="">Seleccionar Usuario</option>
+                        </select>
+                        <span asp-validation-for="id_usuario" class="text-danger"></span>
+                    </div>
+
+                    <!-- Capacitación Relacionada -->
+                    <div class="col-md-12">
+                        <label for="id_capacitacion" class="form-label fw-bold">Capacitación Relacionada</label>
+                        <select asp-for="id_capacitacion" id="id_capacitacion" class="form-select" asp-items="@(new SelectList(ViewData["Capacitaciones"] as IEnumerable<dynamic>, "id_capacitacion", "titulo", Model.id_capacitacion))" required>
+                            <option value="">Seleccionar Capacitación</option>
+                        </select>
+                        <span asp-validation-for="id_capacitacion" class="text-danger"></span>
+                    </div>
+
+                    <!-- Subir Archivo (opcional) -->
+                    <div class="col-md-12">
+                        <label for="file" class="form-label fw-bold">Archivo Adjunto (opcional)</label>
+                        <input type="file" name="file" id="file" class="form-control" />
+                    </div>
+                </div>
+
+                <!-- Botones de Acción -->
+                <div class="d-flex justify-content-center gap-3 mt-4">
+                    <button type="submit" class="btn btn-warning btn-lg text-white">
+                        <i class="bi bi-save"></i> Guardar Cambios
+                    </button>
+                    <a asp-action="Index" class="btn btn-secondary btn-lg">
+                        <i class="bi bi-arrow-left"></i> Cancelar
+                    </a>
+                </div>
+            </form>
+        </div>
     </div>
-</form>
+</div>
 
 @section Scripts {
-    @{ await Html.RenderPartialAsync("_ValidationScriptsPartial"); }
+    <partial name="_ValidationScriptsPartial" />
 }

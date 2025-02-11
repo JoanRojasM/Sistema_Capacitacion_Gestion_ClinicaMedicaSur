@@ -279,10 +279,10 @@ C:\Users\Usuario\OneDrive\Documentos\GitHub\Sistema_Capacitacion_Gestion_Clinica
 C:\Users\Usuario\OneDrive\Documentos\GitHub\Sistema_Capacitacion_Gestion_ClinicaMedicaSur\scg_clinicasur\obj\Debug\net8.0\staticwebassets\msbuild.buildMultiTargeting.scg_clinicasur.props
 C:\Users\Usuario\OneDrive\Documentos\GitHub\Sistema_Capacitacion_Gestion_ClinicaMedicaSur\scg_clinicasur\obj\Debug\net8.0\staticwebassets\msbuild.buildTransitive.scg_clinicasur.props
 C:\Users\Usuario\OneDrive\Documentos\GitHub\Sistema_Capacitacion_Gestion_ClinicaMedicaSur\scg_clinicasur\obj\Debug\net8.0\staticwebassets.pack.json
-C:\Users\Usuario\OneDrive\Documentos\GitHub\Sistema_Capacitacion_Gestion_ClinicaMedicaSur\scg_clinicasur\obj\Debug\net8.0\staticwebassets.upToDateCheck.txt
 C:\Users\Usuario\OneDrive\Documentos\GitHub\Sistema_Capacitacion_Gestion_ClinicaMedicaSur\scg_clinicasur\obj\Debug\net8.0\scg_clin.0DBB7C3F.Up2Date
 C:\Users\Usuario\OneDrive\Documentos\GitHub\Sistema_Capacitacion_Gestion_ClinicaMedicaSur\scg_clinicasur\obj\Debug\net8.0\scg_clinicasur.dll
 C:\Users\Usuario\OneDrive\Documentos\GitHub\Sistema_Capacitacion_Gestion_ClinicaMedicaSur\scg_clinicasur\obj\Debug\net8.0\refint\scg_clinicasur.dll
 C:\Users\Usuario\OneDrive\Documentos\GitHub\Sistema_Capacitacion_Gestion_ClinicaMedicaSur\scg_clinicasur\obj\Debug\net8.0\scg_clinicasur.pdb
 C:\Users\Usuario\OneDrive\Documentos\GitHub\Sistema_Capacitacion_Gestion_ClinicaMedicaSur\scg_clinicasur\obj\Debug\net8.0\scg_clinicasur.genruntimeconfig.cache
 C:\Users\Usuario\OneDrive\Documentos\GitHub\Sistema_Capacitacion_Gestion_ClinicaMedicaSur\scg_clinicasur\obj\Debug\net8.0\ref\scg_clinicasur.dll
+C:\Users\Usuario\OneDrive\Documentos\GitHub\Sistema_Capacitacion_Gestion_ClinicaMedicaSur\scg_clinicasur\obj\Debug\net8.0\staticwebassets.upToDateCheck.txt

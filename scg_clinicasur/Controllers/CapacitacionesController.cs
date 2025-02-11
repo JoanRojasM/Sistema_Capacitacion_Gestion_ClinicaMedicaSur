@@ -97,11 +97,11 @@ namespace scg_clinicasur.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Crear(Capacitacion capacitacion)
         {
-            // Verificar si el rol del usuario es administrador
             var userRole = HttpContext.Session.GetString("UserRole");
             if (userRole != "administrador")
             {
-                return RedirectToAction("AccessDenied", "Home"); // Redirigir a una página de acceso denegado
+                TempData["ErrorMessage"] = "Acceso denegado. Solo los administradores pueden realizar esta acción.";
+                return RedirectToAction("AccessDenied", "Home");
             }
 
             if (ModelState.IsValid)
@@ -121,22 +121,31 @@ namespace scg_clinicasur.Controllers
                     _context.Add(capacitacion);
                     await _context.SaveChangesAsync();
 
+                    TempData["SuccessMessage"] = "La capacitación se ha creado correctamente.";
+
+                    // 🔍 Obtener el correo del usuario asignado
+                    var usuario = await _context.Usuarios.FindAsync(capacitacion.id_usuario);
+                    if (usuario == null || string.IsNullOrEmpty(usuario.correo))
+                    {
+                        TempData["WarningMessage"] = "Capacitación creada, pero no se pudo enviar el correo porque el usuario no tiene un correo registrado.";
+                        return RedirectToAction(nameof(Index));
+                    }
+
                     // Configuración del cliente SMTP
                     var smtpClient = new SmtpClient("smtp.outlook.com")
                     {
                         Port = 587,
-                        Credentials = new NetworkCredential("daharoni90459@ufide.ac.cr", "###"), // Cambiar ### por la contraseña real
+                        Credentials = new NetworkCredential("jrojas30463@ufide.ac.cr", "QsEfT0809*"), // Cambiar la contraseña real
                         EnableSsl = true,
                     };
 
                     // Crear el mensaje de correo
                     var mailMessage = new MailMessage
                     {
-                        From = new MailAddress("daharoni90459@ufide.ac.cr"),
-                        Subject = $"Nueva Capacitación Disponible: {capacitacion.titulo}",
-                        Body = $"Estimado usuario,<br/><br/>" +
+                        From = new MailAddress("jrojas30463@ufide.ac.cr"),
+                        Subject = $"Nueva Capacitación Asignada: {capacitacion.titulo}",
+                        Body = $"Estimado/a {usuario.nombre} {usuario.apellido},<br/><br/>" +
                                $"Se te ha asignado una nueva capacitación en el sistema.<br/><br/>" +
-                               $"Detalles de la capacitación:<br/>" +
                                $"<strong>Título:</strong> {capacitacion.titulo}<br/>" +
                                $"<strong>Descripción:</strong> {capacitacion.descripcion}<br/>" +
                                $"<strong>Duración:</strong> {capacitacion.duracion}<br/>" +
@@ -146,40 +155,26 @@ namespace scg_clinicasur.Controllers
                         IsBodyHtml = true,
                     };
 
-                    mailMessage.To.Add("daharoni90459@ufide.ac.cr");
+                    mailMessage.To.Add(usuario.correo);
 
                     try
                     {
-                        // Intentar enviar el correo
                         await smtpClient.SendMailAsync(mailMessage);
-                        ViewBag.Message = "Correo de notificación enviado correctamente.";
+                        TempData["SuccessMessage"] += " El correo de notificación se envió correctamente.";
                     }
                     catch (Exception ex)
                     {
-                        ViewBag.Message = $"Error al enviar el correo: {ex.Message}";
+                        TempData["WarningMessage"] = $"La capacitación se creó, pero hubo un problema al enviar el correo: {ex.Message}";
                     }
 
                     return RedirectToAction(nameof(Index));
                 }
                 catch (Exception ex)
                 {
-                    ModelState.AddModelError("", $"Error al guardar la capacitación: {ex.Message}");
+                    TempData["ErrorMessage"] = $"Error al guardar la capacitación: {ex.Message}";
+                    return RedirectToAction(nameof(Index));
                 }
             }
-
-            // Recargar la lista de usuarios en caso de error
-            var usuarios = _context.Usuarios
-                                   .Include(u => u.roles)
-                                   .Where(u => u.id_rol == 1 || u.id_rol == 2)
-                                   .ToList();
-
-            var usuariosConRoles = usuarios.Select(u => new
-            {
-                id_usuario = u.id_usuario,
-                DisplayText = u.nombre + " (" + u.roles.nombre_rol + ")"
-            }).ToList();
-
-            ViewBag.Usuarios = new SelectList(usuariosConRoles, "id_usuario", "DisplayText");
 
             return View(capacitacion);
         }
@@ -228,16 +223,17 @@ namespace scg_clinicasur.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Editar(int id, Capacitacion capacitacion)
         {
-            // Verificar si el rol del usuario es administrador
             var userRole = HttpContext.Session.GetString("UserRole");
             if (userRole != "administrador")
             {
-                return RedirectToAction("AccessDenied", "Home"); // Redirigir a una página de acceso denegado
+                TempData["ErrorMessage"] = "Acceso denegado. Solo los administradores pueden realizar esta acción.";
+                return RedirectToAction("AccessDenied", "Home");
             }
 
             if (id != capacitacion.id_capacitacion)
             {
-                return NotFound();
+                TempData["ErrorMessage"] = "ID de capacitación no válido.";
+                return RedirectToAction("Index");
             }
 
             if (ModelState.IsValid)
@@ -253,50 +249,62 @@ namespace scg_clinicasur.Controllers
 
                     await _context.SaveChangesAsync();
 
-                    // Configuración del cliente SMTP para enviar correo
+                    TempData["SuccessMessage"] = "La capacitación se ha actualizado correctamente.";
+
+                    // 🔍 Obtener el correo del usuario asignado
+                    var usuario = await _context.Usuarios.FindAsync(capacitacion.id_usuario);
+                    if (usuario == null || string.IsNullOrEmpty(usuario.correo))
+                    {
+                        TempData["WarningMessage"] = "Capacitación actualizada, pero no se pudo enviar el correo porque el usuario no tiene un correo registrado.";
+                        return RedirectToAction(nameof(Index));
+                    }
+
+                    // Configuración del cliente SMTP
                     var smtpClient = new SmtpClient("smtp.outlook.com")
                     {
                         Port = 587,
-                        Credentials = new NetworkCredential("daharoni90459@ufide.ac.cr", "###"), // Cambiar ### por la contraseña real
+                        Credentials = new NetworkCredential("jrojas30463@ufide.ac.cr", "QsEfT0809*"), // Cambiar la contraseña real
                         EnableSsl = true,
                     };
 
                     // Crear el mensaje de correo
                     var mailMessage = new MailMessage
                     {
-                        From = new MailAddress("daharoni90459@ufide.ac.cr"),
+                        From = new MailAddress("jrojas30463@ufide.ac.cr"),
                         Subject = $"Capacitación Editada: {capacitacion.titulo}",
-                        Body = $"Estimado usuario,<br/><br/>" +
-                               $"Se han realizado modificaciones en la capacitación: <strong>{capacitacion.titulo}</strong><br/><br/>" +
+                        Body = $"Estimado/a {usuario.nombre} {usuario.apellido},<br/><br/>" +
+                               $"Se han realizado modificaciones en la capacitación: <strong>{capacitacion.titulo}</strong>.<br/><br/>" +
+                               $"<strong>Descripción:</strong> {capacitacion.descripcion}<br/>" +
+                               $"<strong>Duración:</strong> {capacitacion.duracion}<br/>" +
+                               $"<strong>Estado:</strong> {capacitacion.estado}<br/><br/>" +
                                $"Por favor, ingresa al sistema para revisar los detalles.<br/><br/>" +
                                $"Gracias.",
                         IsBodyHtml = true,
                     };
 
-                    // Aquí puedes agregar correos específicos o dinámicos si tienes el correo del usuario responsable
-                    mailMessage.To.Add("daharoni90459@ufide.ac.cr");
+                    mailMessage.To.Add(usuario.correo);
 
                     try
                     {
-                        // Intentar enviar el correo
                         await smtpClient.SendMailAsync(mailMessage);
-                        ViewBag.Message = "Correo de notificación enviado correctamente.";
+                        TempData["SuccessMessage"] += " El correo de notificación se envió correctamente.";
                     }
                     catch (Exception ex)
                     {
-                        ViewBag.Message = $"Error al enviar el correo: {ex.Message}";
+                        TempData["WarningMessage"] = $"La capacitación se actualizó, pero hubo un problema al enviar el correo: {ex.Message}";
                     }
 
-                    // Redirigir a la página principal de capacitaciones tras la actualización
-                    return RedirectToAction("Index", "Capacitaciones");
+                    return RedirectToAction(nameof(Index));
                 }
                 catch (DbUpdateException ex)
                 {
-                    ModelState.AddModelError("", $"Error de actualización: {ex.InnerException?.Message ?? ex.Message}");
+                    TempData["ErrorMessage"] = $"Error de actualización: {ex.InnerException?.Message ?? ex.Message}";
+                    return RedirectToAction(nameof(Index));
                 }
                 catch (Exception ex)
                 {
-                    ModelState.AddModelError("", $"Error inesperado: {ex.Message}");
+                    TempData["ErrorMessage"] = $"Error inesperado: {ex.Message}";
+                    return RedirectToAction(nameof(Index));
                 }
             }
 
@@ -324,16 +332,16 @@ namespace scg_clinicasur.Controllers
         [HttpGet]
         public async Task<IActionResult> Eliminar(int? id)
         {
-            // Verificar si el rol del usuario es administrador
             var userRole = HttpContext.Session.GetString("UserRole");
             if (userRole != "administrador")
             {
-                return RedirectToAction("AccessDenied", "Home"); // Redirigir a una página de acceso denegado
+                return RedirectToAction("AccessDenied", "Home");
             }
 
             if (id == null)
             {
-                return NotFound();
+                TempData["ErrorMessage"] = "ID de capacitación no proporcionado.";
+                return RedirectToAction(nameof(Index));
             }
 
             var capacitacion = await _context.Capacitaciones
@@ -342,7 +350,8 @@ namespace scg_clinicasur.Controllers
 
             if (capacitacion == null)
             {
-                return NotFound();
+                TempData["ErrorMessage"] = "Capacitación no encontrada.";
+                return RedirectToAction(nameof(Index));
             }
 
             return View(capacitacion);
@@ -352,17 +361,21 @@ namespace scg_clinicasur.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> EliminarConfirmado(int id)
         {
-            // Verificar si el rol del usuario es administrador
             var userRole = HttpContext.Session.GetString("UserRole");
             if (userRole != "administrador")
             {
+                TempData["ErrorMessage"] = "Acceso denegado. Solo los administradores pueden realizar esta acción.";
                 return RedirectToAction("AccessDenied", "Home");
             }
 
-            var capacitacion = await _context.Capacitaciones.FindAsync(id);
+            var capacitacion = await _context.Capacitaciones
+                                             .Include(c => c.Usuario) // Incluimos el usuario asociado
+                                             .FirstOrDefaultAsync(c => c.id_capacitacion == id);
+
             if (capacitacion == null)
             {
-                return NotFound();
+                TempData["ErrorMessage"] = "Capacitación no encontrada.";
+                return RedirectToAction(nameof(Index));
             }
 
             try
@@ -370,44 +383,60 @@ namespace scg_clinicasur.Controllers
                 _context.Capacitaciones.Remove(capacitacion);
                 await _context.SaveChangesAsync();
 
-                // Notificación por correo (opcional)
-                var smtpClient = new SmtpClient("smtp.outlook.com")
-                {
-                    Port = 587,
-                    Credentials = new NetworkCredential("daharoni90459@ufide.ac.cr", "###"), // Cambiar ###
-                    EnableSsl = true,
-                };
+                TempData["SuccessMessage"] = "La capacitación se ha eliminado correctamente.";
 
-                var mailMessage = new MailMessage
-                {
-                    From = new MailAddress("daharoni90459@ufide.ac.cr"),
-                    Subject = $"Capacitación Eliminada: {capacitacion.titulo}",
-                    Body = $"Estimado usuario,<br/><br/>" +
-                           $"Se ha eliminado la capacitación: <strong>{capacitacion.titulo}</strong>.<br/><br/>" +
-                           $"Gracias por su atención.",
-                    IsBodyHtml = true,
-                };
+                // Obtener el correo del usuario (asistente médico o de limpieza)
+                var usuario = await _context.Usuarios
+                                            .Where(u => u.id_usuario == capacitacion.id_usuario &&
+                                                       (u.roles.nombre_rol == "asistente_medico" || u.roles.nombre_rol == "asistente_limpieza"))
+                                            .Select(u => new { u.correo, NombreCompleto = u.nombre + " " + u.apellido })
+                                            .FirstOrDefaultAsync();
 
-                mailMessage.To.Add("daharoni90459@ufide.ac.cr");
-
-                try
+                if (usuario != null)
                 {
-                    await smtpClient.SendMailAsync(mailMessage);
+                    // Envío de notificación por correo
+                    try
+                    {
+                        var smtpClient = new SmtpClient("smtp.outlook.com")
+                        {
+                            Port = 587,
+                            Credentials = new NetworkCredential("jrojas30463@ufide.ac.cr", "QsEfT0809*"),
+                            EnableSsl = true,
+                        };
+
+                        var mailMessage = new MailMessage
+                        {
+                            From = new MailAddress("jrojas30463@ufide.ac.cr"),
+                            Subject = $"Capacitación Eliminada: {capacitacion.titulo}",
+                            Body = $"Estimado/a {usuario.NombreCompleto},<br/><br/>" +
+                                   $"Le informamos que la capacitación: <strong>{capacitacion.titulo}</strong> ha sido eliminada del sistema.<br/><br/>" +
+                                   $"Gracias por su atención.",
+                            IsBodyHtml = true,
+                        };
+
+                        mailMessage.To.Add(usuario.correo);
+                        await smtpClient.SendMailAsync(mailMessage);
+                    }
+                    catch (Exception ex)
+                    {
+                        TempData["ErrorMessage"] = $"Error al enviar el correo de notificación: {ex.Message}";
+                    }
                 }
-                catch (Exception ex)
+                else
                 {
-                    // Log del error de envío de correo (opcional)
-                    Console.WriteLine($"Error al enviar el correo: {ex.Message}");
+                    TempData["WarningMessage"] = "La capacitación fue eliminada, pero no se encontró un usuario asociado para enviar la notificación.";
                 }
 
                 return RedirectToAction(nameof(Index));
             }
             catch (Exception ex)
             {
-                ModelState.AddModelError("", $"Error al eliminar la capacitación: {ex.Message}");
-                return View(capacitacion);
+                TempData["ErrorMessage"] = $"Error al eliminar la capacitación: {ex.Message}";
+                return RedirectToAction(nameof(Index));
             }
         }
+
+
         public async Task<IActionResult> Recursos(int id, string? buscarTitulo)
         {
             var userRole = HttpContext.Session.GetString("UserRole");

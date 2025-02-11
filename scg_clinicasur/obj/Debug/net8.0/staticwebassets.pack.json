@@ -5,6 +5,10 @@
       "PackagePath": "staticwebassets\\scg_clinicasur.0xezdzykzl.bundle.scp.css"
     },
     {
+      "Id": "C:\\Users\\Usuario\\OneDrive\\Documentos\\GitHub\\Sistema_Capacitacion_Gestion_ClinicaMedicaSur\\scg_clinicasur\\wwwroot\\archivos\\AN701_HistoriaEmprendimiento_G8_MN1.pdf",
+      "PackagePath": "staticwebassets\\archivos\\AN701_HistoriaEmprendimiento_G8_MN1.pdf"
+    },
+    {
       "Id": "C:\\Users\\Usuario\\OneDrive\\Documentos\\GitHub\\Sistema_Capacitacion_Gestion_ClinicaMedicaSur\\scg_clinicasur\\wwwroot\\archivos\\Caso Practico 2 G6 2024.pdf",
       "PackagePath": "staticwebassets\\archivos\\Caso Practico 2 G6 2024.pdf"
     },
@@ -247,6 +251,14 @@
     {
       "Id": "C:\\Users\\Usuario\\OneDrive\\Documentos\\GitHub\\Sistema_Capacitacion_Gestion_ClinicaMedicaSur\\scg_clinicasur\\wwwroot\\lib\\jquery\\dist\\jquery.min.map",
       "PackagePath": "staticwebassets\\lib\\jquery\\dist\\jquery.min.map"
+    },
+    {
+      "Id": "C:\\Users\\Usuario\\OneDrive\\Documentos\\GitHub\\Sistema_Capacitacion_Gestion_ClinicaMedicaSur\\scg_clinicasur\\wwwroot\\uploads\\AN701_HistoriaEmprendimiento_G8_MN.pdf",
+      "PackagePath": "staticwebassets\\uploads\\AN701_HistoriaEmprendimiento_G8_MN.pdf"
+    },
+    {
+      "Id": "C:\\Users\\Usuario\\OneDrive\\Documentos\\GitHub\\Sistema_Capacitacion_Gestion_ClinicaMedicaSur\\scg_clinicasur\\wwwroot\\uploads\\AN701_HistoriaEmprendimiento_G8_MN1.pdf",
+      "PackagePath": "staticwebassets\\uploads\\AN701_HistoriaEmprendimiento_G8_MN1.pdf"
     },
     {
       "Id": "C:\\Users\\Usuario\\OneDrive\\Documentos\\GitHub\\Sistema_Capacitacion_Gestion_ClinicaMedicaSur\\scg_clinicasur\\wwwroot\\uploads\\descarga.png",

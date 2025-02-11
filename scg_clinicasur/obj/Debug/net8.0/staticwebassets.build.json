@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "7PoWzNGS+phhvj/ox2MxfqqtLpFG9Rfm2II0OtQEXuA=",
+  "Hash": "eHnk+OpZ06jmbFnLckHQ6S+t2hcv1M2lCzNNZ1jpBqI=",
   "Source": "scg_clinicasur",
   "BasePath": "_content/scg_clinicasur",
   "Mode": "Default",
@@ -57,6 +57,27 @@
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "C:\\Users\\Usuario\\OneDrive\\Documentos\\GitHub\\Sistema_Capacitacion_Gestion_ClinicaMedicaSur\\scg_clinicasur\\obj\\Debug\\net8.0\\scopedcss\\projectbundle\\scg_clinicasur.bundle.scp.css"
+    },
+    {
+      "Identity": "C:\\Users\\Usuario\\OneDrive\\Documentos\\GitHub\\Sistema_Capacitacion_Gestion_ClinicaMedicaSur\\scg_clinicasur\\wwwroot\\archivos\\AN701_HistoriaEmprendimiento_G8_MN1.pdf",
+      "SourceId": "scg_clinicasur",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\Users\\Usuario\\OneDrive\\Documentos\\GitHub\\Sistema_Capacitacion_Gestion_ClinicaMedicaSur\\scg_clinicasur\\wwwroot\\",
+      "BasePath": "_content/scg_clinicasur",
+      "RelativePath": "archivos/AN701_HistoriaEmprendimiento_G8_MN1#[.{fingerprint}]?.pdf",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "Fingerprint": "25guzhju3p",
+      "Integrity": "NkRc8yLDzTFnkF6oOvHZkCgA/3xFYKLrrI3Avk6tgy4=",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\archivos\\AN701_HistoriaEmprendimiento_G8_MN1.pdf"
     },
     {
       "Identity": "C:\\Users\\Usuario\\OneDrive\\Documentos\\GitHub\\Sistema_Capacitacion_Gestion_ClinicaMedicaSur\\scg_clinicasur\\wwwroot\\archivos\\Caso Practico 2 G6 2024.pdf",
@@ -1340,6 +1361,48 @@
       "OriginalItemSpec": "wwwroot\\lib\\jquery-validation-unobtrusive\\LICENSE.txt"
     },
     {
+      "Identity": "C:\\Users\\Usuario\\OneDrive\\Documentos\\GitHub\\Sistema_Capacitacion_Gestion_ClinicaMedicaSur\\scg_clinicasur\\wwwroot\\uploads\\AN701_HistoriaEmprendimiento_G8_MN.pdf",
+      "SourceId": "scg_clinicasur",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\Users\\Usuario\\OneDrive\\Documentos\\GitHub\\Sistema_Capacitacion_Gestion_ClinicaMedicaSur\\scg_clinicasur\\wwwroot\\",
+      "BasePath": "_content/scg_clinicasur",
+      "RelativePath": "uploads/AN701_HistoriaEmprendimiento_G8_MN#[.{fingerprint}]?.pdf",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "Fingerprint": "oki0nnsowm",
+      "Integrity": "+K4ZqYEzECWCsu7rg04vvArQiQLH4MSCDM3gJYugnh4=",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\uploads\\AN701_HistoriaEmprendimiento_G8_MN.pdf"
+    },
+    {
+      "Identity": "C:\\Users\\Usuario\\OneDrive\\Documentos\\GitHub\\Sistema_Capacitacion_Gestion_ClinicaMedicaSur\\scg_clinicasur\\wwwroot\\uploads\\AN701_HistoriaEmprendimiento_G8_MN1.pdf",
+      "SourceId": "scg_clinicasur",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\Users\\Usuario\\OneDrive\\Documentos\\GitHub\\Sistema_Capacitacion_Gestion_ClinicaMedicaSur\\scg_clinicasur\\wwwroot\\",
+      "BasePath": "_content/scg_clinicasur",
+      "RelativePath": "uploads/AN701_HistoriaEmprendimiento_G8_MN1#[.{fingerprint}]?.pdf",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "Fingerprint": "25guzhju3p",
+      "Integrity": "NkRc8yLDzTFnkF6oOvHZkCgA/3xFYKLrrI3Avk6tgy4=",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\uploads\\AN701_HistoriaEmprendimiento_G8_MN1.pdf"
+    },
+    {
       "Identity": "C:\\Users\\Usuario\\OneDrive\\Documentos\\GitHub\\Sistema_Capacitacion_Gestion_ClinicaMedicaSur\\scg_clinicasur\\wwwroot\\uploads\\descarga.png",
       "SourceId": "scg_clinicasur",
       "SourceType": "Discovered",
@@ -1383,6 +1446,88 @@
     }
   ],
   "Endpoints": [
+    {
+      "Route": "archivos/AN701_HistoriaEmprendimiento_G8_MN1.25guzhju3p.pdf",
+      "AssetFile": "C:\\Users\\Usuario\\OneDrive\\Documentos\\GitHub\\Sistema_Capacitacion_Gestion_ClinicaMedicaSur\\scg_clinicasur\\wwwroot\\archivos\\AN701_HistoriaEmprendimiento_G8_MN1.pdf",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "1532461"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "application/pdf"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"NkRc8yLDzTFnkF6oOvHZkCgA/3xFYKLrrI3Avk6tgy4=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Thu, 06 Feb 2025 21:31:35 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=31536000, immutable"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "fingerprint",
+          "Value": "25guzhju3p"
+        },
+        {
+          "Name": "label",
+          "Value": "archivos/AN701_HistoriaEmprendimiento_G8_MN1.pdf"
+        },
+        {
+          "Name": "integrity",
+          "Value": "sha256-NkRc8yLDzTFnkF6oOvHZkCgA/3xFYKLrrI3Avk6tgy4="
+        }
+      ]
+    },
+    {
+      "Route": "archivos/AN701_HistoriaEmprendimiento_G8_MN1.pdf",
+      "AssetFile": "C:\\Users\\Usuario\\OneDrive\\Documentos\\GitHub\\Sistema_Capacitacion_Gestion_ClinicaMedicaSur\\scg_clinicasur\\wwwroot\\archivos\\AN701_HistoriaEmprendimiento_G8_MN1.pdf",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "1532461"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "application/pdf"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"NkRc8yLDzTFnkF6oOvHZkCgA/3xFYKLrrI3Avk6tgy4=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Thu, 06 Feb 2025 21:31:35 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "no-cache"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "integrity",
+          "Value": "sha256-NkRc8yLDzTFnkF6oOvHZkCgA/3xFYKLrrI3Avk6tgy4="
+        }
+      ]
+    },
     {
       "Route": "archivos/Caso Practico 2 G6 2024.8fa0nb72mf.pdf",
       "AssetFile": "C:\\Users\\Usuario\\OneDrive\\Documentos\\GitHub\\Sistema_Capacitacion_Gestion_ClinicaMedicaSur\\scg_clinicasur\\wwwroot\\archivos\\Caso Practico 2 G6 2024.pdf",
@@ -6546,6 +6691,170 @@
         {
           "Name": "integrity",
           "Value": "sha256-vBBxfL1BUAyoajKHLbtpaotg4xjGRQLU9of6VzRebm0="
+        }
+      ]
+    },
+    {
+      "Route": "uploads/AN701_HistoriaEmprendimiento_G8_MN.oki0nnsowm.pdf",
+      "AssetFile": "C:\\Users\\Usuario\\OneDrive\\Documentos\\GitHub\\Sistema_Capacitacion_Gestion_ClinicaMedicaSur\\scg_clinicasur\\wwwroot\\uploads\\AN701_HistoriaEmprendimiento_G8_MN.pdf",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "1532741"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "application/pdf"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"+K4ZqYEzECWCsu7rg04vvArQiQLH4MSCDM3gJYugnh4=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Thu, 06 Feb 2025 21:42:16 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=31536000, immutable"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "fingerprint",
+          "Value": "oki0nnsowm"
+        },
+        {
+          "Name": "label",
+          "Value": "uploads/AN701_HistoriaEmprendimiento_G8_MN.pdf"
+        },
+        {
+          "Name": "integrity",
+          "Value": "sha256-+K4ZqYEzECWCsu7rg04vvArQiQLH4MSCDM3gJYugnh4="
+        }
+      ]
+    },
+    {
+      "Route": "uploads/AN701_HistoriaEmprendimiento_G8_MN.pdf",
+      "AssetFile": "C:\\Users\\Usuario\\OneDrive\\Documentos\\GitHub\\Sistema_Capacitacion_Gestion_ClinicaMedicaSur\\scg_clinicasur\\wwwroot\\uploads\\AN701_HistoriaEmprendimiento_G8_MN.pdf",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "1532741"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "application/pdf"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"+K4ZqYEzECWCsu7rg04vvArQiQLH4MSCDM3gJYugnh4=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Thu, 06 Feb 2025 21:42:16 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "no-cache"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "integrity",
+          "Value": "sha256-+K4ZqYEzECWCsu7rg04vvArQiQLH4MSCDM3gJYugnh4="
+        }
+      ]
+    },
+    {
+      "Route": "uploads/AN701_HistoriaEmprendimiento_G8_MN1.25guzhju3p.pdf",
+      "AssetFile": "C:\\Users\\Usuario\\OneDrive\\Documentos\\GitHub\\Sistema_Capacitacion_Gestion_ClinicaMedicaSur\\scg_clinicasur\\wwwroot\\uploads\\AN701_HistoriaEmprendimiento_G8_MN1.pdf",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "1532461"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "application/pdf"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"NkRc8yLDzTFnkF6oOvHZkCgA/3xFYKLrrI3Avk6tgy4=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Thu, 06 Feb 2025 21:47:58 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=31536000, immutable"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "fingerprint",
+          "Value": "25guzhju3p"
+        },
+        {
+          "Name": "label",
+          "Value": "uploads/AN701_HistoriaEmprendimiento_G8_MN1.pdf"
+        },
+        {
+          "Name": "integrity",
+          "Value": "sha256-NkRc8yLDzTFnkF6oOvHZkCgA/3xFYKLrrI3Avk6tgy4="
+        }
+      ]
+    },
+    {
+      "Route": "uploads/AN701_HistoriaEmprendimiento_G8_MN1.pdf",
+      "AssetFile": "C:\\Users\\Usuario\\OneDrive\\Documentos\\GitHub\\Sistema_Capacitacion_Gestion_ClinicaMedicaSur\\scg_clinicasur\\wwwroot\\uploads\\AN701_HistoriaEmprendimiento_G8_MN1.pdf",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "1532461"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "application/pdf"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"NkRc8yLDzTFnkF6oOvHZkCgA/3xFYKLrrI3Avk6tgy4=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Thu, 06 Feb 2025 21:47:58 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "no-cache"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "integrity",
+          "Value": "sha256-NkRc8yLDzTFnkF6oOvHZkCgA/3xFYKLrrI3Avk6tgy4="
         }
       ]
     },
