@@ -168,7 +168,12 @@ namespace scg_clinicasur.Controllers
                         evaluacion.archivo = Path.Combine("/evaluaciones", nombreArchivo);                        
                     }
 
-                    _context.Update(evaluacion);
+                    _context.Entry(evaluacion).Property(c => c.id_capacitacion).IsModified = true;
+                    _context.Entry(evaluacion).Property(c => c.nombre).IsModified = true;
+                    _context.Entry(evaluacion).Property(c => c.descripcion).IsModified = true;
+                    _context.Entry(evaluacion).Property(c => c.tiempo_prueba).IsModified = true;
+                    _context.Entry(evaluacion).Property(c => c.archivo).IsModified = true;
+                    _context.Entry(evaluacion).Property(c => c.id_usuario).IsModified = true;                    
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)

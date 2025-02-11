@@ -29,15 +29,27 @@
         <span asp-validation-for="tiempo_prueba" class="text-danger"></span>
     </div>
 
-    <div class="form-group">
-        <label asp-for="id_usuario" class="control-label"></label>
-        <select asp-for="id_usuario" class="form-control" asp-items="@(ViewData["Usuarios"] as SelectList)"></select>
+    <div class="mb-3">
+        <label asp-for="id_usuario" class="form-label fw-bold">Usuario Responsable</label>
+        <select asp-for="id_usuario" class="form-select">
+            <option value="">Seleccione un usuario</option>
+            @foreach (var usuario in (IEnumerable<scg_clinicasur.Models.Usuario>)ViewData["Usuarios"])
+            {
+                <option value="@usuario.id_usuario">@usuario.nombre @usuario.apellido</option>
+            }
+        </select>
         <span asp-validation-for="id_usuario" class="text-danger"></span>
     </div>
 
     <div class="form-group">
-        <label asp-for="id_capacitacion" class="control-label"></label>
-        <select asp-for="id_capacitacion" class="form-control" asp-items="@(ViewData["Capacitaciones"] as SelectList)"></select>
+        <label asp-for="id_capacitacion" class="form-label fw-bold">Capacitación</label>
+        <select asp-for="id_capacitacion" class="form-select">
+            <option value="">Seleccione una capacitación</option>
+            @foreach (var capacitacion in (IEnumerable<scg_clinicasur.Models.Capacitacion>)ViewData["Capacitaciones"])
+            {
+                <option value="@capacitacion.id_capacitacion">@capacitacion.titulo</option>
+            }
+        </select>
         <span asp-validation-for="id_capacitacion" class="text-danger"></span>
     </div>
 

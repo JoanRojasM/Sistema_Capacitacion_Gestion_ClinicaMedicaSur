@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "dr7x5T0q57+uONY51tgTDXdEetpWKh5WaUxhOOP/7V8=",
+  "Hash": "Fguam5k9hZctov8RpjUnMYpubWzjtjsyQhSsR+1f8ec=",
   "Source": "scg_clinicasur",
   "BasePath": "_content/scg_clinicasur",
   "Mode": "Default",
@@ -129,6 +129,25 @@
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "wwwroot\\evaluaciones\\images.png"
+    },
+    {
+      "Identity": "C:\\Users\\danie\\OneDrive\\Documentos\\GitHub\\Sistema_Capacitacion_Gestion_ClinicaMedicaSur\\scg_clinicasur\\wwwroot\\evaluaciones\\Temas para ensayo argumentativo.pdf",
+      "SourceId": "scg_clinicasur",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\Users\\danie\\OneDrive\\Documentos\\GitHub\\Sistema_Capacitacion_Gestion_ClinicaMedicaSur\\scg_clinicasur\\wwwroot\\",
+      "BasePath": "_content/scg_clinicasur",
+      "RelativePath": "evaluaciones/Temas para ensayo argumentativo.pdf",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "PreferTarget",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\evaluaciones\\Temas para ensayo argumentativo.pdf"
     },
     {
       "Identity": "C:\\Users\\danie\\OneDrive\\Documentos\\GitHub\\Sistema_Capacitacion_Gestion_ClinicaMedicaSur\\scg_clinicasur\\wwwroot\\favicon.ico",
