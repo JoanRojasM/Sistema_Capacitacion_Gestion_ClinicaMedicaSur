@@ -17,6 +17,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="wwwroot\evaluaciones\" />
     <Folder Include="wwwroot\recursos\" />
   </ItemGroup>
 

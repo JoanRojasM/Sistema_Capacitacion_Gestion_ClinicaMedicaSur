@@ -521,7 +521,7 @@ namespace scg_clinicasur.Controllers
                             await archivo.CopyToAsync(stream);
                         }
 
-                        recurso.archivo = Path.Combine("/archivos", nombreArchivo);
+                        recurso.archivo = Path.Combine("/recursos", nombreArchivo);
                     }
                     else if (!string.IsNullOrEmpty(enlace))
                     {

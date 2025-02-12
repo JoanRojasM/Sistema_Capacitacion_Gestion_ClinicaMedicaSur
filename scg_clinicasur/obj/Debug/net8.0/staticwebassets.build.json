@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "Fguam5k9hZctov8RpjUnMYpubWzjtjsyQhSsR+1f8ec=",
+  "Hash": "5hUqmrMyfcgho3jMcG0/gA+GOemlSyf8Zc71tJq3HeU=",
   "Source": "scg_clinicasur",
   "BasePath": "_content/scg_clinicasur",
   "Mode": "Default",
@@ -1269,6 +1269,25 @@
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "wwwroot\\lib\\jquery-validation-unobtrusive\\LICENSE.txt"
+    },
+    {
+      "Identity": "C:\\Users\\danie\\OneDrive\\Documentos\\GitHub\\Sistema_Capacitacion_Gestion_ClinicaMedicaSur\\scg_clinicasur\\wwwroot\\recursos\\Resultado_1.pdf",
+      "SourceId": "scg_clinicasur",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\Users\\danie\\OneDrive\\Documentos\\GitHub\\Sistema_Capacitacion_Gestion_ClinicaMedicaSur\\scg_clinicasur\\wwwroot\\",
+      "BasePath": "_content/scg_clinicasur",
+      "RelativePath": "recursos/Resultado_1.pdf",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "PreferTarget",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\recursos\\Resultado_1.pdf"
     }
   ]
 }

@@ -54,7 +54,7 @@
     </div>
 
     <div class="form-group">
-        <<label asp-for="archivo" class="form-label fw-bold">Archivo (Opcional)</label>
+        <label asp-for="archivo" class="form-label fw-bold">Archivo (Opcional)</label>
         <input asp-for="archivo" type="file" class="form-control" />
         <span asp-validation-for="archivo" class="text-danger"></span>
         @if (!string.IsNullOrEmpty(Model.archivo))

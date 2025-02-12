@@ -261,6 +261,10 @@
       "PackagePath": "staticwebassets\\lib\\jquery\\dist\\jquery.min.map"
     },
     {
+      "Id": "C:\\Users\\danie\\OneDrive\\Documentos\\GitHub\\Sistema_Capacitacion_Gestion_ClinicaMedicaSur\\scg_clinicasur\\wwwroot\\recursos\\Resultado_1.pdf",
+      "PackagePath": "staticwebassets\\recursos\\Resultado_1.pdf"
+    },
+    {
       "Id": "obj\\Debug\\net8.0\\staticwebassets\\msbuild.build.scg_clinicasur.props",
       "PackagePath": "build\\scg_clinicasur.props"
     },
