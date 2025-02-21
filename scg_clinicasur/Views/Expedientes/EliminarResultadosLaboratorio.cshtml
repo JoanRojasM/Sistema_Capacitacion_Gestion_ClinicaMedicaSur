@@ -1,0 +1,54 @@
+﻿@model scg_clinicasur.Models.ResultadosLaboratorio
+
+@{
+    ViewData["Title"] = "Confirmar Eliminación de Resultado";
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="stylesheet" href="~/css/site.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <title>@ViewData["Title"]</title>
+</head>
+<body>
+    <header>
+        <h1>@ViewData["Title"]</h1>
+        <nav>
+            <a asp-action="DetallesConsulta" asp-route-id="@Model.IdExpediente" class="button">Volver a Detalles</a>
+        </nav>
+    </header>
+    <main>
+        <p>¿Estás seguro de que deseas eliminar el resultado de laboratorio del @Model.FechaPrueba.ToString("yyyy-MM-dd")?</p>
+        <button id="btnEliminar" class="btn btn-danger">Sí, Eliminar</button>
+        <a href="@Url.Action("VerHistorialResultados", "Expedientes", new { idExpediente = Model.IdExpediente })" class="button">Cancelar</a>
+
+        <!-- Script para cuadro de confirmación de eliminación -->
+        <script>
+            document.getElementById('btnEliminar').addEventListener('click', function () {
+                Swal.fire({
+                    title: '¿Estás seguro?',
+                    text: "No podrás revertir esto.",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#d33',
+                    cancelButtonColor: '#3085d6',
+                    confirmButtonText: 'Sí, eliminar',
+                    cancelButtonText: 'Cancelar'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        // Enviar el formulario de eliminación
+                        document.getElementById('formEliminar').submit();
+                    }
+                });
+            });
+        </script>
+
+        <!-- Formulario de eliminación -->
+        <form id="formEliminar" method="post" asp-controller="Expedientes" asp-action="EliminarResultadoConfirmado">
+            <input type="hidden" name="id" value="@Model.IdResultado" />
+            @Html.AntiForgeryToken()
+        </form>
+    </main>
+</body>
+</html>

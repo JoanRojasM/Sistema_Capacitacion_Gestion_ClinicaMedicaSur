@@ -82,14 +82,14 @@ namespace scg_clinicasur.Controllers
             ViewBag.IdDoctor = idDoctor ?? 0;
             ViewBag.EspecialidadesAsignadas = especialidadesAsignadas;
 
-            // Lista de doctores para la selección
-            ViewBag.Doctores = new SelectList(
-                _context.Usuarios
-                    .Where(u => u.roles.nombre_rol == "doctor" && u.estado == "activo")
-                    .Select(u => new { u.id_usuario, NombreCompleto = u.nombre + " " + u.apellido }),
-                "id_usuario",
-                "NombreCompleto"
-            );
+            // Lista de doctores para la selección, excluyendo a los doctores que ya tienen especialidades asignadas
+            var doctoresSinEspecialidadesAsignadas = _context.Usuarios
+                .Where(u => u.roles.nombre_rol == "doctor" && u.estado == "activo"
+                            && !_context.DoctorEspecialidades.Any(de => de.IdUsuario == u.id_usuario))
+                .Select(u => new { u.id_usuario, NombreCompleto = u.nombre + " " + u.apellido })
+                .ToList();
+
+            ViewBag.Doctores = new SelectList(doctoresSinEspecialidadesAsignadas, "id_usuario", "NombreCompleto");
 
             return View();
         }

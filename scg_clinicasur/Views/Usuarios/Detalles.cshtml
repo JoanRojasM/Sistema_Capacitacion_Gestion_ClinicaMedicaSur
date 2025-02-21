@@ -26,6 +26,9 @@
                         <dt class="col-sm-4 text-muted">Nombre Completo:</dt>
                         <dd class="col-sm-8 fw-bold">@Model.nombre @Model.apellido</dd>
 
+                        <dt class="col-sm-4 text-muted">Fecha de Nacimiento:</dt>
+                        <dd class="col-sm-8 fw-bold">@Model.fecha_nacimiento.ToString("dd/MM/yyyy")</dd>
+
                         <dt class="col-sm-4 text-muted">Correo Electrónico:</dt>
                         <dd class="col-sm-8">
                             <i class="bi bi-envelope"></i> @Model.correo

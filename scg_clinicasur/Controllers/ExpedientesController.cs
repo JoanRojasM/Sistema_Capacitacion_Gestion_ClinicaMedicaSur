@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using scg_clinicasur.Data;
 using scg_clinicasur.Models;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace scg_clinicasur.Controllers
 {
@@ -17,81 +18,140 @@ namespace scg_clinicasur.Controllers
 
         public IActionResult Index(string searchName)
         {
-            // Guardar el término de búsqueda en ViewData para usarlo en la vista
             ViewData["searchName"] = searchName;
 
-            // Si no se especifica ningún nombre, devolver todos los expedientes
             var expedientes = from e in _context.Expedientes
                               select e;
 
-            // Filtrar por nombre de paciente si el usuario ingresó un término de búsqueda
             if (!string.IsNullOrEmpty(searchName))
             {
                 expedientes = expedientes.Where(e => e.nombrePaciente.Contains(searchName));
             }
 
-            return View(expedientes.ToList());
+            // Crear una lista de objetos anónimos con el expediente y la fecha de nacimiento del usuario
+            var expedientesConfecha_nacimiento = expedientes.ToList().Select(e => new
+            {
+                Expediente = e,
+                FechaNacimiento = _context.Usuarios.FirstOrDefault(u => u.id_usuario == e.idPaciente)?.fecha_nacimiento
+            }).ToList();
+
+            // Pasar la lista a la vista
+            return View(expedientesConfecha_nacimiento);
         }
 
-        // GET: CrearExpediente
         [HttpGet]
         public IActionResult CrearExpediente()
         {
-            // Consulta para obtener solo los usuarios con el rol de 'paciente'
-            ViewBag.Pacientes = _context.Usuarios
-                .Where(u => u.id_rol == _context.Roles.FirstOrDefault(r => r.nombre_rol == "paciente").id_rol)
-                .Select(u => new { u.id_usuario, NombreCompleto = u.nombre + " " + u.apellido })
-                .ToList();
+            // Obtener el ID del rol "paciente"
+            var idRolPaciente = _context.Roles
+                .FirstOrDefault(r => r.nombre_rol == "paciente")?.id_rol;
+
+            if (idRolPaciente.HasValue)
+            {
+                // Obtener la lista de pacientes con sus datos necesarios
+                ViewBag.Pacientes = _context.Usuarios
+                    .Where(u => u.id_rol == idRolPaciente.Value && u != null) // Filtra pacientes nulos
+                    .Select(u => new
+                    {
+                        u.id_usuario,
+                        NombreCompleto = u.nombre + " " + u.apellido,
+                        u.fecha_nacimiento // Incluir la fecha de nacimiento
+                    })
+                    .ToList();
+            }
+            else
+            {
+                // Si no hay rol "paciente", inicializar una lista vacía
+                ViewBag.Pacientes = new List<object>();
+            }
 
             return View();
         }
 
-        // POST: CrearExpediente
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> CrearExpediente(Expediente expediente)
         {
             if (ModelState.IsValid)
             {
-                // Asignar la fecha de creación actual
+                // Validar que el ID del paciente no sea cero
+                if (expediente.idPaciente == 0)
+                {
+                    ModelState.AddModelError(string.Empty, "El ID del paciente no es válido.");
+                    return View(expediente);
+                }
+
+                // Buscar el usuario (paciente) en la base de datos
+                var usuario = _context.Usuarios.FirstOrDefault(u => u.id_usuario == expediente.idPaciente);
+                if (usuario == null)
+                {
+                    ModelState.AddModelError(string.Empty, "El usuario no fue encontrado.");
+                    return View(expediente);
+                }
+
+                // Asignar la fecha de creación del expediente
                 expediente.fechaCreacion = DateTime.Now;
 
-                // Añadir el expediente al contexto de la base de datos
+                // Guardar el expediente en la base de datos
                 _context.Add(expediente);
-
-                // Guardar los cambios de forma asíncrona
                 await _context.SaveChangesAsync();
 
-                // Redirigir al índice de expedientes u otra vista
+                // Redirigir a la lista de expedientes
                 return RedirectToAction(nameof(Index));
             }
 
-            // Si el modelo no es válido, volver a mostrar la vista de creación con los errores
+            // Si el modelo no es válido, mostrar la vista con errores
             return View(expediente);
         }
 
         public IActionResult DetallesConsulta(int id)
         {
+            // Buscar el expediente por su ID
             var expediente = _context.Expedientes.FirstOrDefault(e => e.idExpediente == id);
             if (expediente == null)
             {
-                return NotFound();
+                return NotFound(); // Si no se encuentra el expediente, retornar un error 404
             }
+
+            // Obtener la fecha de nacimiento del usuario (paciente)
+            var usuario = _context.Usuarios.FirstOrDefault(u => u.id_usuario == expediente.idPaciente);
+            if (usuario != null)
+            {
+                ViewBag.FechaNacimiento = usuario.fecha_nacimiento; // Asignar la fecha de nacimiento al ViewBag
+            }
+            else
+            {
+                ViewBag.FechaNacimiento = null; // Si no se encuentra el usuario, asignar null
+            }
+
+            // Pasar el expediente a la vista
             return View(expediente);
         }
 
-        // Método para mostrar el formulario de edición
+        [HttpGet]
         public IActionResult EditarExpedientes(int id)
         {
             var expediente = _context.Expedientes.FirstOrDefault(e => e.idExpediente == id);
             if (expediente == null)
             {
-                return NotFound();
+                return NotFound(); // Si no se encuentra el expediente, retornar un error 404
             }
+
+            // Obtener la fecha de nacimiento del usuario (paciente)
+            var usuario = _context.Usuarios.FirstOrDefault(u => u.id_usuario == expediente.idPaciente);
+            if (usuario != null)
+            {
+                ViewBag.FechaNacimiento = usuario.fecha_nacimiento; // Asignar la fecha de nacimiento al ViewBag
+            }
+            else
+            {
+                ViewBag.FechaNacimiento = null; // Si no se encuentra el usuario, asignar null
+            }
+
+            // Pasar el expediente a la vista
             return View("EditarExpediente", expediente);
         }
 
-        // Método para guardar los cambios al expediente
         [HttpPost]
         public IActionResult EditarExpedientes(Expediente model)
         {
@@ -100,65 +160,87 @@ namespace scg_clinicasur.Controllers
                 var expediente = _context.Expedientes.FirstOrDefault(e => e.idExpediente == model.idExpediente);
                 if (expediente != null)
                 {
+                    // Actualizar los campos editables
                     expediente.ultimaConsulta = model.ultimaConsulta;
                     expediente.diagnostico = model.diagnostico;
                     expediente.descripcion = model.descripcion;
                     expediente.tratamientosPrevios = model.tratamientosPrevios;
 
-                    _context.SaveChanges();
-                    return RedirectToAction("DetallesConsulta", new { id = model.idExpediente });
+                    _context.SaveChanges(); // Guardar los cambios en la base de datos
+                    return RedirectToAction("DetallesConsulta", new { id = model.idExpediente }); // Redirigir a la vista de detalles
                 }
-                return NotFound();
+                return NotFound(); // Si no se encuentra el expediente, retornar un error 404
             }
 
+            // Si el modelo no es válido, mostrar la vista con errores
             return View("EditarExpediente", model);
         }
 
-        // POST: EliminarExpediente
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> EliminarExpediente(int id)
+        [HttpGet]
+        public IActionResult EliminarExpediente(int id)
         {
-            Console.WriteLine("ID recibido para eliminar: " + id); // Debugging
-            // Buscar el expediente en la base de datos por su ID
-            var expediente = await _context.Expedientes.FindAsync(id);
-
+            var expediente = _context.Expedientes.FirstOrDefault(e => e.idExpediente == id);
             if (expediente == null)
             {
-                // Si no se encuentra el expediente, retornar un error o redirigir a una página de error
-                return NotFound();
+                return NotFound(); // Si no se encuentra el expediente, retornar un error 404
             }
 
-            try
+            // Obtener la fecha de nacimiento del usuario (paciente)
+            var usuario = _context.Usuarios.FirstOrDefault(u => u.id_usuario == expediente.idPaciente);
+            if (usuario != null)
             {
-                // Remover el expediente del contexto de la base de datos
-                _context.Expedientes.Remove(expediente);
-
-                // Guardar los cambios de forma asíncrona
-                await _context.SaveChangesAsync();
-
-                // Redirigir a la página de listado tras eliminar
-                return RedirectToAction(nameof(Index));
+                ViewBag.FechaNacimiento = usuario.fecha_nacimiento; // Asignar la fecha de nacimiento al ViewBag
             }
-            catch (DbUpdateException ex)
+            else
             {
-                // Manejar cualquier error relacionado con la base de datos
-                // Podrías registrar el error y mostrar un mensaje adecuado
-                ModelState.AddModelError(string.Empty, "No se pudo eliminar el expediente. Inténtalo de nuevo más tarde.");
-                return View("Error");
+                ViewBag.FechaNacimiento = null; // Si no se encuentra el usuario, asignar null
             }
+
+            // Pasar el expediente a la vista
+            return View(expediente);
         }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult EliminarConfirmado(int id)
+        {
+            var expediente = _context.Expedientes.FirstOrDefault(e => e.idExpediente == id);
+            if (expediente == null)
+            {
+                return NotFound(); // Si no se encuentra el expediente, retornar un error 404
+            }
+
+            // Eliminar el expediente
+            _context.Expedientes.Remove(expediente);
+            _context.SaveChanges();
+
+            // Redirigir al listado de expedientes
+            return RedirectToAction("Index");
+        }
+
         public IActionResult ImprimirExpedienteCompleto(int id)
         {
             var expediente = _context.Expedientes.FirstOrDefault(e => e.idExpediente == id);
             if (expediente == null)
             {
-                return NotFound();
+                return NotFound(); // Si no se encuentra el expediente, retornar un error 404
             }
 
-            // Renderiza la vista de impresión con el modelo de expediente
+            // Obtener la fecha de nacimiento del usuario (paciente)
+            var usuario = _context.Usuarios.FirstOrDefault(u => u.id_usuario == expediente.idPaciente);
+            if (usuario != null)
+            {
+                ViewBag.FechaNacimiento = usuario.fecha_nacimiento; // Asignar la fecha de nacimiento al ViewBag
+            }
+            else
+            {
+                ViewBag.FechaNacimiento = null; // Si no se encuentra el usuario, asignar null
+            }
+
+            // Pasar el expediente a la vista
             return View(expediente);
         }
+
         public IActionResult VerResultadosRecientes(int idExpediente)
         {
             var resultadosRecientes = _context.ResultadosLaboratorio
@@ -173,6 +255,7 @@ namespace scg_clinicasur.Controllers
 
             return View(resultadosRecientes);
         }
+
         public IActionResult VerHistorialResultados(int idExpediente)
         {
             var historialResultados = _context.ResultadosLaboratorio
@@ -183,16 +266,13 @@ namespace scg_clinicasur.Controllers
             return View(historialResultados);
         }
 
-        // GET: CrearResultadosLaboratorio
         [HttpGet]
         public IActionResult CrearResultadosLaboratorio(int idExpediente)
         {
-            // Pasa el id del expediente al ViewBag para usarlo en la vista
             ViewBag.IdExpediente = idExpediente;
             return View();
         }
 
-        // POST: CrearResultadosLaboratorio
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> CrearResultadosLaboratorio(int idExpediente, IFormFile archivoPDF)
@@ -203,7 +283,6 @@ namespace scg_clinicasur.Controllers
                 return View();
             }
 
-            // Convierte el archivo PDF a un arreglo de bytes
             byte[] archivoData;
             using (var memoryStream = new MemoryStream())
             {
@@ -211,35 +290,29 @@ namespace scg_clinicasur.Controllers
                 archivoData = memoryStream.ToArray();
             }
 
-            // Obtener el id del paciente a partir del expediente
             var expediente = _context.Expedientes.FirstOrDefault(e => e.idExpediente == idExpediente);
             if (expediente == null)
             {
                 return NotFound("No se encontró el expediente especificado.");
             }
 
-            // Crear un nuevo resultado de laboratorio
             var resultadoLaboratorio = new ResultadosLaboratorio
             {
                 IdExpediente = idExpediente,
-                IdPaciente = expediente.idPaciente,  // Asigna el id del paciente del expediente
+                IdPaciente = expediente.idPaciente,
                 FechaPrueba = DateTime.Now,
                 ArchivoPDF = archivoData
             };
 
-            // Añadir el resultado al contexto de la base de datos
             _context.ResultadosLaboratorio.Add(resultadoLaboratorio);
             await _context.SaveChangesAsync();
 
-            // Redirigir a la vista de historial de resultados
             return RedirectToAction("VerHistorialResultados", new { idExpediente });
         }
 
-        // GET: DescargarPDF
         [HttpGet]
         public IActionResult DescargarPDF(int id)
         {
-            // Buscar el resultado de laboratorio por su IdResultado
             var resultado = _context.ResultadosLaboratorio.FirstOrDefault(r => r.IdResultado == id);
 
             if (resultado == null || resultado.ArchivoPDF == null)
@@ -247,11 +320,9 @@ namespace scg_clinicasur.Controllers
                 return NotFound("El archivo PDF no se encontró.");
             }
 
-            // Retornar el archivo PDF como un archivo descargable
             return File(resultado.ArchivoPDF, "application/pdf", $"Resultado_{id}.pdf");
         }
 
-        // GET: EditarResultado
         [HttpGet]
         public IActionResult EditarResultado(int id)
         {
@@ -265,7 +336,6 @@ namespace scg_clinicasur.Controllers
             return View(resultado);
         }
 
-        // POST: EditarResultado
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> EditarResultado(int id, IFormFile archivoPDF)
@@ -284,7 +354,7 @@ namespace scg_clinicasur.Controllers
                     resultado.ArchivoPDF = memoryStream.ToArray();
                 }
 
-                resultado.FechaPrueba = DateTime.Now; // Actualiza la fecha de la prueba si es necesario
+                resultado.FechaPrueba = DateTime.Now;
 
                 _context.Update(resultado);
                 await _context.SaveChangesAsync();
@@ -296,21 +366,35 @@ namespace scg_clinicasur.Controllers
             return View(resultado);
         }
 
-        // POST: EliminarResultado
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> EliminarResultado(int id)
+        [HttpGet]
+        public IActionResult EliminarResultadosLaboratorio(int id)
         {
-            var resultado = await _context.ResultadosLaboratorio.FindAsync(id);
+            var resultado = _context.ResultadosLaboratorio.FirstOrDefault(r => r.IdResultado == id);
             if (resultado == null)
             {
-                return NotFound("Resultado de laboratorio no encontrado.");
+                return NotFound(); // Si no se encuentra el resultado, retornar un error 404
             }
 
-            _context.ResultadosLaboratorio.Remove(resultado);
-            await _context.SaveChangesAsync();
+            // Pasar el resultado a la vista
+            return View(resultado);
+        }
 
-            return RedirectToAction("VerHistorialResultados", new { idExpediente = resultado.IdExpediente });
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult EliminarResultadoConfirmado(int id)
+        {
+            var resultado = _context.ResultadosLaboratorio.FirstOrDefault(r => r.IdResultado == id);
+            if (resultado == null)
+            {
+                return NotFound(); // Si no se encuentra el resultado, retornar un error 404
+            }
+
+            // Eliminar el resultado de laboratorio
+            _context.ResultadosLaboratorio.Remove(resultado);
+            _context.SaveChanges();
+
+            // Redirigir a la vista de detalles del expediente
+            return RedirectToAction("DetallesConsulta", new { id = resultado.IdExpediente });
         }
     }
 }

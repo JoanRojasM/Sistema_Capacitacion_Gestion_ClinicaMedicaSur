@@ -21,13 +21,23 @@
                     <!-- Seleccionar Paciente -->
                     <div class="col-md-6">
                         <label for="nombrePaciente" class="form-label fw-bold">Nombre del Paciente</label>
-                        <select class="form-select" id="nombrePaciente" name="nombrePaciente" onchange="setPacienteId()" required>
+                        <select class="form-select" id="nombrePaciente" name="nombrePaciente" onchange="setPacienteIdAndFechaNacimiento()" required>
                             <option value="">Seleccione un paciente</option>
-                            @foreach (var paciente in ViewBag.Pacientes)
+                            @if (ViewBag.Pacientes != null)
                             {
-                                <option value="@paciente.NombreCompleto" data-id="@paciente.id_usuario">
-                                    @paciente.NombreCompleto
-                                </option>
+                                foreach (var paciente in ViewBag.Pacientes)
+                                {
+                                    if (paciente != null)
+                                    {
+                                        <option value="@paciente.NombreCompleto" data-id="@paciente.id_usuario" data-fecha_nacimiento="@paciente.fecha_nacimiento?.ToString("yyyy-MM-dd")">
+                                            @paciente.NombreCompleto
+                                        </option>
+                                    }
+                                }
+                            }
+                            else
+                            {
+                                <option value="">No hay pacientes disponibles</option>
                             }
                         </select>
                     </div>
@@ -35,10 +45,10 @@
                     <!-- Campo oculto para el ID del Paciente -->
                     <input type="hidden" id="idPaciente" name="idPaciente" />
 
-                    <!-- Fecha de Nacimiento -->
+                    <!-- Fecha de Nacimiento (Dinamicamente llenado) -->
                     <div class="col-md-6">
-                        <label for="fechaNacimiento" class="form-label fw-bold">Fecha de Nacimiento</label>
-                        <input type="date" class="form-control" id="fechaNacimiento" name="fechaNacimiento" required />
+                        <label for="fecha_nacimiento" class="form-label fw-bold">Fecha de Nacimiento</label>
+                        <input type="date" class="form-control" id="fecha_nacimiento" name="fecha_nacimiento" required readonly />
                     </div>
 
                     <!-- Última Consulta -->
@@ -81,10 +91,18 @@
 </div>
 
 <script>
-    function setPacienteId() {
+    function setPacienteIdAndFechaNacimiento() {
         var select = document.getElementById("nombrePaciente");
         var selectedOption = select.options[select.selectedIndex];
         var pacienteId = selectedOption.getAttribute("data-id");
-        document.getElementById("idPaciente").value = pacienteId;
+        var fechaNacimiento = selectedOption.getAttribute("data-fecha_nacimiento");
+
+        if (pacienteId && fechaNacimiento) {
+            document.getElementById("idPaciente").value = pacienteId;
+            document.getElementById("fecha_nacimiento").value = fechaNacimiento;
+        } else {
+            document.getElementById("idPaciente").value = "";
+            document.getElementById("fecha_nacimiento").value = "";
+        }
     }
 </script>

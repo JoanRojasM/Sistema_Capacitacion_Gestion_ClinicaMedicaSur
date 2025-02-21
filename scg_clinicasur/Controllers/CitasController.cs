@@ -148,12 +148,14 @@ namespace scg_clinicasur.Controllers
                 return RedirectToAction("AccessDenied", "Home");
             }
 
+            // Verifica si el modelo es válido
             if (!ModelState.IsValid)
             {
                 await CargarViewBagUsuarios();
                 return View(cita);
             }
 
+            // Verifica que la fecha de inicio y fin sean válidas
             if (cita.IdDoctor == 0 || cita.IdPaciente == 0 || cita.FechaInicio == default || cita.FechaFin == default)
             {
                 ModelState.AddModelError("", "Debe seleccionar un doctor, un paciente y definir la fecha correctamente.");
@@ -161,6 +163,7 @@ namespace scg_clinicasur.Controllers
                 return View(cita);
             }
 
+            // Verifica si ya existe un conflicto en la programación
             bool existeConflicto = await _context.Citas
                 .AnyAsync(c => c.IdDoctor == cita.IdDoctor
                             && c.FechaInicio < cita.FechaFin
@@ -173,10 +176,20 @@ namespace scg_clinicasur.Controllers
                 return View(cita);
             }
 
+            // Verifica que la fecha de inicio esté correctamente establecida
+            if (cita.FechaInicio < DateTime.Now)
+            {
+                ModelState.AddModelError("", "La fecha de inicio no puede ser en el pasado.");
+                await CargarViewBagUsuarios();
+                return View(cita);
+            }
+
             try
             {
-                // Guardar la cita en la base de datos
+                // Asegúrate de que la fecha de creación esté siendo asignada
                 cita.FechaCreacion = DateTime.Now;
+
+                // Guardar la cita en la base de datos
                 _context.Citas.Add(cita);
                 await _context.SaveChangesAsync();
 
@@ -214,8 +227,6 @@ namespace scg_clinicasur.Controllers
                     TempData["ErrorMessage"] = "El ID del usuario actual no es válido.";
                     return RedirectToAction("Index");
                 }
-
-                Console.WriteLine($"[DEBUG] Usuario actual: {userId}, Doctor: {doctor.id_usuario}, Paciente: {paciente.id_usuario}, Rol: {userRole}");
 
                 // 🔹 Notificaciones para el Doctor y Paciente según el rol del usuario actual
                 if (userRole == "administrador")
@@ -285,12 +296,10 @@ namespace scg_clinicasur.Controllers
                     mailMessage.To.Add(doctor.correo);
 
                     await smtpClient.SendMailAsync(mailMessage);
-                    Console.WriteLine("[DEBUG] Correo enviado con éxito a paciente y doctor.");
                 }
                 catch (Exception ex)
                 {
                     TempData["ErrorMessage"] = $"Error al enviar el correo: {ex.Message}";
-                    Console.WriteLine($"[DEBUG] Error en envío de correo: {ex.Message}");
                 }
 
                 // 🔹 Redirección a `Index`
@@ -299,11 +308,9 @@ namespace scg_clinicasur.Controllers
             catch (Exception ex)
             {
                 TempData["ErrorMessage"] = $"Error inesperado: {ex.Message}";
-                Console.WriteLine($"[DEBUG] Error inesperado: {ex.Message}");
                 return RedirectToAction("Index");
             }
         }
-
 
         private async Task CargarViewBagUsuarios()
         {
@@ -378,6 +385,23 @@ namespace scg_clinicasur.Controllers
 
             try
             {
+                // Verificar que la fecha de inicio esté en el formato correcto
+                if (cita.FechaInicio == default(DateTime))
+                {
+                    ModelState.AddModelError("FechaInicio", "La fecha de inicio es inválida.");
+                    await CargarDatosParaEditar(cita.IdEstadoCita);
+                    return View(cita);
+                }
+
+                // Verificar que la fecha de fin también esté correctamente configurada
+                if (cita.FechaFin <= cita.FechaInicio)
+                {
+                    ModelState.AddModelError("FechaFin", "La fecha de fin debe ser posterior a la fecha de inicio.");
+                    await CargarDatosParaEditar(cita.IdEstadoCita);
+                    return View(cita);
+                }
+
+                // Actualizar la cita
                 _context.Citas.Update(cita);
                 await _context.SaveChangesAsync();
 
@@ -415,8 +439,6 @@ namespace scg_clinicasur.Controllers
                     TempData["ErrorMessage"] = "El ID del usuario actual no es válido.";
                     return RedirectToAction("Index");
                 }
-
-                Console.WriteLine($"[DEBUG] Usuario actual: {userId}, Doctor: {doctor.id_usuario}, Paciente: {paciente.id_usuario}, Rol: {userRole}");
 
                 // 🔹 Notificaciones para el Doctor y Paciente según el rol del usuario actual
                 if (userRole == "administrador")
@@ -486,12 +508,10 @@ namespace scg_clinicasur.Controllers
                     mailMessage.To.Add(doctor.correo);
 
                     await smtpClient.SendMailAsync(mailMessage);
-                    Console.WriteLine("[DEBUG] Correo enviado con éxito a paciente y doctor.");
                 }
                 catch (Exception ex)
                 {
                     TempData["ErrorMessage"] = $"Error al enviar el correo: {ex.Message}";
-                    Console.WriteLine($"[DEBUG] Error en envío de correo: {ex.Message}");
                 }
 
                 // 🔹 Redirección a `Index`
@@ -504,13 +524,11 @@ namespace scg_clinicasur.Controllers
             catch (Exception ex)
             {
                 TempData["ErrorMessage"] = $"Ocurrió un error interno: {ex.Message}";
-                Console.WriteLine($"[DEBUG] Error inesperado: {ex.Message}");
             }
 
             await CargarDatosParaEditar(cita.IdEstadoCita);
             return View(cita);
         }
-
 
         private async Task CargarDatosParaEditar(int? idEstadoSeleccionado)
         {

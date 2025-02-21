@@ -23,8 +23,8 @@
                 <!-- Columna Izquierda -->
                 <div class="col-md-6">
                     <p><strong>ID del Paciente:</strong> @Model.idPaciente</p>
-                    <p><strong>Fecha de Nacimiento:</strong> @Model.fechaNacimiento.ToString("yyyy-MM-dd")</p>
-                    <p><strong>Última Consulta:</strong> @(Model.ultimaConsulta.ToString("yyyy-MM-dd") ?? "No disponible")</p>
+                    <p><strong>Fecha de Nacimiento:</strong> @(ViewBag.FechaNacimiento?.ToString("dd-MM-yyyy") ?? "No disponible")</p>
+                    <p><strong>Última Consulta:</strong> @(Model.ultimaConsulta.ToString("dd-MM-yyyy") ?? "No disponible")</p>
                 </div>
 
                 <!-- Columna Derecha -->
@@ -35,7 +35,7 @@
                 </div>
             </div>
             <hr />
-            <p><strong>Fecha de Creación:</strong> @Model.fechaCreacion.ToString("yyyy-MM-dd")</p>
+            <p><strong>Fecha de Creación:</strong> @Model.fechaCreacion.ToString("dd-MM-yyyy")</p>
         </div>
     </div>
 
@@ -49,13 +49,9 @@
             <i class="bi bi-printer"></i> Imprimir Expediente Completo
         </a>
 
-        <form id="eliminarForm" method="post" action="@Url.Action("EliminarExpediente", "Expedientes")" class="d-inline">
-            @Html.AntiForgeryToken()
-            <input type="hidden" name="id" value="@Model.idExpediente" />
-            <button type="button" class="btn btn-danger" onclick="confirmarEliminacion()">
-                <i class="bi bi-trash"></i> Eliminar
-            </button>
-        </form>
+        <a asp-action="EliminarExpediente" asp-route-id="@Model.idExpediente" class="btn btn-danger me-2">
+            <i class="bi bi-trash"></i> Eliminar
+        </a>
     </div>
 
     <!-- Sección de Resultados de Laboratorio -->
@@ -80,12 +76,3 @@
         </a>
     </div>
 </div>
-
-<script type="text/javascript">
-    function confirmarEliminacion() {
-        var confirmacion = confirm("¿Estás seguro de que deseas eliminar este expediente? Esta acción no se puede deshacer.");
-        if (confirmacion) {
-            document.getElementById('eliminarForm').submit();
-        }
-    }
-</script>

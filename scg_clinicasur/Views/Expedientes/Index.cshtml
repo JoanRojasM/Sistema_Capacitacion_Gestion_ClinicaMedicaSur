@@ -1,4 +1,4 @@
-﻿@model IEnumerable<scg_clinicasur.Models.Expediente>
+﻿@model IEnumerable<dynamic>
 
 @{
     ViewData["Title"] = "Listado de Expedientes Médicos";
@@ -56,15 +56,15 @@
                     <tbody>
                         @if (Model.Any())
                         {
-                            @foreach (var expediente in Model)
+                            @foreach (var item in Model)
                             {
                                 <tr>
-                                    <td>EXP-@expediente.idExpediente.ToString("D4")</td>
-                                    <td>@expediente.nombrePaciente</td>
-                                    <td>@expediente.fechaNacimiento.ToString("dd/MM/yyyy")</td>
-                                    <td>@expediente.ultimaConsulta.ToString("dd/MM/yyyy")</td>
+                                    <td>EXP-@item.Expediente.idExpediente.ToString("D4")</td>
+                                    <td>@item.Expediente.nombrePaciente</td>
+                                    <td>@(item.FechaNacimiento?.ToString("dd/MM/yyyy") ?? "No disponible")</td>
+                                    <td>@(item.Expediente.ultimaConsulta.ToString("dd/MM/yyyy") ?? "No disponible")</td>
                                     <td>
-                                        <a href="@Url.Action("DetallesConsulta", "Expedientes", new { id = expediente.idExpediente })" class="btn btn-info btn-sm">
+                                        <a href="@Url.Action("DetallesConsulta", "Expedientes", new { id = item.Expediente.idExpediente })" class="btn btn-info btn-sm">
                                             <i class="bi bi-eye"></i> Ver Detalles
                                         </a>
                                     </td>

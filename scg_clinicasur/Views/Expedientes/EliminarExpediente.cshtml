@@ -1,0 +1,52 @@
+﻿@model scg_clinicasur.Models.Expediente
+
+@{
+    ViewData["Title"] = "Confirmar Eliminación";
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="stylesheet" href="~/css/site.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <title>@ViewData["Title"]</title>
+</head>
+<body>
+    <header>
+        <h1>@ViewData["Title"]</h1>
+        <nav>
+            <a asp-action="Index" class="button">Volver al Listado</a>
+        </nav>
+    </header>
+    <main>
+        <p>¿Estás seguro de que deseas eliminar el expediente de @Model.nombrePaciente?</p>
+        <button id="btnEliminar" class="btn btn-danger">Sí, Eliminar</button>
+        <a href="@Url.Action("DetallesConsulta", "Expedientes", new { id = Model.idExpediente })" class="button">Cancelar</a>
+
+        <!-- Script para cuadro de confirmación de eliminación -->
+        <script>
+            document.getElementById('btnEliminar').addEventListener('click', function () {
+                Swal.fire({
+                    title: '¿Estás seguro?',
+                    text: "No podrás revertir esto.",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#d33',
+                    cancelButtonColor: '#3085d6',
+                    confirmButtonText: 'Sí, eliminar'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        document.getElementById('formEliminar').submit();
+                    }
+                });
+            });
+        </script>
+
+        <!-- Formulario de eliminación -->
+        <form id="formEliminar" method="post" asp-controller="Expedientes" asp-action="EliminarConfirmado">
+            <input type="hidden" name="id" value="@Model.idExpediente" />
+            @Html.AntiForgeryToken()
+        </form>
+    </main>
+</body>
+</html>

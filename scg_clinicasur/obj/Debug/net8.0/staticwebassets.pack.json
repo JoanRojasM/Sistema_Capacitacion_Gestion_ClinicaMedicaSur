@@ -9,22 +9,6 @@
       "PackagePath": "staticwebassets\\css\\site.css"
     },
     {
-      "Id": "C:\\Users\\danie\\OneDrive\\Documentos\\GitHub\\Sistema_Capacitacion_Gestion_ClinicaMedicaSur\\scg_clinicasur\\wwwroot\\evaluaciones\\Cambios por hacer.docx",
-      "PackagePath": "staticwebassets\\evaluaciones\\Cambios por hacer.docx"
-    },
-    {
-      "Id": "C:\\Users\\danie\\OneDrive\\Documentos\\GitHub\\Sistema_Capacitacion_Gestion_ClinicaMedicaSur\\scg_clinicasur\\wwwroot\\evaluaciones\\Temas para ensayo argumentativo.pdf",
-      "PackagePath": "staticwebassets\\evaluaciones\\Temas para ensayo argumentativo.pdf"
-    },
-    {
-      "Id": "C:\\Users\\danie\\OneDrive\\Documentos\\GitHub\\Sistema_Capacitacion_Gestion_ClinicaMedicaSur\\scg_clinicasur\\wwwroot\\evaluaciones\\descarga.png",
-      "PackagePath": "staticwebassets\\evaluaciones\\descarga.png"
-    },
-    {
-      "Id": "C:\\Users\\danie\\OneDrive\\Documentos\\GitHub\\Sistema_Capacitacion_Gestion_ClinicaMedicaSur\\scg_clinicasur\\wwwroot\\evaluaciones\\images.png",
-      "PackagePath": "staticwebassets\\evaluaciones\\images.png"
-    },
-    {
       "Id": "C:\\Users\\danie\\OneDrive\\Documentos\\GitHub\\Sistema_Capacitacion_Gestion_ClinicaMedicaSur\\scg_clinicasur\\wwwroot\\favicon.ico",
       "PackagePath": "staticwebassets\\favicon.ico"
     },
@@ -259,10 +243,6 @@
     {
       "Id": "C:\\Users\\danie\\OneDrive\\Documentos\\GitHub\\Sistema_Capacitacion_Gestion_ClinicaMedicaSur\\scg_clinicasur\\wwwroot\\lib\\jquery\\dist\\jquery.min.map",
       "PackagePath": "staticwebassets\\lib\\jquery\\dist\\jquery.min.map"
-    },
-    {
-      "Id": "C:\\Users\\danie\\OneDrive\\Documentos\\GitHub\\Sistema_Capacitacion_Gestion_ClinicaMedicaSur\\scg_clinicasur\\wwwroot\\recursos\\Resultado_1.pdf",
-      "PackagePath": "staticwebassets\\recursos\\Resultado_1.pdf"
     },
     {
       "Id": "obj\\Debug\\net8.0\\staticwebassets\\msbuild.build.scg_clinicasur.props",

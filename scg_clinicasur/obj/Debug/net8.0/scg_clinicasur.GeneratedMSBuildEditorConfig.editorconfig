@@ -218,6 +218,14 @@ build_metadata.AdditionalFiles.CssScope =
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcRXhwZWRpZW50ZXNcRWRpdGFyUmVzdWx0YWRvLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
+[C:/Users/danie/OneDrive/Documentos/GitHub/Sistema_Capacitacion_Gestion_ClinicaMedicaSur/scg_clinicasur/Views/Expedientes/EliminarExpediente.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcRXhwZWRpZW50ZXNcRWxpbWluYXJFeHBlZGllbnRlLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/danie/OneDrive/Documentos/GitHub/Sistema_Capacitacion_Gestion_ClinicaMedicaSur/scg_clinicasur/Views/Expedientes/EliminarResultadosLaboratorio.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcRXhwZWRpZW50ZXNcRWxpbWluYXJSZXN1bHRhZG9zTGFib3JhdG9yaW8uY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
 [C:/Users/danie/OneDrive/Documentos/GitHub/Sistema_Capacitacion_Gestion_ClinicaMedicaSur/scg_clinicasur/Views/Expedientes/Historial.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcRXhwZWRpZW50ZXNcSGlzdG9yaWFsLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 

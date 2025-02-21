@@ -30,6 +30,8 @@ namespace scg_clinicasur.Models
 
         public DateTime fecha_registro { get; set; } = DateTime.Now;
 
+        public DateTime fecha_nacimiento { get; set; }
+
         [Required(ErrorMessage = "El rol es requerido")]
         public int id_rol { get; set; }
 

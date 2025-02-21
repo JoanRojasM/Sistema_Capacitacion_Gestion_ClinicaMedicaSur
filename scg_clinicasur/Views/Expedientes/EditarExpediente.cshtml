@@ -25,13 +25,13 @@
             <!-- Fecha de Nacimiento -->
             <div class="col-md-6">
                 <label for="fechaNacimiento" class="form-label fw-bold">Fecha de Nacimiento</label>
-                <input type="date" class="form-control" id="fechaNacimiento" name="fechaNacimiento" value="@Model.fechaNacimiento.ToString("yyyy-MM-dd")" readonly />
+                <input type="date" class="form-control" id="fechaNacimiento" name="fechaNacimiento" value="@(ViewBag.FechaNacimiento.ToString("yyyy-MM-dd"))" readonly />
             </div>
 
             <!-- Última Consulta -->
             <div class="col-md-6">
                 <label for="ultimaConsulta" class="form-label fw-bold">Última Consulta</label>
-                <input type="date" class="form-control" id="ultimaConsulta" name="ultimaConsulta" value="@Model.ultimaConsulta.ToString("yyyy-MM-dd")" />
+                <input type="date" class="form-control" id="ultimaConsulta" name="ultimaConsulta" value="@(Model.ultimaConsulta.ToString("yyyy-MM-dd"))" />
             </div>
 
             <!-- Diagnóstico -->

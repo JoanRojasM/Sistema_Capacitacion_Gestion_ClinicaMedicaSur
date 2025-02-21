@@ -128,6 +128,12 @@ namespace scg_clinicasur.Controllers
                     // Establecer la fecha de registro del usuario
                     usuario.fecha_registro = DateTime.Now;
 
+                    // Asegurar que fecha de nacimiento esté siendo asignada
+                    if (usuario.fecha_nacimiento == default(DateTime))
+                    {
+                        ModelState.AddModelError("fecha_nacimiento", "La fecha de nacimiento es requerida.");
+                    }
+
                     // Guardar el nuevo usuario en la base de datos
                     _context.Add(usuario);
                     await _context.SaveChangesAsync();
@@ -265,6 +271,7 @@ namespace scg_clinicasur.Controllers
                     // Actualizamos los demás campos
                     usuarioExistente.nombre = usuario.nombre;
                     usuarioExistente.apellido = usuario.apellido;
+                    usuarioExistente.fecha_nacimiento = usuario.fecha_nacimiento;
                     usuarioExistente.correo = usuario.correo;
                     usuarioExistente.telefono = usuario.telefono;
                     usuarioExistente.id_rol = usuario.id_rol;
@@ -381,6 +388,41 @@ namespace scg_clinicasur.Controllers
                 // Eliminar el usuario de la base de datos
                 _context.Usuarios.Remove(usuario);
                 await _context.SaveChangesAsync();
+
+                // Enviar notificación por correo electrónico
+                var smtpClient = new SmtpClient("smtp.outlook.com")
+                {
+                    Port = 587,
+                    Credentials = new NetworkCredential("jrojas30463@ufide.ac.cr", "QsEfT0809*"), // Reemplaza con tu contraseña real
+                    EnableSsl = true,
+                };
+
+                string subject = "Cuenta Eliminada del Sistema";
+                string body = $"Hola {usuario.nombre},<br/><br/>" +
+                              $"Tu cuenta ha sido eliminada exitosamente de nuestro sistema.<br/><br/>" +
+                              $"Por favor, cantacte con el administrador en caso de ser necesario.<br/><br/>" +
+                              $"Muchas Gracias.";
+
+                var mailMessage = new MailMessage
+                {
+                    From = new MailAddress("jrojas30463@ufide.ac.cr"),
+                    Subject = subject,
+                    Body = body,
+                    IsBodyHtml = true,
+                };
+                mailMessage.To.Add(usuario.correo);
+
+                try
+                {
+                    // Intentar enviar el correo
+                    await smtpClient.SendMailAsync(mailMessage);
+                    TempData["SuccessMessage"] = "Usuario eliminado exitosamente y se ha enviado una notificación al correo.";
+                }
+                catch (Exception ex)
+                {
+                    // Manejar errores en el envío del correo
+                    TempData["ErrorMessage"] = $"El usuario fue eliminado, pero ocurrió un error al enviar el correo: {ex.Message}";
+                }
 
                 TempData["SuccessMessage"] = "Usuario eliminado exitosamente.";
                 return RedirectToAction("Index");

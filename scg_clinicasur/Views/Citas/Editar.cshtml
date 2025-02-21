@@ -65,7 +65,7 @@
                 <!-- Fecha de Cita -->
                 <div class="mb-3">
                     <label for="fechaCita" class="form-label fw-bold">Fecha de la Cita</label>
-                    <input type="date" id="fechaCita" class="form-control" name="FechaInicio"
+                    <input type="date" id="fechaCita" class="form-control"
                            value="@Model.FechaInicio.ToString("yyyy-MM-dd")" min="@DateTime.Now.ToString("yyyy-MM-dd")" />
                 </div>
 
@@ -133,6 +133,7 @@
                         } else {
                             horaBtn.classList.add('btn-outline-success');
                             horaBtn.onclick = function () {
+                                // Actualizar el campo oculto FechaInicio con la fecha y hora seleccionada
                                 document.getElementById('FechaInicio').value = `${fecha}T${hora.horaInicio}`;
                                 document.getElementById('FechaFin').value = `${fecha}T${hora.horaFin}`;
                                 document.querySelectorAll('.hora-bloque').forEach(b => b.classList.remove('btn-success', 'text-white'));

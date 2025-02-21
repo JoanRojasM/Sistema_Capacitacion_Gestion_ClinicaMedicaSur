@@ -22,6 +22,7 @@ CREATE TABLE usuarios (
     contraseña VARCHAR(255), -- Almacenar contraseñas hasheadas
     telefono VARCHAR(15),
     id_rol INT,
+	fecha_nacimiento DATE,
     fecha_registro DATETIME DEFAULT GETDATE(),
     estado VARCHAR(10) DEFAULT 'activo' CHECK (estado IN ('activo', 'inactivo')),
     FOREIGN KEY (id_rol) REFERENCES roles(id_rol)
@@ -119,13 +120,12 @@ CREATE TABLE expedientes (
     id_expediente INT PRIMARY KEY IDENTITY(1,1),
     id_paciente INT NOT NULL,
     nombre_paciente TEXT NOT NULL,
-    fecha_nacimiento DATE NOT NULL,
     ultima_consulta DATETIME,
     diagnostico TEXT,
     descripcion TEXT,
     tratamientos_previos TEXT,
     fecha_creacion DATETIME DEFAULT GETDATE(),
-    FOREIGN KEY (id_paciente) REFERENCES usuarios(id_usuario)
+    FOREIGN KEY (id_paciente) REFERENCES usuarios(id_usuario),
 );
 
 CREATE TABLE contabilidad (
@@ -229,23 +229,23 @@ CREATE TABLE doctor_especialidades (
 );
 
 -- Insertar un usuario para cada rol con estado "activo"
-INSERT INTO usuarios (nombre, apellido, correo, contraseña, telefono, id_rol, estado)
-VALUES
-('Maria', 'Perez', 'maria.perez@example.com', '123', '1234567890', (SELECT id_rol FROM roles WHERE nombre_rol = 'asistente_limpieza'), 'activo'),
-('Carlos', 'Rodriguez', 'carlos.rodriguez@example.com', '123', '2345678901', (SELECT id_rol FROM roles WHERE nombre_rol = 'asistente_medico'), 'activo'),
-('Ana', 'Lopez', 'ana.lopez@example.com', '123', '3456789012', (SELECT id_rol FROM roles WHERE nombre_rol = 'paciente'), 'activo'),
-('Jorge', 'Martinez', 'jorge.martinez@example.com', '123', '4567890123', (SELECT id_rol FROM roles WHERE nombre_rol = 'doctor'), 'activo'),
-('Laura', 'Fernandez', 'laura.fernandez@example.com', '123', '5678901234', (SELECT id_rol FROM roles WHERE nombre_rol = 'administrador'), 'activo');
+INSERT INTO usuarios (nombre, apellido, correo, contraseña, telefono, id_rol, fecha_nacimiento) VALUES
+('Maria', 'Perez', 'maria.perez@example.com', 'IaSw3izPQ21dyC4/iEyvyoPcxdbKPx2NeFIb/YMq8ko=:UxQo8LX8x/CeYISiLAWY4w==', '1234567890', (SELECT id_rol FROM roles WHERE nombre_rol = 'asistente_limpieza'), '1985-02-15'),
+('Carlos', 'Rodriguez', 'carlos.rodriguez@example.com', 'IaSw3izPQ21dyC4/iEyvyoPcxdbKPx2NeFIb/YMq8ko=:UxQo8LX8x/CeYISiLAWY4w==', '2345678901', (SELECT id_rol FROM roles WHERE nombre_rol = 'asistente_medico'), '1990-06-10'),
+('Ana', 'Lopez', 'ana.lopez@example.com', 'IaSw3izPQ21dyC4/iEyvyoPcxdbKPx2NeFIb/YMq8ko=:UxQo8LX8x/CeYISiLAWY4w==', '3456789012', (SELECT id_rol FROM roles WHERE nombre_rol = 'paciente'), '1995-08-25'),
+('Jorge', 'Martinez', 'jorge.martinez@example.com', 'IaSw3izPQ21dyC4/iEyvyoPcxdbKPx2NeFIb/YMq8ko=:UxQo8LX8x/CeYISiLAWY4w==', '4567890123', (SELECT id_rol FROM roles WHERE nombre_rol = 'doctor'), '1982-11-30'),
+('Laura', 'Fernandez', 'laura.fernandez@example.com', 'IaSw3izPQ21dyC4/iEyvyoPcxdbKPx2NeFIb/YMq8ko=:UxQo8LX8x/CeYISiLAWY4w==', '5678901234', (SELECT id_rol FROM roles WHERE nombre_rol = 'administrador'), '1980-04-12');
 
 -- Insertar pacientes
-INSERT INTO usuarios (nombre, apellido, correo, contraseña, telefono, id_rol) VALUES
-('Juancho', 'Torres', 'juan.perez@mail.com', '123456', '12345678', 3),
-('Anita', 'Flores', 'ana.gomez@mail.com', '123456', '87654321', 3);
+INSERT INTO usuarios (nombre, apellido, correo, contraseña, telefono, id_rol, fecha_nacimiento) VALUES
+('Juancho', 'Torres', 'juan.perez@mail.com', 'IaSw3izPQ21dyC4/iEyvyoPcxdbKPx2NeFIb/YMq8ko=:UxQo8LX8x/CeYISiLAWY4w==', '12345678', 3, '1992-01-20'),
+('Anita', 'Flores', 'ana.gomez@mail.com', 'IaSw3izPQ21dyC4/iEyvyoPcxdbKPx2NeFIb/YMq8ko=:UxQo8LX8x/CeYISiLAWY4w==', '87654321', 3, '1993-05-05');
 
 -- Insertar doctores
-INSERT INTO usuarios (nombre, apellido, correo, contraseña, telefono, id_rol) VALUES
-('Dr. Francisco', 'Rodríguez', 'francisco.rodriguez@mail.com', '123456', '12349876', 4),
-('Dra. Pepe', 'Lopez', 'pepe.lopez@mail.com', '123456', '87651234', 4);
+INSERT INTO usuarios (nombre, apellido, correo, contraseña, telefono, id_rol, fecha_nacimiento) VALUES
+('Dr. Francisco', 'Rodríguez', 'francisco.rodriguez@mail.com', 'IaSw3izPQ21dyC4/iEyvyoPcxdbKPx2NeFIb/YMq8ko=:UxQo8LX8x/CeYISiLAWY4w==', '12349876', 4, '1978-03-15'),
+('Dra. Pepe', 'Lopez', 'pepe.lopez@mail.com', 'IaSw3izPQ21dyC4/iEyvyoPcxdbKPx2NeFIb/YMq8ko=:UxQo8LX8x/CeYISiLAWY4w==', '87651234', 4, '1985-07-30');
+
 
 INSERT INTO citas (id_paciente, id_doctor, fecha_inicio, fecha_fin, motivo_cita, id_estado_cita, fecha_creacion) 
 VALUES 

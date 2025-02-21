@@ -28,6 +28,13 @@
                     <span asp-validation-for="apellido" class="text-danger"></span>
                 </div>
 
+                <div class="form-group">
+                    <label asp-for="fecha_nacimiento" class="control-label"></label>
+                    <input asp-for="fecha_nacimiento" class="form-control" type="date" />
+                    <span asp-validation-for="fecha_nacimiento" class="text-danger"></span>
+                </div>
+
+
                 <div class="mb-3">
                     <label asp-for="correo" class="form-label fw-bold">Correo Electrónico:</label>
                     <input asp-for="correo" type="email" class="form-control" placeholder="Ej. usuario@correo.com" />

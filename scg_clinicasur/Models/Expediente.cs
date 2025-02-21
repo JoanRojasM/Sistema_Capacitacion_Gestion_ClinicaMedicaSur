@@ -20,11 +20,6 @@ namespace scg_clinicasur.Models
         [Column("id_paciente")]  // Mapea a la columna 'id_paciente' en la base de datos
         public int idPaciente { get; set; }
 
-        [Required(ErrorMessage = "La fecha de nacimiento es obligatoria.")]
-        [DataType(DataType.Date, ErrorMessage = "La fecha de nacimiento debe ser válida.")]
-        [Column("fecha_nacimiento")]  // Mapea a la columna 'fecha_nacimiento' en la base de datos
-        public DateTime fechaNacimiento { get; set; }
-
         [Required(ErrorMessage = "La fecha de la última consulta es obligatoria.")]
         [DataType(DataType.DateTime, ErrorMessage = "La fecha de la última consulta debe ser válida.")]
         [Column("ultima_consulta")]  // Mapea a la columna 'ultima_consulta' en la base de datos

@@ -76,14 +76,9 @@
                                        class="btn btn-warning btn-sm text-white">
                                         <i class="bi bi-pencil-square"></i> Editar
                                     </a>
-                                    <form asp-action="EliminarResultado" asp-controller="Expedientes" method="post" class="d-inline">
-                                        @Html.AntiForgeryToken()
-                                        <input type="hidden" name="id" value="@resultado.IdResultado" />
-                                        <button type="submit" class="btn btn-danger btn-sm"
-                                                onclick="return confirm('¿Estás seguro de que deseas eliminar este resultado de laboratorio?')">
-                                            <i class="bi bi-trash"></i> Eliminar
-                                        </button>
-                                    </form>
+                                    <a asp-action="EliminarResultadosLaboratorio" asp-route-id="@resultado.IdResultado" class="btn btn-danger btn-sm">
+                                        <i class="bi bi-trash"></i> Eliminar
+                                    </a>
                                 </td>
                             </tr>
                         }
@@ -100,12 +95,22 @@
 
         <!-- Botón de regreso -->
         @{
+            // Obtén el IdExpediente del primer resultado (si existe)
             var idExpediente = Model.FirstOrDefault()?.IdExpediente;
         }
         <div class="text-center mt-4">
-            <a href="@Url.Action("DetallesConsulta", "Expedientes", new { id = idExpediente })" class="btn btn-secondary">
-                <i class="bi bi-arrow-left"></i> Volver al Expediente
-            </a>
+            <nav>
+                @if (idExpediente != null)
+                {
+                    <a asp-action="DetallesConsulta" asp-route-id="@idExpediente" class="btn btn-secondary">
+                        <i class="bi bi-arrow-left"></i> Volver a Detalles
+                    </a>
+                }
+                else
+                {
+                    <p class="text-muted">No hay expediente asociado.</p>
+                }
+            </nav>
         </div>
     </div>
 
