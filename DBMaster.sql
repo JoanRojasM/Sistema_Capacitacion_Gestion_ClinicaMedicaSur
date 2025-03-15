@@ -230,30 +230,12 @@ CREATE TABLE doctor_especialidades (
 
 -- Insertar un usuario para cada rol con estado "activo"
 INSERT INTO usuarios (nombre, apellido, correo, contraseña, telefono, id_rol, fecha_nacimiento) VALUES
-('Maria', 'Perez', 'maria.perez@example.com', 'IaSw3izPQ21dyC4/iEyvyoPcxdbKPx2NeFIb/YMq8ko=:UxQo8LX8x/CeYISiLAWY4w==', '1234567890', (SELECT id_rol FROM roles WHERE nombre_rol = 'asistente_limpieza'), '1985-02-15'),
-('Carlos', 'Rodriguez', 'carlos.rodriguez@example.com', 'IaSw3izPQ21dyC4/iEyvyoPcxdbKPx2NeFIb/YMq8ko=:UxQo8LX8x/CeYISiLAWY4w==', '2345678901', (SELECT id_rol FROM roles WHERE nombre_rol = 'asistente_medico'), '1990-06-10'),
-('Ana', 'Lopez', 'ana.lopez@example.com', 'IaSw3izPQ21dyC4/iEyvyoPcxdbKPx2NeFIb/YMq8ko=:UxQo8LX8x/CeYISiLAWY4w==', '3456789012', (SELECT id_rol FROM roles WHERE nombre_rol = 'paciente'), '1995-08-25'),
-('Jorge', 'Martinez', 'jorge.martinez@example.com', 'IaSw3izPQ21dyC4/iEyvyoPcxdbKPx2NeFIb/YMq8ko=:UxQo8LX8x/CeYISiLAWY4w==', '4567890123', (SELECT id_rol FROM roles WHERE nombre_rol = 'doctor'), '1982-11-30'),
 ('Laura', 'Fernandez', 'laura.fernandez@example.com', 'IaSw3izPQ21dyC4/iEyvyoPcxdbKPx2NeFIb/YMq8ko=:UxQo8LX8x/CeYISiLAWY4w==', '5678901234', (SELECT id_rol FROM roles WHERE nombre_rol = 'administrador'), '1980-04-12');
-
--- Insertar pacientes
-INSERT INTO usuarios (nombre, apellido, correo, contraseña, telefono, id_rol, fecha_nacimiento) VALUES
-('Juancho', 'Torres', 'juan.perez@mail.com', 'IaSw3izPQ21dyC4/iEyvyoPcxdbKPx2NeFIb/YMq8ko=:UxQo8LX8x/CeYISiLAWY4w==', '12345678', 3, '1992-01-20'),
-('Anita', 'Flores', 'ana.gomez@mail.com', 'IaSw3izPQ21dyC4/iEyvyoPcxdbKPx2NeFIb/YMq8ko=:UxQo8LX8x/CeYISiLAWY4w==', '87654321', 3, '1993-05-05');
 
 -- Insertar doctores
 INSERT INTO usuarios (nombre, apellido, correo, contraseña, telefono, id_rol, fecha_nacimiento) VALUES
 ('Dr. Francisco', 'Rodríguez', 'francisco.rodriguez@mail.com', 'IaSw3izPQ21dyC4/iEyvyoPcxdbKPx2NeFIb/YMq8ko=:UxQo8LX8x/CeYISiLAWY4w==', '12349876', 4, '1978-03-15'),
 ('Dra. Pepe', 'Lopez', 'pepe.lopez@mail.com', 'IaSw3izPQ21dyC4/iEyvyoPcxdbKPx2NeFIb/YMq8ko=:UxQo8LX8x/CeYISiLAWY4w==', '87651234', 4, '1985-07-30');
-
-
-INSERT INTO citas (id_paciente, id_doctor, fecha_inicio, fecha_fin, motivo_cita, id_estado_cita, fecha_creacion) 
-VALUES 
-(1, 2, '2024-11-01 14:00:00', '2024-11-01 15:00:00', 'Revisión General', 1, GETDATE()),
-
-(3, 2, '2024-11-02 09:30:00', '2024-11-02 10:30:00', 'Consulta de Seguimiento', 1, GETDATE()),
-
-(2, 1, '2024-11-03 11:00:00', '2024-11-03 12:00:00', 'Consulta de Resultados', 3, GETDATE());
 
 -- Disponibilidad para el Dr. Francisco Rodríguez
 INSERT INTO disponibilidad_doctor (id_doctor, dia_semana, hora_inicio, hora_fin) VALUES
@@ -302,64 +284,6 @@ INSERT INTO Alergias (nombre_alergia) VALUES
 ('Moho'),
 ('Látex'),
 ('Gatos');
-
-INSERT INTO capacitacion (titulo, descripcion, duracion, id_usuario, estado) VALUES
-('Introducción a la Seguridad Laboral', 'Capacitación básica sobre medidas de seguridad en el trabajo para prevenir accidentes.', '02:00:00', 1, 'activo'),
-('Limpieza y Desinfección en Áreas Críticas', 'Técnicas adecuadas para la limpieza y desinfección de quirófanos y áreas críticas.', '02:00:00', 1, 'activo'),
-('Primeros Auxilios Básicos', 'Capacitación para aprender técnicas de primeros auxilios en situaciones de emergencia.', '02:00:00', 2, 'activo'),
-('Manejo de Residuos Médicos', 'Procedimientos correctos para manejar y desechar residuos médicos de forma segura.', '02:00:00', 2, 'activo'),
-('Uso Seguro de Productos Químicos', 'Precauciones y manejo adecuado de productos químicos utilizados en limpieza.', '02:00:00', 1, 'activo'),
-('Relaciones Interpersonales en el Trabajo', 'Mejora de las habilidades de comunicación y trabajo en equipo.', '02:00:00', 2, 'activo'),
-('Prevención de Infecciones', 'Técnicas para prevenir la propagación de infecciones en el entorno hospitalario.', '02:00:00', 2, 'activo'),
-('Manejo de Herramientas de Limpieza', 'Uso y mantenimiento correcto de equipos de limpieza.', '02:00:00', 1, 'activo'),
-('Protocolos de Emergencia en Hospitales', 'Cómo actuar en caso de emergencias dentro del hospital.', '02:00:00', 2, 'activo'),
-('Convivencia y Respeto en el Entorno Laboral', 'Fomentar el respeto y la convivencia pacífica en el entorno de trabajo.', '02:00:00', 1, 'activo'),
-('Capacitación en Ergonomía', 'Cómo evitar lesiones relacionadas con malas posturas o esfuerzos innecesarios.', '02:00:00', 1, 'activo'),
-('Higiene Personal y Profesional', 'Buenas prácticas de higiene personal para garantizar un entorno limpio.', '02:00:00', 2, 'activo'),
-('Control de Plagas en Instalaciones Médicas', 'Métodos para prevenir y controlar plagas en instalaciones de salud.', '02:00:00', 1, 'activo'),
-('Atención al Paciente con Movilidad Reducida', 'Técnicas para asistir de manera segura a pacientes con movilidad limitada.', '02:00:00', 2, 'activo'),
-('Recolección y Separación de Residuos', 'Normas para la recolección y separación correcta de residuos.', '02:00:00', 1, 'activo'),
-('Actualización en Protocolos de Bioseguridad', 'Nuevas normativas y protocolos de bioseguridad en el entorno hospitalario.', '02:00:00', 2, 'activo'),
-('Técnicas de Desinfección Avanzada', 'Métodos avanzados para desinfectar áreas críticas.', '02:00:00', 1, 'activo'),
-('Identificación de Riesgos Laborales', 'Cómo identificar y mitigar riesgos en el entorno laboral.', '02:00:00', 2, 'activo'),
-('Capacitación en Manejo de Equipos de Protección', 'Uso adecuado de equipos de protección personal en el trabajo.', '02:00:00', 2, 'activo'),
-('Organización y Planeación de Tareas', 'Cómo organizar de manera eficiente las tareas diarias.', '02:00:00', 1, 'activo');
-
-INSERT INTO citas (id_paciente, id_doctor, fecha_inicio, fecha_fin, motivo_cita, id_estado_cita, fecha_creacion) 
-VALUES 
-(3, 4, '2024-11-04 08:00:00', '2024-11-04 09:00:00', 'Consulta de Seguimiento', 1, GETDATE()),
-(3, 4, '2024-11-04 10:00:00', '2024-11-04 11:00:00', 'Chequeo Preventivo', 2, GETDATE()),
-(3, 4, '2024-11-05 14:00:00', '2024-11-05 15:00:00', 'Revisión General', 1, GETDATE()),
-(3, 4, '2024-11-06 09:00:00', '2024-11-06 10:00:00', 'Consulta Inicial', 1, GETDATE()),
-(3, 4, '2024-11-06 11:30:00', '2024-11-06 12:30:00', 'Evaluación de Tratamiento', 3, GETDATE()),
-(3, 4, '2024-11-07 15:00:00', '2024-11-07 16:00:00', 'Control de Peso', 1, GETDATE()),
-(3, 4, '2024-11-08 08:30:00', '2024-11-08 09:30:00', 'Chequeo Preventivo', 2, GETDATE());
-
-INSERT INTO contabilidad (concepto, monto, tipo, fecha_registro) 
-VALUES 
-('Pago de Suministros Médicos', 150000, 'Gasto', GETDATE()),
-('Ingreso por Consulta Médica', 20000, 'Ingreso', GETDATE()),
-('Compra de Material de Limpieza', 30000, 'Gasto', GETDATE()),
-('Ingreso por Consulta de Seguimiento', 25000, 'Ingreso', GETDATE()),
-('Pago a Proveedores de Equipos Médicos', 500000, 'Gasto', GETDATE()),
-('Ingreso por Revisión General', 18000, 'Ingreso', GETDATE()),
-('Pago de Servicios de Mantenimiento de Equipos', 120000, 'Gasto', GETDATE()),
-('Ingreso por Consulta Inicial', 22000, 'Ingreso', GETDATE()),
-('Compra de Medicamentos', 80000, 'Gasto', GETDATE()),
-('Ingreso por Consulta de Resultados', 20000, 'Ingreso', GETDATE()),
-('Pago de Salarios al Personal', 1500000, 'Gasto', GETDATE()),
-('Ingreso por Chequeo Preventivo', 15000, 'Ingreso', GETDATE()),
-('Pago de Servicios de Limpieza', 60000, 'Gasto', GETDATE()),
-('Ingreso por Control de Peso', 18000, 'Ingreso', GETDATE()),
-('Compra de Insumos para Emergencias', 70000, 'Gasto', GETDATE()),
-('Ingreso por Evaluación de Tratamiento', 23000, 'Ingreso', GETDATE()),
-('Pago de Seguros Médicos', 200000, 'Gasto', GETDATE()),
-('Ingreso por Control de Plagas', 50000, 'Ingreso', GETDATE()),
-('Compra de Equipos de Protección Personal', 120000, 'Gasto', GETDATE()),
-('Ingreso por Capacitación a Personal', 35000, 'Ingreso', GETDATE());
-
-INSERT INTO usuarios (nombre, apellido, correo, contraseña, telefono, id_rol, fecha_registro, estado)
-VALUES ('Joan', 'Rojas', 'joanda0804@gmail.com', 'IaSw3izPQ21dyC4/iEyvyoPcxdbKPx2NeFIb/YMq8ko=:UxQo8LX8x/CeYISiLAWY4w==', '1234567890', 5, '2024-12-10 11:16:16.267', 'activo'); --123--
 
 INSERT INTO doctor_especialidades (id_usuario, id_especialidad)
 VALUES 

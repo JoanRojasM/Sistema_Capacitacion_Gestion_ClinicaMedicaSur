@@ -1,7 +1,7 @@
 ﻿@model scg_clinicasur.Models.Cita
 
 @{
-    ViewData["Title"] = "Confirmar Eliminación de Cita";
+    ViewData["Title"] = "Confirmar Eliminación";
 }
 
 <!DOCTYPE html>
@@ -20,8 +20,8 @@
     </header>
     <main>
         <p>¿Estás seguro de que deseas eliminar la cita de @Model.Paciente.nombre @Model.Paciente.apellido?</p>
-        <button id="btnEliminar" class="btn btn-danger">Sí, Eliminar Cita</button>
-        <a href="@Url.Action("Citas")" class="button">No, Cancelar</a>
+        <button id="btnEliminar" class="btn btn-danger">Sí, Eliminar</button>
+        <a href="@Url.Action("Citas")" class="button">Cancelar</a>
 
         <!-- Script para cuadro de confirmación de eliminación -->
         <script>
@@ -33,8 +33,7 @@
                     showCancelButton: true,
                     confirmButtonColor: '#d33',
                     cancelButtonColor: '#3085d6',
-                    confirmButtonText: 'Sí, Eliminar Cita',
-                    cancelButtonText: 'No, Cancelar'
+                    confirmButtonText: 'Sí, eliminar'
                 }).then((result) => {
                     if (result.isConfirmed) {
                         document.getElementById('formEliminar').submit();
@@ -42,6 +41,11 @@
                 });
             });
         </script>
+
+        <!-- Formulario de eliminación -->
+        <form id="formEliminar" method="post" asp-controller="Paciente" asp-action="EliminarConfirmado">
+            <input type="hidden" name="id" value="@Model.IdCita" />
+        </form>
     </main>
 </body>
 </html>

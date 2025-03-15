@@ -4,6 +4,8 @@ using Microsoft.EntityFrameworkCore;
 using scg_clinicasur.Data;
 using scg_clinicasur.Models;
 using System.Diagnostics;
+using System.Net.Mail;
+using System.Net;
 using System.Security.Claims;
 
 namespace scg_clinicasur.Controllers
@@ -140,6 +142,7 @@ namespace scg_clinicasur.Controllers
         [HttpGet]
         public async Task<IActionResult> Eliminar(int id)
         {
+
             var cita = await _context.Citas
                 .Include(c => c.Paciente)
                 .Include(c => c.Doctor)
@@ -147,27 +150,24 @@ namespace scg_clinicasur.Controllers
 
             if (cita == null)
             {
-                ViewBag.ErrorMessage = "No se pudo encontrar la cita. Por favor, verifica el ID.";
+                ViewBag.ErrorMessage = "No se pudo encontrar la cita.";
                 return View("ErrorCita");
             }
 
-            // Pasar la cita a la vista para mostrar los detalles
             return View(cita);
         }
 
-        // POST: Confirmar Eliminación
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> EliminarConfirmado(int id)
         {
-            var cita = await _context.Citas
-                .Include(c => c.Paciente)
-                .SingleOrDefaultAsync(c => c.IdCita == id);
+
+            var cita = await _context.Citas.FindAsync(id);
 
             if (cita == null)
             {
-                ViewBag.ErrorMessage = "No se pudo encontrar la cita. Por favor, verifica el ID.";
-                return View("ErrorCita");
+                TempData["ErrorMessage"] = "No se pudo encontrar la cita.";
+                return RedirectToAction("Index");
             }
 
             try
@@ -176,18 +176,22 @@ namespace scg_clinicasur.Controllers
                 await _context.SaveChangesAsync();
 
                 TempData["SuccessMessage"] = "La cita se ha eliminado correctamente.";
-                return RedirectToAction(nameof(Citas));
+
+                // 🔹 Redirección a `Index`
+                return RedirectToAction("Citas");
             }
             catch (DbUpdateException)
             {
-                ViewBag.ErrorMessage = "Error de base de datos: No se pudo eliminar la cita. Intenta nuevamente más tarde.";
-                return View("ErrorCita");
+                TempData["ErrorMessage"] = "Error de base de datos: No se pudo eliminar la cita.";
             }
             catch (Exception ex)
             {
-                ViewBag.ErrorMessage = "Ocurrió un error al intentar eliminar la cita.";
-                ViewBag.ErrorDetails = ex.Message;
-                return View("ErrorCita");
+                TempData["ErrorMessage"] = $"Ocurrió un error interno: {ex.Message}";
+                Console.WriteLine($"[DEBUG] Error inesperado: {ex.Message}");
+            }
+
+            {
+                return RedirectToAction("Citas");
             }
         }
         // Método para mostrar los detalles de una cita con manejo de errores

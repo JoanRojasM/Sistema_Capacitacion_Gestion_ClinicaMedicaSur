@@ -21,7 +21,7 @@ namespace scg_clinicasur.Controllers
         private bool EsRolPermitido()
         {
             var userRole = HttpContext.Session.GetString("UserRole");
-            return userRole?.ToLower() == "doctor" || userRole?.ToLower() == "administrador";
+            return userRole?.ToLower() == "doctor" || userRole?.ToLower() == "administrador" || userRole?.ToLower() == "paciente";
         }
 
         public IActionResult Index(string[] estado)
@@ -720,7 +720,15 @@ namespace scg_clinicasur.Controllers
                 Console.WriteLine($"[DEBUG] Error inesperado: {ex.Message}");
             }
 
-            return RedirectToAction("Index");
+            if (HttpContext.Session.GetString("UserRole").ToLower() == "administrador")
+            {
+                return RedirectToAction("Index");
+            }
+
+            else
+            {
+                return RedirectToAction("Paciente", "Citas");
+            }
         }
 
         [HttpGet]
