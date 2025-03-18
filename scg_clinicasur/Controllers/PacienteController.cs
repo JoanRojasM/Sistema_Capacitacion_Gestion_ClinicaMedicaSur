@@ -48,11 +48,6 @@ namespace scg_clinicasur.Controllers
         [HttpGet]
         public async Task<IActionResult> Editar(int id)
         {
-            var userIdString = HttpContext.Session.GetString("UserId");
-            if (!int.TryParse(userIdString, out int userId))
-            {
-                return RedirectToAction("Login", "Account");
-            }
 
             var cita = await _context.Citas
                 .Include(c => c.Paciente)
@@ -62,62 +57,78 @@ namespace scg_clinicasur.Controllers
 
             if (cita == null)
             {
-                ViewBag.ErrorMessage = "No se pudo encontrar la cita. Por favor, verifica el ID.";
-                return View("ErrorCita");
+                TempData["ErrorMessage"] = "No se pudo encontrar la cita.";
+                return RedirectToAction("Index");
             }
 
-            // Asignar los ViewBag para la vista
             await CargarDatosParaEditar(cita.IdEstadoCita);
             return View(cita);
         }
 
-        // POST: Editar
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Editar(Cita cita)
         {
-            if (ModelState.IsValid)
+
+            if (!ModelState.IsValid)
             {
-                // Verificar conflicto de horarios con las nuevas fechas de inicio y fin
-                bool conflictoHorario = await _context.Citas
-                    .AnyAsync(c => c.IdDoctor == cita.IdDoctor
-                                   && c.IdCita != cita.IdCita
-                                   && ((c.FechaInicio < cita.FechaFin && c.FechaFin > cita.FechaInicio)));
-
-                if (conflictoHorario)
-                {
-                    ModelState.AddModelError("FechaInicio", "El horario seleccionado ya está ocupado por otra cita.");
-                    await CargarDatosParaEditar(cita.IdEstadoCita);
-                    return View(cita);
-                }
-
-                try
-                {
-                    _context.Citas.Update(cita);
-                    await _context.SaveChangesAsync();
-                    TempData["SuccessMessage"] = "La cita se ha actualizado correctamente.";
-                    return RedirectToAction(nameof(Citas));
-                }
-                catch (DbUpdateException)
-                {
-                    ViewBag.ErrorMessage = "Error de base de datos: No se pudieron guardar los cambios. Por favor, intenta nuevamente más tarde.";
-                    await CargarDatosParaEditar(cita.IdEstadoCita);
-                    return View(cita);
-                }
-                catch (Exception)
-                {
-                    ViewBag.ErrorMessage = "Ocurrió un error interno al intentar actualizar la cita. Por favor, contacta con soporte.";
-                    await CargarDatosParaEditar(cita.IdEstadoCita);
-                    return View(cita);
-                }
+                await CargarDatosParaEditar(cita.IdEstadoCita);
+                return View(cita);
             }
 
-            // Volver a cargar los ViewBag y mostrar errores de validación
+            // 🔹 Verificar conflictos de horario con otras citas
+            bool conflictoHorario = await _context.Citas
+                .AnyAsync(c => c.IdDoctor == cita.IdDoctor
+                               && c.IdCita != cita.IdCita
+                               && (c.FechaInicio < cita.FechaFin && c.FechaFin > cita.FechaInicio));
+
+            if (conflictoHorario)
+            {
+                ModelState.AddModelError("FechaInicio", "El horario seleccionado ya está ocupado por otra cita.");
+                await CargarDatosParaEditar(cita.IdEstadoCita);
+                return View(cita);
+            }
+
+            try
+            {
+                // Verificar que la fecha de inicio esté en el formato correcto
+                if (cita.FechaInicio == default(DateTime))
+                {
+                    ModelState.AddModelError("FechaInicio", "La fecha de inicio es inválida.");
+                    await CargarDatosParaEditar(cita.IdEstadoCita);
+                    return View(cita);
+                }
+
+                // Verificar que la fecha de fin también esté correctamente configurada
+                if (cita.FechaFin <= cita.FechaInicio)
+                {
+                    ModelState.AddModelError("FechaFin", "La fecha de fin debe ser posterior a la fecha de inicio.");
+                    await CargarDatosParaEditar(cita.IdEstadoCita);
+                    return View(cita);
+                }
+
+                // Actualizar la cita
+                _context.Citas.Update(cita);
+                await _context.SaveChangesAsync();
+
+                TempData["SuccessMessage"] = "La cita se ha actualizado correctamente.";
+
+                // 🔹 Redirección a `Index`
+                return RedirectToAction("Citas");
+            }
+            catch (DbUpdateException)
+            {
+                TempData["ErrorMessage"] = "Error de base de datos: No se pudieron guardar los cambios.";
+            }
+            catch (Exception ex)
+            {
+                TempData["ErrorMessage"] = $"Ocurrió un error interno: {ex.Message}";
+            }
+
             await CargarDatosParaEditar(cita.IdEstadoCita);
             return View(cita);
         }
 
-        // Cargar datos para la vista de edición
         private async Task CargarDatosParaEditar(int? idEstadoSeleccionado)
         {
             ViewBag.Pacientes = await _context.Usuarios
@@ -616,5 +627,42 @@ namespace scg_clinicasur.Controllers
 
             return RedirectToAction("GestionarMedicamentos", new { id_paciente = medicamento.IdPaciente });
         }
+
+        [HttpGet]
+        public async Task<IActionResult> ObtenerHorasDisponibles(int idDoctor, DateTime fecha)
+        {
+
+            var diaSemana = fecha.ToString("dddd", new System.Globalization.CultureInfo("es-ES")).ToLower();
+
+            var disponibilidad = await _context.DisponibilidadDoctor
+                .Where(d => d.IdDoctor == idDoctor && d.DiaSemana.ToLower() == diaSemana)
+                .ToListAsync();
+
+            var citasReservadas = await _context.Citas
+                .Where(c => c.IdDoctor == idDoctor && c.FechaInicio.Date == fecha.Date)
+                .Select(c => new { c.FechaInicio, c.FechaFin })
+                .ToListAsync();
+
+            var horasDisponibles = new List<object>();
+
+            foreach (var disponibilidadBloque in disponibilidad)
+            {
+                bool bloqueLibre = !citasReservadas.Any(cita =>
+                    cita.FechaInicio.TimeOfDay < disponibilidadBloque.HoraFin &&
+                    cita.FechaFin.TimeOfDay > disponibilidadBloque.HoraInicio);
+
+                var horario = new
+                {
+                    HoraInicio = disponibilidadBloque.HoraInicio.ToString(@"hh\:mm"),
+                    HoraFin = disponibilidadBloque.HoraFin.ToString(@"hh\:mm"),
+                    Ocupada = !bloqueLibre
+                };
+
+                horasDisponibles.Add(horario);
+            }
+
+            return Json(horasDisponibles);
+        }
+
     }
 }

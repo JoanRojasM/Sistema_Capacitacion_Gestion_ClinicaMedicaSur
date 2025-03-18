@@ -285,15 +285,6 @@ INSERT INTO Alergias (nombre_alergia) VALUES
 ('Látex'),
 ('Gatos');
 
-INSERT INTO doctor_especialidades (id_usuario, id_especialidad)
-VALUES 
-(8, 5),
-(8, 6),
-(8, 2),
-(9, 7),
-(9, 6),
-(9, 4);
-
 CREATE PROCEDURE [dbo].[RegistrarNotificacion]
     @id_usuario INT,
     @titulo NVARCHAR(255),

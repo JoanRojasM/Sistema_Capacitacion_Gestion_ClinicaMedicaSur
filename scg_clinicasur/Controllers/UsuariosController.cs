@@ -157,7 +157,7 @@ namespace scg_clinicasur.Controllers
                                   $"Tu cuenta ha sido creada exitosamente en nuestro sistema.<br/><br/>" +
                                   $"Tus credenciales de acceso son:<br/>" +
                                   $"Usuario: {usuario.correo}<br/>" +
-                                  $"Contraseña: La que elegiste durante el registro.<br/>" +
+                                  $"Contraseña: La contraseña predeterminada es 123, procura cambiar la contraseña antes de entrar a la página.<br/>" +
                                   $"Rol: {rolUsuario}<br/><br/>" +
                                   $"Por favor, accede al sistema utilizando tus credenciales.<br/><br/>" +
                                   $"Gracias.";
