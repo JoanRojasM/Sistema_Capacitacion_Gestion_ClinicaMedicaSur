@@ -89,11 +89,47 @@
                         <ul class="navbar-nav">
                             @if (userRole == "administrador")
                             {
-                                    <li class="nav-item">
-                                        <a class="nav-link" asp-controller="Admin" asp-action="Index">
-                                            <i class="bi bi-house"></i> Home
-                                        </a>
-                                    </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" asp-controller="Admin" asp-action="Index">
+                                        <i class="bi bi-house"></i> Home
+                                    </a>
+                                </li>
+                            }
+                            else if (userRole == "doctor")
+                            {
+                                <li class="nav-item">
+                                    <a class="nav-link" asp-controller="Doctor" asp-action="Index">
+                                        <i class="bi bi-house"></i> Home
+                                    </a>
+                                </li>
+                            }
+                            else if (userRole == "asistente_limpieza")
+                            {
+                                <li class="nav-item">
+                                    <a class="nav-link" asp-controller="AsistenteLimpieza" asp-action="Index">
+                                        <i class="bi bi-house"></i> Home
+                                    </a>
+                                </li>
+                            }
+                            else if (userRole == "asistente_medico")
+                            {
+                                <li class="nav-item">
+                                    <a class="nav-link" asp-controller="AsistenteMedico" asp-action="Index">
+                                        <i class="bi bi-house"></i> Home
+                                    </a>
+                                </li>
+                            }
+                            else if (userRole == "paciente")
+                            {
+                                <li class="nav-item">
+                                    <a class="nav-link" asp-controller="Paciente" asp-action="Index">
+                                        <i class="bi bi-house"></i> Home
+                                    </a>
+                                </li>
+                            }
+
+                            @if (userRole == "administrador")
+                            {
                                     <li class="nav-item">
                                         <a class="nav-link" asp-controller="Capacitaciones" asp-action="Index">
                                             <i class="bi bi-journal"></i> Capacitaciones

@@ -53,7 +53,6 @@
                                 }
                             </td>
                             <td>
-                                <!-- Botones de Acción -->
                                 <div class="btn-group" role="group">
                                     <a href="@Url.Action("Detalles", new { id = evaluacion.id_evaluacion })" class="btn btn-primary btn-sm">
                                         <i class="bi bi-eye"></i> Detalles
@@ -61,8 +60,10 @@
                                     <a href="@Url.Action("Editar", new { id = evaluacion.id_evaluacion })" class="btn btn-warning btn-sm text-white">
                                         <i class="bi bi-pencil-square"></i> Editar
                                     </a>
-                                    <form asp-action="Eliminar" asp-route-id="@evaluacion.id_evaluacion" method="post" class="d-inline" onsubmit="return confirm('¿Estás seguro de que quieres eliminar esta evaluación?');">
-                                        <button type="submit" class="btn btn-danger btn-sm">
+                                    <form asp-action="Eliminar" asp-route-id="@evaluacion.id_evaluacion" method="post"
+                                          class="d-inline m-0 p-0 border-0"
+                                          style="margin: 0; padding: 0; border: none; background: transparent;">
+                                        <button type="submit" class="btn btn-danger btn-sm border-0 shadow-none">
                                             <i class="bi bi-trash"></i> Eliminar
                                         </button>
                                     </form>
