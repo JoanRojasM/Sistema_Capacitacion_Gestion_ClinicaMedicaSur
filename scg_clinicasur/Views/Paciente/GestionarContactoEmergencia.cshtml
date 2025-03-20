@@ -2,45 +2,9 @@
 
 @{
     ViewData["Title"] = "Gestionar Contacto de Emergencia de " + Model.Paciente.nombre + " " + Model.Paciente.apellido;
+    Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>@ViewData["Title"]</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.10.5/font/bootstrap-icons.min.css" rel="stylesheet">
-    <style>
-        body {
-            background-color: #f8f9fa;
-        }
-
-        .container {
-            margin-top: 30px;
-            background: #fff;
-            padding: 25px;
-            border-radius: 10px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-        }
-
-        h1 {
-            color: #0d6efd;
-            text-align: center;
-            font-weight: bold;
-        }
-
-        .btn-custom {
-            display: inline-flex;
-            align-items: center;
-        }
-
-            .btn-custom i {
-                margin-right: 5px;
-            }
-    </style>
-</head>
 <body>
     <div class="container">
         <!-- Título -->
@@ -175,5 +139,18 @@
             form.style.display = form.style.display === "none" ? "block" : "none";
         }
     </script>
+
+    <!-- 🔹 Scripts para corregir dropdown de Cerrar Sesión -->
+    @section Scripts {
+        <script>
+            document.addEventListener("DOMContentLoaded", function () {
+                var dropdownElementList = [].slice.call(document.querySelectorAll('.dropdown-toggle'));
+                var dropdownList = dropdownElementList.map(function (dropdownToggleEl) {
+                    return new bootstrap.Dropdown(dropdownToggleEl);
+                });
+            });
+        </script>
+    }
+
 </body>
 </html>

@@ -1,0 +1,111 @@
+﻿@model scg_clinicasur.Models.Cita
+
+@{
+    ViewData["Title"] = "Agendar Cita";
+}
+
+<div class="container mt-5">
+    <h1 class="display-5 fw-bold text-primary">@ViewData["Title"]</h1>
+    <p class="lead text-muted">Seleccione un doctor y una fecha para programar su cita.</p>
+
+    <form method="post" asp-action="Crear">
+        <div class="row g-4">
+            <!-- Seleccionar Doctor -->
+            <div class="col-md-6">
+                <label class="form-label fw-bold">Doctor</label>
+                <select asp-for="IdDoctor" id="doctorSelect" class="form-select">
+                    <option value="">Seleccione un Doctor</option>
+                    @foreach (var doctor in ViewBag.Doctores)
+                    {
+                            <option value="@doctor.id_usuario">@doctor.nombre @doctor.apellido</option>
+                    }
+                </select>
+                <span asp-validation-for="IdDoctor" class="text-danger"></span>
+            </div>
+
+            <!-- Fecha -->
+            <div class="col-md-6">
+                <label class="form-label fw-bold">Fecha</label>
+                <input type="date" id="fechaCita" class="form-control" min="@DateTime.Now.ToString("yyyy-MM-dd")" />
+            </div>
+
+            <!-- Horas Disponibles -->
+            <div class="col-md-12">
+                <label class="form-label fw-bold">Horas Disponibles</label>
+                <div id="horasContainer" class="d-flex flex-wrap gap-2"></div>
+                <input type="hidden" id="FechaInicio" name="FechaInicio" />
+                <input type="hidden" id="FechaFin" name="FechaFin" />
+            </div>
+
+            <!-- Motivo -->
+            <div class="col-md-12">
+                <label class="form-label fw-bold">Motivo de la Cita</label>
+                <input type="text" asp-for="MotivoCita" class="form-control" required />
+                <span asp-validation-for="MotivoCita" class="text-danger"></span>
+            </div>
+        </div>
+
+        <div class="text-center mt-4">
+            <button type="submit" class="btn btn-success">
+                <i class="bi bi-calendar-plus"></i> Guardar
+            </button>
+            <a asp-action="Citas" class="btn btn-secondary">
+                <i class="bi bi-arrow-left"></i> Cancelar
+            </a>
+        </div>
+    </form>
+</div>
+
+<script>
+    document.getElementById('doctorSelect').addEventListener('change', cargarHorasDisponibles);
+    document.getElementById('fechaCita').addEventListener('change', cargarHorasDisponibles);
+
+    function cargarHorasDisponibles() {
+        var idDoctor = document.getElementById('doctorSelect').value;
+        var fecha = document.getElementById('fechaCita').value;
+
+        if (idDoctor && fecha) {
+            console.log(`🔍 Buscando horarios para Doctor ID: ${idDoctor}, Fecha: ${fecha}`);
+
+            fetch(`/Paciente/ObtenerHorasDisponibles?idDoctor=${idDoctor}&fecha=${fecha}`)
+                .then(response => response.json())
+                .then(data => {
+                    console.log("📋 Respuesta de horarios:", data);
+                    var horasContainer = document.getElementById('horasContainer');
+                    horasContainer.innerHTML = '';
+
+                    if (data.length === 0) {
+                        console.warn("⚠️ No se encontraron horarios disponibles.");
+                        horasContainer.innerHTML = '<p class="text-muted">No hay horarios disponibles.</p>';
+                        return;
+                    }
+
+                    data.forEach(hora => {
+                        var horaBtn = document.createElement('button');
+                        horaBtn.classList.add('hora-bloque', 'btn', 'btn-sm');
+                        horaBtn.innerText = `${hora.horaInicio} - ${hora.horaFin}`;
+                        horaBtn.type = 'button';
+
+                        if (hora.ocupada) {
+                            horaBtn.classList.add('btn-secondary', 'disabled');
+                        } else {
+                            horaBtn.classList.add('btn-outline-success');
+                            horaBtn.onclick = function () {
+                                document.getElementById('FechaInicio').value = `${fecha}T${hora.horaInicio}`;
+                                document.getElementById('FechaFin').value = `${fecha}T${hora.horaFin}`;
+                                document.querySelectorAll('.hora-bloque').forEach(b => b.classList.remove('btn-success', 'text-white'));
+                                horaBtn.classList.add('btn-success', 'text-white');
+                            };
+                        }
+
+                        horasContainer.appendChild(horaBtn);
+                    });
+                })
+                .catch(error => {
+                    console.error("❌ Error obteniendo horarios:", error);
+                });
+        } else {
+            console.warn("⚠️ Debe seleccionar un doctor y una fecha para obtener horarios.");
+        }
+    }
+</script>

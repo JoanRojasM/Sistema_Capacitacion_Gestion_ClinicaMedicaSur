@@ -360,7 +360,7 @@ namespace scg_clinicasur.Controllers
         public async Task<IActionResult> Eliminar(int id)
         {
             var usuario = await _context.Usuarios
-                .Include(u => u.roles) // Incluir el rol del usuario si es necesario
+                .Include(u => u.roles)
                 .FirstOrDefaultAsync(u => u.id_usuario == id);
 
             if (usuario == null)
@@ -369,7 +369,7 @@ namespace scg_clinicasur.Controllers
                 return RedirectToAction("Index");
             }
 
-            return View(usuario); // Pasamos el usuario a la vista de confirmación
+            return View(usuario);
         }
 
         [HttpPost, ActionName("Eliminar")]
@@ -385,23 +385,36 @@ namespace scg_clinicasur.Controllers
                     return RedirectToAction("Index");
                 }
 
-                // Eliminar el usuario de la base de datos
+                // **Eliminar manualmente todas las relaciones asociadas**
+                _context.Citas.RemoveRange(_context.Citas.Where(c => c.IdPaciente == id || c.IdDoctor == id));
+                await _context.SaveChangesAsync(); // Guardar cambios antes de eliminar el usuario
+
+                // **Eliminar Notificaciones antes de eliminar el usuario**
+                var notificaciones = _context.Notificaciones.Where(n => n.id_usuario == id);
+                _context.Notificaciones.RemoveRange(notificaciones);
+                await _context.SaveChangesAsync(); // Guardar cambios antes de eliminar el usuario
+
+                _context.Notificaciones.RemoveRange(_context.Notificaciones.Where(n => n.id_usuario == id));
+                _context.Capacitaciones.RemoveRange(_context.Capacitaciones.Where(c => c.id_usuario == id));
+                _context.Evaluaciones.RemoveRange(_context.Evaluaciones.Where(e => e.id_usuario == id));
+
+                // **Eliminar el usuario después de borrar sus relaciones**
                 _context.Usuarios.Remove(usuario);
                 await _context.SaveChangesAsync();
 
-                // Enviar notificación por correo electrónico
+                // **Enviar notificación por correo electrónico**
                 var smtpClient = new SmtpClient("smtp.outlook.com")
                 {
                     Port = 587,
-                    Credentials = new NetworkCredential("jrojas30463@ufide.ac.cr", "QsEfT0809*"), // Reemplaza con tu contraseña real
+                    Credentials = new NetworkCredential("jrojas30463@ufide.ac.cr", "QsEfT0809*"), // Reemplaza con la credencial real
                     EnableSsl = true,
                 };
 
                 string subject = "Cuenta Eliminada del Sistema";
                 string body = $"Hola {usuario.nombre},<br/><br/>" +
-                              $"Tu cuenta ha sido eliminada exitosamente de nuestro sistema.<br/><br/>" +
-                              $"Por favor, cantacte con el administrador en caso de ser necesario.<br/><br/>" +
-                              $"Muchas Gracias.";
+                              $"Tu cuenta ha sido eliminada exitosamente del sistema.<br/><br/>" +
+                              $"Si necesitas más información, contacta con el administrador.<br/><br/>" +
+                              $"Gracias.";
 
                 var mailMessage = new MailMessage
                 {
@@ -414,38 +427,29 @@ namespace scg_clinicasur.Controllers
 
                 try
                 {
-                    // Intentar enviar el correo
                     await smtpClient.SendMailAsync(mailMessage);
-                    TempData["SuccessMessage"] = "Usuario eliminado exitosamente y se ha enviado una notificación al correo.";
+                    TempData["SuccessMessage"] = "Usuario eliminado exitosamente y se ha enviado una notificación por correo.";
                 }
                 catch (Exception ex)
                 {
-                    // Manejar errores en el envío del correo
                     TempData["ErrorMessage"] = $"El usuario fue eliminado, pero ocurrió un error al enviar el correo: {ex.Message}";
                 }
 
-                TempData["SuccessMessage"] = "Usuario eliminado exitosamente.";
                 return RedirectToAction("Index");
             }
-            catch (DbUpdateException dbEx)
+            catch (DbUpdateException ex)
             {
-                // Error relacionado con la actualización de la base de datos
-                TempData["ErrorMessage"] = "Ocurrió un error al eliminar el usuario en la base de datos. Por favor, inténtelo nuevamente más tarde.";
-                // Opcional: registrar detalles del error
+                TempData["ErrorMessage"] = $"Error de base de datos: {ex.InnerException?.Message ?? ex.Message}";
             }
-            catch (TimeoutException timeoutEx)
+            catch (TimeoutException)
             {
-                // Error de tiempo de espera
                 TempData["ErrorMessage"] = "La operación tomó demasiado tiempo. Por favor, inténtelo nuevamente más tarde.";
-                // Opcional: registrar detalles del error
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                // Cualquier otro error inesperado
                 TempData["ErrorMessage"] = "Ocurrió un error inesperado. Por favor, inténtelo nuevamente.";
             }
 
-            // En caso de error, redirigir al índice para mostrar el mensaje de error
             return RedirectToAction("Index");
         }
 

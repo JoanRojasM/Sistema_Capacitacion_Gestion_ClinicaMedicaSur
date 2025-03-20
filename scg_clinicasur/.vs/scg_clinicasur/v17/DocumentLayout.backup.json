@@ -3,12 +3,24 @@
   "WorkspaceRootPath": "C:\\Users\\Usuario\\OneDrive\\Documentos\\GitHub\\Sistema_Capacitacion_Gestion_ClinicaMedicaSur\\scg_clinicasur\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{725F065E-1652-4DC8-8AB2-3A6C4BFAB6C7}|scg_clinicasur.csproj|c:\\users\\usuario\\onedrive\\documentos\\github\\sistema_capacitacion_gestion_clinicamedicasur\\scg_clinicasur\\controllers\\contabilidadcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{725F065E-1652-4DC8-8AB2-3A6C4BFAB6C7}|scg_clinicasur.csproj|solutionrelative:controllers\\contabilidadcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{725F065E-1652-4DC8-8AB2-3A6C4BFAB6C7}|scg_clinicasur.csproj|c:\\users\\usuario\\onedrive\\documentos\\github\\sistema_capacitacion_gestion_clinicamedicasur\\scg_clinicasur\\views\\paciente\\listadopacientes.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{725F065E-1652-4DC8-8AB2-3A6C4BFAB6C7}|scg_clinicasur.csproj|solutionrelative:views\\paciente\\listadopacientes.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{725F065E-1652-4DC8-8AB2-3A6C4BFAB6C7}|scg_clinicasur.csproj|c:\\users\\usuario\\onedrive\\documentos\\github\\sistema_capacitacion_gestion_clinicamedicasur\\scg_clinicasur\\views\\contabilidad\\editarentrada.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
-      "RelativeMoniker": "D:0:0:{725F065E-1652-4DC8-8AB2-3A6C4BFAB6C7}|scg_clinicasur.csproj|solutionrelative:views\\contabilidad\\editarentrada.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+      "AbsoluteMoniker": "D:0:0:{725F065E-1652-4DC8-8AB2-3A6C4BFAB6C7}|scg_clinicasur.csproj|c:\\users\\usuario\\onedrive\\documentos\\github\\sistema_capacitacion_gestion_clinicamedicasur\\scg_clinicasur\\views\\admin\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{725F065E-1652-4DC8-8AB2-3A6C4BFAB6C7}|scg_clinicasur.csproj|solutionrelative:views\\admin\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{725F065E-1652-4DC8-8AB2-3A6C4BFAB6C7}|scg_clinicasur.csproj|c:\\users\\usuario\\onedrive\\documentos\\github\\sistema_capacitacion_gestion_clinicamedicasur\\scg_clinicasur\\controllers\\pacientecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{725F065E-1652-4DC8-8AB2-3A6C4BFAB6C7}|scg_clinicasur.csproj|solutionrelative:controllers\\pacientecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{725F065E-1652-4DC8-8AB2-3A6C4BFAB6C7}|scg_clinicasur.csproj|c:\\users\\usuario\\onedrive\\documentos\\github\\sistema_capacitacion_gestion_clinicamedicasur\\scg_clinicasur\\views\\paciente\\crear.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{725F065E-1652-4DC8-8AB2-3A6C4BFAB6C7}|scg_clinicasur.csproj|solutionrelative:views\\paciente\\crear.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{725F065E-1652-4DC8-8AB2-3A6C4BFAB6C7}|scg_clinicasur.csproj|c:\\users\\usuario\\onedrive\\documentos\\github\\sistema_capacitacion_gestion_clinicamedicasur\\scg_clinicasur\\views\\paciente\\citas.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{725F065E-1652-4DC8-8AB2-3A6C4BFAB6C7}|scg_clinicasur.csproj|solutionrelative:views\\paciente\\citas.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
     }
   ],
   "DocumentGroupContainers": [
@@ -18,7 +30,7 @@
       "DocumentGroups": [
         {
           "DockedWidth": 142,
-          "SelectedChildIndex": 19,
+          "SelectedChildIndex": 63,
           "Children": [
             {
               "$type": "Bookmark",
@@ -93,29 +105,248 @@
               "Name": "ST:0:0:{a34b1c5d-6d37-4a0c-a8b0-99f8e8158b48}"
             },
             {
-              "$type": "Document",
-              "DocumentIndex": 1,
-              "Title": "EditarEntrada.cshtml",
-              "DocumentMoniker": "C:\\Users\\Usuario\\OneDrive\\Documentos\\GitHub\\Sistema_Capacitacion_Gestion_ClinicaMedicaSur\\scg_clinicasur\\Views\\Contabilidad\\EditarEntrada.cshtml",
-              "RelativeDocumentMoniker": "Views\\Contabilidad\\EditarEntrada.cshtml",
-              "ToolTip": "C:\\Users\\Usuario\\OneDrive\\Documentos\\GitHub\\Sistema_Capacitacion_Gestion_ClinicaMedicaSur\\scg_clinicasur\\Views\\Contabilidad\\EditarEntrada.cshtml",
-              "RelativeToolTip": "Views\\Contabilidad\\EditarEntrada.cshtml",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2025-02-06T02:30:38.114Z",
-              "EditorCaption": ""
+              "$type": "Bookmark",
+              "Name": "ST:128:0:{75188d03-9892-4ae2-abf1-207126247ce5}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:131:0:{1fc202d4-d401-403c-9834-5b218574bb67}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:132:0:{1fc202d4-d401-403c-9834-5b218574bb67}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:133:0:{1fc202d4-d401-403c-9834-5b218574bb67}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:134:0:{1fc202d4-d401-403c-9834-5b218574bb67}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:135:0:{1fc202d4-d401-403c-9834-5b218574bb67}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:136:0:{1fc202d4-d401-403c-9834-5b218574bb67}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:137:0:{1fc202d4-d401-403c-9834-5b218574bb67}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:138:0:{1fc202d4-d401-403c-9834-5b218574bb67}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:14:0:{2456bd12-ecf7-4988-a4a6-67d49173f565}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{809f6ff3-8092-454a-8003-6d4091f9b5bb}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:1:0:{809f6ff3-8092-454a-8003-6d4091f9b5bb}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:129:0:{116d2292-e37d-41cd-a077-ebacac4c8cc4}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:134:0:{116d2292-e37d-41cd-a077-ebacac4c8cc4}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:140:0:{1fc202d4-d401-403c-9834-5b218574bb67}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:137:0:{116d2292-e37d-41cd-a077-ebacac4c8cc4}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:138:0:{116d2292-e37d-41cd-a077-ebacac4c8cc4}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:139:0:{116d2292-e37d-41cd-a077-ebacac4c8cc4}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:140:0:{116d2292-e37d-41cd-a077-ebacac4c8cc4}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:141:0:{116d2292-e37d-41cd-a077-ebacac4c8cc4}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:142:0:{116d2292-e37d-41cd-a077-ebacac4c8cc4}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:143:0:{116d2292-e37d-41cd-a077-ebacac4c8cc4}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:144:0:{116d2292-e37d-41cd-a077-ebacac4c8cc4}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:145:0:{116d2292-e37d-41cd-a077-ebacac4c8cc4}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:146:0:{116d2292-e37d-41cd-a077-ebacac4c8cc4}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:147:0:{116d2292-e37d-41cd-a077-ebacac4c8cc4}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:148:0:{116d2292-e37d-41cd-a077-ebacac4c8cc4}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:151:0:{116d2292-e37d-41cd-a077-ebacac4c8cc4}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:149:0:{116d2292-e37d-41cd-a077-ebacac4c8cc4}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:150:0:{116d2292-e37d-41cd-a077-ebacac4c8cc4}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:136:0:{116d2292-e37d-41cd-a077-ebacac4c8cc4}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:152:0:{116d2292-e37d-41cd-a077-ebacac4c8cc4}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:153:0:{116d2292-e37d-41cd-a077-ebacac4c8cc4}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:154:0:{116d2292-e37d-41cd-a077-ebacac4c8cc4}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:155:0:{116d2292-e37d-41cd-a077-ebacac4c8cc4}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:156:0:{116d2292-e37d-41cd-a077-ebacac4c8cc4}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:159:0:{116d2292-e37d-41cd-a077-ebacac4c8cc4}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:133:0:{116d2292-e37d-41cd-a077-ebacac4c8cc4}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:130:0:{116d2292-e37d-41cd-a077-ebacac4c8cc4}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:131:0:{116d2292-e37d-41cd-a077-ebacac4c8cc4}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:132:0:{116d2292-e37d-41cd-a077-ebacac4c8cc4}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:135:0:{116d2292-e37d-41cd-a077-ebacac4c8cc4}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{ca8cc5c7-0231-406a-95cd-aa5ed6ac0190}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{1c64b9c2-e352-428e-a56d-0ace190b99a6}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{a83394e3-39c2-4678-a3c8-364b69d78fd3}"
             },
             {
               "$type": "Document",
               "DocumentIndex": 0,
-              "Title": "ContabilidadController.cs",
-              "DocumentMoniker": "C:\\Users\\Usuario\\OneDrive\\Documentos\\GitHub\\Sistema_Capacitacion_Gestion_ClinicaMedicaSur\\scg_clinicasur\\Controllers\\ContabilidadController.cs",
-              "RelativeDocumentMoniker": "Controllers\\ContabilidadController.cs",
-              "ToolTip": "C:\\Users\\Usuario\\OneDrive\\Documentos\\GitHub\\Sistema_Capacitacion_Gestion_ClinicaMedicaSur\\scg_clinicasur\\Controllers\\ContabilidadController.cs",
-              "RelativeToolTip": "Controllers\\ContabilidadController.cs",
-              "ViewState": "AgIAAFYAAAAAAAAAAAAswIUAAAAJAAAAAAAAAA==",
+              "Title": "ListadoPacientes.cshtml",
+              "DocumentMoniker": "C:\\Users\\Usuario\\OneDrive\\Documentos\\GitHub\\Sistema_Capacitacion_Gestion_ClinicaMedicaSur\\scg_clinicasur\\Views\\Paciente\\ListadoPacientes.cshtml",
+              "RelativeDocumentMoniker": "Views\\Paciente\\ListadoPacientes.cshtml",
+              "ToolTip": "C:\\Users\\Usuario\\OneDrive\\Documentos\\GitHub\\Sistema_Capacitacion_Gestion_ClinicaMedicaSur\\scg_clinicasur\\Views\\Paciente\\ListadoPacientes.cshtml",
+              "RelativeToolTip": "Views\\Paciente\\ListadoPacientes.cshtml",
+              "ViewState": "AgIAADUAAAAAAAAAAAAAAGwAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2025-03-20T01:22:34.892Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "Index.cshtml",
+              "DocumentMoniker": "C:\\Users\\Usuario\\OneDrive\\Documentos\\GitHub\\Sistema_Capacitacion_Gestion_ClinicaMedicaSur\\scg_clinicasur\\Views\\Admin\\Index.cshtml",
+              "RelativeDocumentMoniker": "Views\\Admin\\Index.cshtml",
+              "ToolTip": "C:\\Users\\Usuario\\OneDrive\\Documentos\\GitHub\\Sistema_Capacitacion_Gestion_ClinicaMedicaSur\\scg_clinicasur\\Views\\Admin\\Index.cshtml",
+              "RelativeToolTip": "Views\\Admin\\Index.cshtml",
+              "ViewState": "AgIAACcAAAAAAAAAAAAAAF4AAAAGAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2025-03-20T01:07:15.458Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "Citas.cshtml",
+              "DocumentMoniker": "C:\\Users\\Usuario\\OneDrive\\Documentos\\GitHub\\Sistema_Capacitacion_Gestion_ClinicaMedicaSur\\scg_clinicasur\\Views\\Paciente\\Citas.cshtml",
+              "RelativeDocumentMoniker": "Views\\Paciente\\Citas.cshtml",
+              "ToolTip": "C:\\Users\\Usuario\\OneDrive\\Documentos\\GitHub\\Sistema_Capacitacion_Gestion_ClinicaMedicaSur\\scg_clinicasur\\Views\\Paciente\\Citas.cshtml",
+              "RelativeToolTip": "Views\\Paciente\\Citas.cshtml",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABgAAAAQAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2025-03-20T00:52:21.51Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "Crear.cshtml",
+              "DocumentMoniker": "C:\\Users\\Usuario\\OneDrive\\Documentos\\GitHub\\Sistema_Capacitacion_Gestion_ClinicaMedicaSur\\scg_clinicasur\\Views\\Paciente\\Crear.cshtml",
+              "RelativeDocumentMoniker": "Views\\Paciente\\Crear.cshtml",
+              "ToolTip": "C:\\Users\\Usuario\\OneDrive\\Documentos\\GitHub\\Sistema_Capacitacion_Gestion_ClinicaMedicaSur\\scg_clinicasur\\Views\\Paciente\\Crear.cshtml",
+              "RelativeToolTip": "Views\\Paciente\\Crear.cshtml",
+              "ViewState": "AgIAADMAAAAAAAAAAAAUwDsAAAAEAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2025-03-20T00:51:43.654Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "PacienteController.cs",
+              "DocumentMoniker": "C:\\Users\\Usuario\\OneDrive\\Documentos\\GitHub\\Sistema_Capacitacion_Gestion_ClinicaMedicaSur\\scg_clinicasur\\Controllers\\PacienteController.cs",
+              "RelativeDocumentMoniker": "Controllers\\PacienteController.cs",
+              "ToolTip": "C:\\Users\\Usuario\\OneDrive\\Documentos\\GitHub\\Sistema_Capacitacion_Gestion_ClinicaMedicaSur\\scg_clinicasur\\Controllers\\PacienteController.cs",
+              "RelativeToolTip": "Controllers\\PacienteController.cs",
+              "ViewState": "AgIAAAIDAAAAAAAAAAAuwA0DAAAJAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-02-06T02:28:55.951Z",
+              "WhenOpened": "2025-03-20T00:47:28.427Z",
               "EditorCaption": ""
             }
           ]

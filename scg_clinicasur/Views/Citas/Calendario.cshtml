@@ -4,6 +4,8 @@
     ViewData["Title"] = "Calendario de Citas";
 }
 
+<!-- Incluir jQuery -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <div class="container mt-5">
     <!-- Encabezado -->
     <div class="text-center mb-4">
@@ -62,20 +64,21 @@
         });
     });
 
-    function cargar_dias() {
-        const date = new Date($('#fecha').val() + '-01');
-        const anno = date.getFullYear();
-        const mes = date.getMonth();
+            function cargar_dias() {
+        const fechaSeleccionada = $('#fecha').val(); // YYYY-MM
+        const partesFecha = fechaSeleccionada.split('-');
+        const anno = parseInt(partesFecha[0], 10);
+        const mes = parseInt(partesFecha[1], 10); // Aquí ya tenemos el mes correcto (1-12)
 
         $('#anno').text(anno);
-        $('#mes').text(mes_a_texto(mes));
+        $('#mes').text(mes_a_texto(mes - 1)); // Restamos 1 porque la función usa índices 0-11
 
         // Obtener citas del servidor
         $.ajax({
-            url: `/Calendario/ObtenerCitasPorMes?year=${anno}&month=${mes + 1}`,
+            url: `/Calendario/ObtenerCitasPorMes?year=${anno}&month=${mes}`, // Ahora el mes es correcto (1-12)
             method: 'GET',
             success: function (citas) {
-                mostrarCalendario(anno, mes, citas);
+                mostrarCalendario(anno, mes - 1, citas); // Pasamos mes - 1 porque la función usa 0-11
             },
             error: function () {
                 alert("No se pudieron cargar las citas.");
@@ -138,8 +141,9 @@
         $('#detalle-cita').show();
     }
 
-    function mes_a_texto(mes) {
-        return ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"][mes];
+        function mes_a_texto(mes) {
+        const meses = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"];
+        return meses[mes];
     }
 
     function get_anno_mes() {

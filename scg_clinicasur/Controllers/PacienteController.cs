@@ -46,6 +46,155 @@ namespace scg_clinicasur.Controllers
         }
 
         [HttpGet]
+        public async Task<IActionResult> Crear()
+        {
+            // Obtener el ID del paciente autenticado desde la sesión
+            var userIdString = HttpContext.Session.GetString("UserId");
+            if (string.IsNullOrEmpty(userIdString) || !int.TryParse(userIdString, out int userId))
+            {
+                TempData["ErrorMessage"] = "No se pudo obtener la información del usuario.";
+                return RedirectToAction("Citas");
+            }
+
+            // Cargar la lista de doctores disponibles
+            ViewBag.Doctores = await _context.Usuarios
+                .Where(u => u.roles.nombre_rol == "doctor")
+                .Select(u => new { u.id_usuario, u.nombre, u.apellido })
+                .ToListAsync();
+
+            return View();
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Crear(Cita cita)
+        {
+            // Obtener el ID del paciente autenticado desde la sesión
+            var userIdString = HttpContext.Session.GetString("UserId");
+            if (string.IsNullOrEmpty(userIdString) || !int.TryParse(userIdString, out int userId))
+            {
+                TempData["ErrorMessage"] = "No se pudo obtener la información del usuario.";
+                return RedirectToAction("Citas");
+            }
+
+            // Asignar el ID del paciente
+            cita.IdPaciente = userId;
+
+            if (!ModelState.IsValid)
+            {
+                await CargarViewBagDoctores();
+                return View(cita);
+            }
+
+            // Validar si el doctor ya tiene una cita en ese horario
+            bool existeConflicto = await _context.Citas
+                .AnyAsync(c => c.IdDoctor == cita.IdDoctor
+                            && c.FechaInicio < cita.FechaFin
+                            && c.FechaFin > cita.FechaInicio);
+
+            if (existeConflicto)
+            {
+                ModelState.AddModelError("", "El doctor ya tiene una cita en este horario.");
+                await CargarViewBagDoctores();
+                return View(cita);
+            }
+
+            // Validar que la fecha de inicio no sea en el pasado
+            if (cita.FechaInicio < DateTime.Now)
+            {
+                ModelState.AddModelError("", "La fecha de inicio no puede ser en el pasado.");
+                await CargarViewBagDoctores();
+                return View(cita);
+            }
+
+            try
+            {
+                // Asignar la fecha de creación
+                cita.FechaCreacion = DateTime.Now;
+
+                // Guardar la cita en la base de datos
+                _context.Citas.Add(cita);
+                await _context.SaveChangesAsync();
+
+                TempData["SuccessMessage"] = "Cita creada exitosamente.";
+
+                // Obtener información del doctor y paciente
+                var doctor = await _context.Usuarios
+                    .Where(u => u.id_usuario == cita.IdDoctor)
+                    .Select(u => new { u.id_usuario, NombreCompleto = u.nombre + " " + u.apellido, u.correo })
+                    .FirstOrDefaultAsync();
+
+                var paciente = await _context.Usuarios
+                    .Where(u => u.id_usuario == userId)
+                    .Select(u => new { u.id_usuario, NombreCompleto = u.nombre + " " + u.apellido, u.correo })
+                    .FirstOrDefaultAsync();
+
+                if (doctor == null || paciente == null)
+                {
+                    TempData["ErrorMessage"] = "No se pudo obtener la información del doctor o paciente.";
+                    return RedirectToAction("Citas");
+                }
+
+                // Notificación para el doctor
+                await _context.Database.ExecuteSqlRawAsync(
+                    "EXEC [dbo].[RegistrarNotificacion] @id_usuario = {0}, @titulo = {1}, @mensaje = {2}, @fecha_envio = {3}",
+                    doctor.id_usuario,
+                    "Nueva Cita Agendada",
+                    $"Estimado {doctor.NombreCompleto}, el paciente {paciente.NombreCompleto} ha programado una cita con usted el {cita.FechaInicio}.",
+                    DateTime.Now
+                );
+
+                // Enviar correo al doctor
+                try
+                {
+                    var smtpClient = new SmtpClient("smtp.outlook.com")
+                    {
+                        Port = 587,
+                        Credentials = new NetworkCredential("jrojas30463@ufide.ac.cr", "QsEfT0809*"), // Reemplazar con credenciales reales
+                        EnableSsl = true,
+                    };
+
+                    var mailMessage = new MailMessage
+                    {
+                        From = new MailAddress("jrojas30463@ufide.ac.cr"),
+                        Subject = "Nueva Cita Agendada",
+                        Body = $"Estimado {doctor.NombreCompleto},<br/><br/>" +
+                               $"El paciente {paciente.NombreCompleto} ha programado una cita con usted.<br/><br/>" +
+                               $"<strong>Fecha de la Cita:</strong> {cita.FechaInicio}<br/>" +
+                               $"<strong>Motivo:</strong> {cita.MotivoCita}<br/><br/>" +
+                               $"Ingrese al sistema para más detalles.<br/>" +
+                               $"Gracias.",
+                        IsBodyHtml = true,
+                    };
+
+                    mailMessage.To.Add(doctor.correo);
+                    await smtpClient.SendMailAsync(mailMessage);
+                }
+                catch (Exception ex)
+                {
+                    TempData["ErrorMessage"] = $"Error al enviar el correo: {ex.Message}";
+                }
+
+                return RedirectToAction("Citas");
+            }
+            catch (Exception ex)
+            {
+                TempData["ErrorMessage"] = $"Error inesperado: {ex.Message}";
+                return RedirectToAction("Citas");
+            }
+        }
+
+        // Método para cargar la lista de doctores en el ViewBag
+        private async Task CargarViewBagDoctores()
+        {
+            ViewBag.Doctores = await _context.Usuarios
+                .Where(u => u.roles.nombre_rol == "doctor")
+                .Select(u => new { u.id_usuario, u.nombre, u.apellido })
+                .ToListAsync();
+        }
+
+
+        [HttpGet]
         public async Task<IActionResult> Editar(int id)
         {
 
@@ -631,6 +780,10 @@ namespace scg_clinicasur.Controllers
         [HttpGet]
         public async Task<IActionResult> ObtenerHorasDisponibles(int idDoctor, DateTime fecha)
         {
+            if (idDoctor == 0 || fecha == default)
+            {
+                return BadRequest("El doctor o la fecha no son válidos.");
+            }
 
             var diaSemana = fecha.ToString("dddd", new System.Globalization.CultureInfo("es-ES")).ToLower();
 
@@ -653,7 +806,7 @@ namespace scg_clinicasur.Controllers
 
                 var horario = new
                 {
-                    HoraInicio = disponibilidadBloque.HoraInicio.ToString(@"hh\:mm"),
+                    HoraInicio = disponibilidadBloque.HoraInicio.ToString(@"hh\:mm"), // 🔹 Usa el mismo formato
                     HoraFin = disponibilidadBloque.HoraFin.ToString(@"hh\:mm"),
                     Ocupada = !bloqueLibre
                 };
@@ -663,6 +816,5 @@ namespace scg_clinicasur.Controllers
 
             return Json(horasDisponibles);
         }
-
     }
 }
