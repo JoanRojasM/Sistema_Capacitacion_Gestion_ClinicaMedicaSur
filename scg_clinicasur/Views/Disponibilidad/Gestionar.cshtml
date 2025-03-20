@@ -1,0 +1,91 @@
+﻿@model IEnumerable<scg_clinicasur.Models.DisponibilidadDoctor>
+
+@{
+    ViewData["Title"] = "Gestionar Disponibilidad";
+}
+
+<div class="container mt-5">
+    <h1 class="text-center text-primary">
+        <i class="bi bi-calendar-clock"></i> Gestionar Disponibilidad
+    </h1>
+
+    <!-- Mensajes de éxito/error -->
+    @if (TempData["SuccessMessage"] != null)
+    {
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            <i class="bi bi-check-circle"></i> @TempData["SuccessMessage"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+    }
+    @if (TempData["ErrorMessage"] != null)
+    {
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            <i class="bi bi-exclamation-triangle"></i> @TempData["ErrorMessage"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+    }
+
+    <!-- Formulario para agregar disponibilidad -->
+    <div class="card p-4 my-4 shadow-sm">
+        <h4 class="text-secondary"><i class="bi bi-plus-circle"></i> Agregar Disponibilidad</h4>
+        <form method="post" asp-action="Agregar">
+            <div class="row g-3">
+                <div class="col-md-4">
+                    <label class="form-label fw-bold">Día de la Semana</label>
+                    <select name="DiaSemana" class="form-select" required>
+                        <option value="Lunes">Lunes</option>
+                        <option value="Martes">Martes</option>
+                        <option value="Miércoles">Miércoles</option>
+                        <option value="Jueves">Jueves</option>
+                        <option value="Viernes">Viernes</option>
+                    </select>
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label fw-bold">Hora Inicio</label>
+                    <input type="time" name="HoraInicio" class="form-control" required />
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label fw-bold">Hora Fin</label>
+                    <input type="time" name="HoraFin" class="form-control" required />
+                </div>
+                <div class="col-md-2 d-flex align-items-end">
+                    <button type="submit" class="btn btn-success w-100">
+                        <i class="bi bi-check-circle"></i> Guardar
+                    </button>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <!-- Tabla con horarios existentes -->
+    <div class="table-responsive">
+        <table class="table table-bordered table-hover text-center">
+            <thead class="bg-primary text-white">
+                <tr>
+                    <th>Día</th>
+                    <th>Hora Inicio</th>
+                    <th>Hora Fin</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>@item.DiaSemana</td>
+                        <td>@item.HoraInicio</td>
+                        <td>@item.HoraFin</td>
+                        <td>
+                            <form method="post" asp-action="Eliminar">
+                                <input type="hidden" name="id" value="@item.IdDisponibilidad" />
+                                <button type="submit" class="btn btn-danger btn-sm">
+                                    <i class="bi bi-trash"></i> Eliminar
+                                </button>
+                            </form>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
