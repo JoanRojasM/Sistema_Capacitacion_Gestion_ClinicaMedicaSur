@@ -32,6 +32,15 @@
                                         <small class="text-muted">
                                             <i class="bi bi-clock"></i> @item.fecha_envio.ToString("dd/MM/yyyy HH:mm")
                                         </small>
+                                        <!-- Formulario de eliminación con el estilo adecuado -->
+                                        <form asp-action="EliminarNotificacion" method="post" class="d-inline m-0 p-0 border-0"
+                                              style="margin: 0; padding: 0; border: none; background: transparent;">
+                                            <!-- Aquí pasamos el id como un campo oculto -->
+                                            <input type="hidden" name="id_notificacion" value="@item.id_notificacion" />
+                                            <button type="submit" class="btn btn-danger btn-sm border-0 shadow-none" title="Eliminar Notificación">
+                                                <i class="bi bi-trash"></i>
+                                            </button>
+                                        </form>
                                     </div>
                                     <p class="mb-0 text-secondary">@item.mensaje</p>
                                 </div>
@@ -43,4 +52,3 @@
         </div>
     }
 </div>
-

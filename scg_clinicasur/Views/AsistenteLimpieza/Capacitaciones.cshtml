@@ -43,24 +43,24 @@
                                 }
                                 else
                                 {
-                                    <span class="badge bg-secondary text-white">@capacitacion.estado</span>
+                                    <span class="badge bg-secondary text-white">Pendiente</span>
                                 }
                             </td>
                             <td>
                                 <div class="btn-group" role="group">
-                                    <form asp-action="SolicitarCancelacion" asp-controller="AsistenteLimpieza" method="post" class="d-inline">
+                                    <form asp-action="SolicitarCancelacion" asp-controller="AsistenteLimpieza" method="post" class="m-0 p-0">
                                         <input type="hidden" name="capacitacionId" value="@capacitacion.id_capacitacion" />
-                                        <button type="submit" class="btn btn-danger btn-sm me-2"
+                                        <button type="submit" class="btn btn-danger w-100 d-flex align-items-center justify-content-center"
                                                 onclick="return confirm('¿Estás seguro de que deseas solicitar la cancelación de esta capacitación?');">
-                                            <i class="bi bi-x-circle"></i> Cancelar
+                                            <i class="bi bi-trash"></i> Cancelar
                                         </button>
                                     </form>
                                     <a asp-controller="Capacitaciones" asp-action="Recursos" asp-route-id="@capacitacion.id_capacitacion"
-                                       class="btn btn-info btn-sm text-white">
+                                       class="btn btn-info text-white w-100 d-flex align-items-center justify-content-center">
                                         <i class="bi bi-folder"></i> Recursos
                                     </a>
                                 </div>
-                            </td>
+                            </td>                            
                         </tr>
                     }
                 }
