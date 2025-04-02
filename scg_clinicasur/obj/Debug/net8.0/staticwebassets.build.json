@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "nQZD/EvsEOTTIzSrM9C0aVPT/Lso81obJMOuYKSD7AI=",
+  "Hash": "pYUoX+PUJ72OPJjlRdeHHgnu9CYEaOEO4ZoU9l9TDF4=",
   "Source": "scg_clinicasur",
   "BasePath": "_content/scg_clinicasur",
   "Mode": "Default",
@@ -72,25 +72,6 @@
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "wwwroot\\css\\site.css"
-    },
-    {
-      "Identity": "C:\\Users\\danie\\OneDrive\\Documentos\\GitHub\\Sistema_Capacitacion_Gestion_ClinicaMedicaSur\\scg_clinicasur\\wwwroot\\evaluaciones\\Caso Practica 01 - Auditoria - Daniel Aharoni.pdf",
-      "SourceId": "scg_clinicasur",
-      "SourceType": "Discovered",
-      "ContentRoot": "C:\\Users\\danie\\OneDrive\\Documentos\\GitHub\\Sistema_Capacitacion_Gestion_ClinicaMedicaSur\\scg_clinicasur\\wwwroot\\",
-      "BasePath": "_content/scg_clinicasur",
-      "RelativePath": "evaluaciones/Caso Practica 01 - Auditoria - Daniel Aharoni.pdf",
-      "AssetKind": "All",
-      "AssetMode": "All",
-      "AssetRole": "Primary",
-      "AssetMergeBehavior": "PreferTarget",
-      "AssetMergeSource": "",
-      "RelatedAsset": "",
-      "AssetTraitName": "",
-      "AssetTraitValue": "",
-      "CopyToOutputDirectory": "Never",
-      "CopyToPublishDirectory": "PreserveNewest",
-      "OriginalItemSpec": "wwwroot\\evaluaciones\\Caso Practica 01 - Auditoria - Daniel Aharoni.pdf"
     },
     {
       "Identity": "C:\\Users\\danie\\OneDrive\\Documentos\\GitHub\\Sistema_Capacitacion_Gestion_ClinicaMedicaSur\\scg_clinicasur\\wwwroot\\favicon.ico",

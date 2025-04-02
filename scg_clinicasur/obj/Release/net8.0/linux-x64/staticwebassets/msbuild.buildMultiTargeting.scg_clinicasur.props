@@ -1,0 +1,3 @@
+﻿<Project>
+  <Import Project="..\build\scg_clinicasur.props" />
+</Project>
