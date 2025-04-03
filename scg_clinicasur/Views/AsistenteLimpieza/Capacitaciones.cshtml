@@ -48,13 +48,10 @@
                             </td>
                             <td>
                                 <div class="btn-group" role="group">
-                                    <form asp-action="SolicitarCancelacion" asp-controller="AsistenteLimpieza" method="post" class="m-0 p-0">
-                                        <input type="hidden" name="capacitacionId" value="@capacitacion.id_capacitacion" />
-                                        <button type="submit" class="btn btn-danger w-100 d-flex align-items-center justify-content-center"
-                                                onclick="return confirm('¿Estás seguro de que deseas solicitar la cancelación de esta capacitación?');">
-                                            <i class="bi bi-trash"></i> Cancelar
-                                        </button>
-                                    </form>
+                                    <a asp-action="SolicitarCancelacion" asp-controller="AsistenteLimpieza" asp-route-capacitacionId="@capacitacion.id_capacitacion"
+                                       class="btn btn-danger w-100 d-flex align-items-center justify-content-center">
+                                        <i class="bi bi-trash"></i> Cancelar
+                                    </a>
                                     <a asp-controller="Capacitaciones" asp-action="Recursos" asp-route-id="@capacitacion.id_capacitacion"
                                        class="btn btn-info text-white w-100 d-flex align-items-center justify-content-center">
                                         <i class="bi bi-folder"></i> Recursos

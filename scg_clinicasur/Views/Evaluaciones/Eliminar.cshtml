@@ -1,12 +1,90 @@
 ﻿@model scg_clinicasur.Models.Evaluacion
 
-<h1>Eliminar Evaluación</h1>
+@{
+    ViewData["Title"] = "Eliminar Evaluación";
+}
 
-<div>
-    <p>¿Estás seguro de que deseas eliminar la evaluación <strong>@Model.nombre</strong>?</p>
-    <form asp-action="Eliminar" method="post">
-        <input type="hidden" asp-for="id_evaluacion" />
-        <button type="submit" class="btn btn-danger">Eliminar</button>
-        <a href="@Url.Action("Index")" class="btn btn-secondary">Cancelar</a>
+<div class="container mt-5">
+    <!-- Encabezado -->
+    <div class="text-center mb-4">
+        <h1 class="display-5 fw-bold text-danger">@ViewData["Title"]</h1>
+        <p class="lead text-muted">Esta acción no se puede deshacer. Por favor, confirme su decisión.</p>
+    </div>
+
+    <!-- Tarjeta con detalles de la capacitación -->
+    <div class="card border-danger shadow-sm">
+        <div class="card-body">
+            <div class="alert alert-danger text-center fw-bold" role="alert">
+                <i class="bi bi-exclamation-triangle-fill"></i> ¡Atención! Esta acción eliminará permanentemente la evaluación.
+            </div>
+
+            <!-- Detalles de la capacitación -->
+            <h4 class="text-center text-primary mb-4">Detalles de la Evaluación</h4>
+            <dl class="row mb-0">
+                <dt class="col-sm-4 text-muted">Título:</dt>
+                <dd class="col-sm-8 fw-bold">@Model.nombre</dd>
+
+                <dt class="col-sm-4 text-muted">Descripción:</dt>
+                <dd class="col-sm-8">@Model.descripcion</dd>
+
+                <dt class="col-sm-4 text-muted">Duración:</dt>
+                <dd class="col-sm-8">@Model.tiempo_prueba</dd>
+
+                <dt class="col-sm-4 text-muted">Archivo:</dt>
+                <dd class="col-sm-8">
+                    @if (!string.IsNullOrEmpty(Model.archivo))
+                    {
+                        <a href="@Url.Content(Model.archivo)" target="_blank" class="btn btn-sm btn-outline-success">
+                            <i class="bi bi-file-earmark"></i> Ver Archivo
+                        </a>
+                    }
+                    else
+                    {
+                        <span class="text-muted">No disponible</span>
+                    }
+                </dd>
+
+                <dt class="col-sm-4 text-muted">Capacitación Relacionada:</dt>
+                <dd class="col-sm-8">@Model.Capacitacion.titulo</dd>
+
+                <dt class="col-sm-4 text-muted">Usuario Responsable:</dt>
+                <dd class="col-sm-8">@Model.Usuario.nombre @Model.Usuario.apellido</dd>
+            </dl>
+        </div>
+    </div>
+
+    <!-- Botones de Acción -->
+    <div class="text-center mt-4">
+        <button id="btnEliminar" class="btn btn-danger me-2">
+            <i class="bi bi-trash-fill"></i> Confirmar Eliminación
+        </button>
+        <a asp-action="Index" class="btn btn-secondary">
+            <i class="bi bi-arrow-left-circle"></i> Cancelar
+        </a>
+    </div>
+
+    <!-- Formulario de eliminación oculto -->
+    <form id="formEliminar" method="post" asp-controller="Evaluaciones" asp-action="EliminarConfirmado">
+        <input type="hidden" name="id" value="@Model.id_evaluacion" />
     </form>
 </div>
+
+<!-- Agregar SweetAlert2 -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>
+    document.getElementById('btnEliminar').addEventListener('click', function () {
+        Swal.fire({
+            title: '¿Estás seguro?',
+            text: "No podrás revertir esta acción.",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#d33',
+            cancelButtonColor: '#3085d6',
+            confirmButtonText: 'Sí, eliminar'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                document.getElementById('formEliminar').submit();
+            }
+        });
+    });
+</script>

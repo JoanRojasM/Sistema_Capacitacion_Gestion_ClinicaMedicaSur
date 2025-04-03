@@ -5,98 +5,111 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<body>
-    <div class="container mt-5">
-        <!-- Encabezado -->
-        <div class="d-flex justify-content-between align-items-center mb-4">
-            <h2 class="fw-bold text-primary"><i class="bi bi-calendar-check"></i> Mis Citas</h2>
+<div class="container mt-5">
+    <!-- Mensajes -->
+    @if (TempData["SuccessMessage"] != null)
+    {
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            @TempData["SuccessMessage"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    }
+    @if (TempData["ErrorMessage"] != null)
+    {
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            @TempData["ErrorMessage"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    }
 
-            <!-- Botón Agendar Cita -->
-            <a asp-action="Crear" class="btn btn-success btn-lg">
+    <!-- Encabezado -->
+    <div class="text-center mb-4">
+        <h1 class="display-5 fw-bold text-primary"><i class="bi bi-calendar-check"></i> Mis Citas</h1>
+        <p class="lead text-muted">Administra y visualiza todas tus citas programadas.</p>
+    </div>
+
+    <!-- Botones y Filtros -->
+    <div class="d-flex justify-content-between flex-wrap mb-4">
+        <div class="d-flex gap-2">
+            <a asp-action="Crear" class="btn btn-success">
                 <i class="bi bi-calendar-plus"></i> Agendar Cita
             </a>
         </div>
-
-        <!-- Tabla -->
-        <div class="table-responsive">
-            <table class="table table-hover text-center align-middle">
-                <thead>
-                    <tr>
-                        <th>Paciente</th>
-                        <th>Doctor</th>
-                        <th>Fecha de Inicio</th>
-                        <th>Fecha de Fin</th>
-                        <th>Motivo</th>
-                        <th>Estado</th>
-                        <th>Acciones</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @if (Model.Any())
-                    {
-                        @foreach (var cita in Model)
-                        {
-                            <tr>
-                                <td>@cita.Paciente.nombre @cita.Paciente.apellido</td>
-                                <td>@cita.Doctor.nombre @cita.Doctor.apellido</td>
-                                <td>@cita.FechaInicio.ToString("dd/MM/yyyy HH:mm")</td>
-                                <td>@cita.FechaFin.ToString("dd/MM/yyyy HH:mm")</td>
-                                <td>@cita.MotivoCita</td>
-                                <td>
-                                    <span class="badge @(cita.EstadoCita.EstadoNombre == "programada" ? "bg-info" : cita.EstadoCita.EstadoNombre == "cancelada" ? "bg-danger" : "bg-success")">
-                                        @cita.EstadoCita.EstadoNombre
-                                    </span>
-                                </td>
-                                <td>
-                                    <a asp-action="Detalles" asp-route-id="@cita.IdCita" class="btn btn-primary btn-sm"><i class="bi bi-eye"></i> Detalles</a>
-                                    <a asp-action="Editar" asp-route-id="@cita.IdCita" class="btn btn-sm btn-warning text-white"><i class="bi bi-pencil"></i> Editar</a>
-                                    <a asp-action="Eliminar" asp-route-id="@cita.IdCita" class="btn btn-sm btn-danger"><i class="bi bi-trash"></i> Eliminar</a>
-                                </td>
-                            </tr>
-                        }
-                    }
-                    else
-                    {
-                        <tr>
-                            <td colspan="7" class="text-muted">No hay citas disponibles.</td>
-                        </tr>
-                    }
-                </tbody>
-            </table>
-        </div>
     </div>
 
-    <!-- Scripts -->
+    <!-- Tabla de Citas -->
+    <div class="table-responsive">
+        <table class="table table-striped table-hover text-center shadow-sm">
+            <thead class="table-primary">
+                <tr>
+                    <th>Paciente</th>
+                    <th>Doctor</th>
+                    <th>Fecha de Inicio</th>
+                    <th>Fecha de Fin</th>
+                    <th>Motivo</th>
+                    <th>Estado</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model.Any())
+                {
+                    @foreach (var cita in Model)
+                    {
+                        <tr>
+                            <td>@cita.Paciente.nombre @cita.Paciente.apellido</td>
+                            <td>@cita.Doctor.nombre @cita.Doctor.apellido</td>
+                            <td>@cita.FechaInicio.ToString("dd/MM/yyyy HH:mm")</td>
+                            <td>@cita.FechaFin.ToString("dd/MM/yyyy HH:mm")</td>
+                            <td>@cita.MotivoCita</td>
+                            <td>
+                                @if (cita.EstadoCita.EstadoNombre == "programada")
+                                {
+                                    <span class="badge bg-info text-dark">Programada</span>
+                                }
+                                else if (cita.EstadoCita.EstadoNombre == "cancelada")
+                                {
+                                    <span class="badge bg-danger">Cancelada</span>
+                                }
+                                else if (cita.EstadoCita.EstadoNombre == "completada")
+                                {
+                                    <span class="badge bg-success">Completada</span>
+                                }
+                            </td>
+                            <td>
+                                <div class="btn-group" role="group">
+                                    <a asp-action="Detalles" asp-route-id="@cita.IdCita" class="btn btn-primary btn-sm">
+                                        <i class="bi bi-eye"></i> Detalles
+                                    </a>
+                                    <a asp-action="Editar" asp-route-id="@cita.IdCita" class="btn btn-sm btn-warning text-white">
+                                        <i class="bi bi-pencil-square"></i> Editar
+                                    </a>
+                                    <a asp-action="Eliminar" asp-route-id="@cita.IdCita" class="btn btn-sm btn-danger">
+                                        <i class="bi bi-trash"></i> Eliminar
+                                    </a>
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                }
+                else
+                {
+                    <tr>
+                        <td colspan="7" class="text-muted">No hay citas disponibles.</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+@section Scripts {
     <script>
-                function applyFilter() {
-            const selectedStates = [];
-            document.querySelectorAll('.estado-checkbox:checked').forEach(checkbox => {
-                selectedStates.push(checkbox.value);
+        document.addEventListener("DOMContentLoaded", function () {
+            var dropdownElementList = [].slice.call(document.querySelectorAll('.dropdown-toggle'));
+            var dropdownList = dropdownElementList.map(function (dropdownToggleEl) {
+                return new bootstrap.Dropdown(dropdownToggleEl);
             });
-
-            if (selectedStates.length > 0) {
-                const queryString = selectedStates.map(state => `estado=${state}`).join('&');
-                window.location.href = `${window.location.pathname}?${queryString}`;
-            } else {
-                window.location.href = `${window.location.pathname}`;
-            }
-        }
-
-        function resetFilter() {
-            window.location.href = `${window.location.pathname}`;
-        }
+        });
     </script>
-    
-        <!-- 🔹 Scripts para corregir dropdown de Cerrar Sesión -->
-    @section Scripts {
-        <script>
-            document.addEventListener("DOMContentLoaded", function () {
-                var dropdownElementList = [].slice.call(document.querySelectorAll('.dropdown-toggle'));
-                var dropdownList = dropdownElementList.map(function (dropdownToggleEl) {
-                    return new bootstrap.Dropdown(dropdownToggleEl);
-                });
-            });
-        </script>
-    }
-</body>
-</html>
+}

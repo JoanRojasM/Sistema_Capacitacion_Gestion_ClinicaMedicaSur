@@ -59,8 +59,8 @@
 
     <!-- Tabla con horarios existentes -->
     <div class="table-responsive">
-        <table class="table table-bordered table-hover text-center">
-            <thead class="bg-primary text-white">
+        <table class="table table-striped table-hover align-middle shadow-sm">
+            <thead class="table-primary">
                 <tr>
                     <th>Día</th>
                     <th>Hora Inicio</th>
@@ -76,12 +76,11 @@
                         <td>@item.HoraInicio</td>
                         <td>@item.HoraFin</td>
                         <td>
-                            <form method="post" asp-action="Eliminar">
-                                <input type="hidden" name="id" value="@item.IdDisponibilidad" />
-                                <button type="submit" class="btn btn-danger btn-sm">
+                            <div class="btn-group" role="group">
+                                <a asp-action="Eliminar" asp-route-id="@item.IdDisponibilidad" class="btn btn-danger btn-sm">
                                     <i class="bi bi-trash"></i> Eliminar
-                                </button>
-                            </form>
+                                </a>
+                            </div>
                         </td>
                     </tr>
                 }

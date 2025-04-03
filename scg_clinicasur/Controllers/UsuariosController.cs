@@ -372,7 +372,6 @@ namespace scg_clinicasur.Controllers
             return View(usuario);
         }
 
-        [HttpPost, ActionName("Eliminar")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> EliminarConfirmado(int id)
         {

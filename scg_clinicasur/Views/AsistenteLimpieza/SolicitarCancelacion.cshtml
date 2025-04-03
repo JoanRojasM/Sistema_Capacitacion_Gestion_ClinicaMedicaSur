@@ -1,7 +1,7 @@
-﻿@model scg_clinicasur.Models.Cita
+﻿@model scg_clinicasur.Models.Capacitacion
 
 @{
-    ViewData["Title"] = "Eliminar Cita";
+    ViewData["Title"] = "Eliminar Capacitación";
 }
 
 <div class="container mt-5">
@@ -15,26 +15,25 @@
     <div class="card border-danger shadow-sm">
         <div class="card-body">
             <div class="alert alert-danger text-center fw-bold" role="alert">
-                <i class="bi bi-exclamation-triangle-fill"></i> ¡Atención! Esta acción eliminará permanentemente la cita.
+                <i class="bi bi-exclamation-triangle-fill"></i> ¡Atención! Esta acción eliminará permanentemente esta capacitación.
             </div>
 
             <!-- Detalles de la capacitación -->
-            <h4 class="text-center text-primary mb-4">Detalles de la Cita</h4>
+            <h4 class="text-center text-primary mb-4">Detalles de la Capacitación</h4>
             <dl class="row mb-0">
-                <dt class="col-sm-4 text-muted">Motivo de la Cita:</dt>
-                <dd class="col-sm-8 fw-bold">@Model.MotivoCita</dd>
+                <dt class="col-sm-4 text-muted">Título:</dt>
+                <dd class="col-sm-8 fw-bold">@(Model?.titulo ?? "No disponible")</dd>
 
-                <dt class="col-sm-4 text-muted">Paciente:</dt>
-                <dd class="col-sm-8">@Model.Paciente.nombre @Model.Paciente.apellido</dd>
+                <dt class="col-sm-4 text-muted">Descripción:</dt>
+                <dd class="col-sm-8">@(Model?.descripcion ?? "No disponible")</dd>
 
-                <dt class="col-sm-4 text-muted">Doctor:</dt>
-                <dd class="col-sm-8">@Model.Doctor.nombre @Model.Doctor.apellido</dd>
+                <dt class="col-sm-4 text-muted">Duración:</dt>
+                <dd class="col-sm-8">@(!string.IsNullOrEmpty(Model?.duracion) ? Model.duracion : "No especificada")</dd>
 
-                <dt class="col-sm-4 text-muted">Fecha Inicio:</dt>
-                <dd class="col-sm-8">@Model.FechaInicio.ToString("dd/MM/yyyy HH:mm")</dd>
-
-                <dt class="col-sm-4 text-muted">Fecha Fin:</dt>
-                <dd class="col-sm-8">@Model.FechaFin.ToString("dd/MM/yyyy HH:mm")</dd>
+                <dt class="col-sm-4 text-muted">Usuario Responsable:</dt>
+                <dd class="col-sm-8">
+                    @(Model?.Usuario != null ? $"{Model.Usuario.nombre} {Model.Usuario.apellido}" : "No asignado")
+                </dd>
             </dl>
         </div>
     </div>
@@ -44,14 +43,14 @@
         <button id="btnEliminar" class="btn btn-danger me-2">
             <i class="bi bi-trash-fill"></i> Confirmar Eliminación
         </button>
-        <a asp-action="Citas" class="btn btn-secondary">
+        <a asp-action="Capacitaciones" class="btn btn-secondary">
             <i class="bi bi-arrow-left-circle"></i> Cancelar
         </a>
     </div>
 
     <!-- Formulario de eliminación oculto -->
-    <form id="formEliminar" method="post" asp-controller="Paciente" asp-action="EliminarConfirmado">
-        <input type="hidden" name="id" value="@Model.IdCita" />
+    <form id="formEliminar" method="post" asp-controller="AsistenteLimpieza" asp-action="ConfirmarSolicitarCancelacion">
+        <input type="hidden" name="capacitacionId" value="@Model.id_capacitacion" />
     </form>
 </div>
 

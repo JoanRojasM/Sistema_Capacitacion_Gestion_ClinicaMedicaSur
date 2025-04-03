@@ -1,51 +1,76 @@
 ﻿@model scg_clinicasur.Models.Cita
 
 @{
-    ViewData["Title"] = "Confirmar Eliminación";
+    ViewData["Title"] = "Eliminar Cita";
 }
 
-<!DOCTYPE html>
-<html>
-<head>
-    <link rel="stylesheet" href="~/css/site.css">
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <title>@ViewData["Title"]</title>
-</head>
-<body>
-    <header>
-        <h1>@ViewData["Title"]</h1>
-        <nav>
-            <a asp-action="Index" class="button">Volver al Listado</a>
-        </nav>
-    </header>
-    <main>
-        <p>¿Estás seguro de que deseas eliminar la cita de @Model.Paciente.nombre @Model.Paciente.apellido?</p>
-        <button id="btnEliminar" class="btn btn-danger">Sí, Eliminar</button>
-        <a href="@Url.Action("Index")" class="button">Cancelar</a>
+<div class="container mt-5">
+    <!-- Encabezado -->
+    <div class="text-center mb-4">
+        <h1 class="display-5 fw-bold text-danger">@ViewData["Title"]</h1>
+        <p class="lead text-muted">Esta acción no se puede deshacer. Por favor, confirme su decisión.</p>
+    </div>
 
-        <!-- Script para cuadro de confirmación de eliminación -->
-        <script>
-            document.getElementById('btnEliminar').addEventListener('click', function () {
-                Swal.fire({
-                    title: '¿Estás seguro?',
-                    text: "No podrás revertir esto.",
-                    icon: 'warning',
-                    showCancelButton: true,
-                    confirmButtonColor: '#d33',
-                    cancelButtonColor: '#3085d6',
-                    confirmButtonText: 'Sí, eliminar'
-                }).then((result) => {
-                    if (result.isConfirmed) {
-                        document.getElementById('formEliminar').submit();
-                    }
-                });
-            });
-        </script>
+    <!-- Tarjeta con detalles de la capacitación -->
+    <div class="card border-danger shadow-sm">
+        <div class="card-body">
+            <div class="alert alert-danger text-center fw-bold" role="alert">
+                <i class="bi bi-exclamation-triangle-fill"></i> ¡Atención! Esta acción eliminará permanentemente la cita.
+            </div>
 
-        <!-- Formulario de eliminación -->
-        <form id="formEliminar" method="post" asp-controller="Citas" asp-action="EliminarConfirmado">
-            <input type="hidden" name="id" value="@Model.IdCita" />
-        </form>
-    </main>
-</body>
-</html>
+            <!-- Detalles de la capacitación -->
+            <h4 class="text-center text-primary mb-4">Detalles de la Cita</h4>
+            <dl class="row mb-0">
+                <dt class="col-sm-4 text-muted">Motivo de la Cita:</dt>
+                <dd class="col-sm-8 fw-bold">@Model.MotivoCita</dd>
+
+                <dt class="col-sm-4 text-muted">Paciente:</dt>
+                <dd class="col-sm-8">@Model.Paciente.nombre @Model.Paciente.apellido</dd>
+
+                <dt class="col-sm-4 text-muted">Doctor:</dt>
+                <dd class="col-sm-8">@Model.Doctor.nombre @Model.Doctor.apellido</dd>
+
+                <dt class="col-sm-4 text-muted">Fecha Inicio:</dt>
+                <dd class="col-sm-8">@Model.FechaInicio.ToString("dd/MM/yyyy HH:mm")</dd>
+
+                <dt class="col-sm-4 text-muted">Fecha Fin:</dt>
+                <dd class="col-sm-8">@Model.FechaFin.ToString("dd/MM/yyyy HH:mm")</dd>
+            </dl>
+        </div>
+    </div>
+
+    <!-- Botones de Acción -->
+    <div class="text-center mt-4">
+        <button id="btnEliminar" class="btn btn-danger me-2">
+            <i class="bi bi-trash-fill"></i> Confirmar Eliminación
+        </button>
+        <a asp-action="Index" class="btn btn-secondary">
+            <i class="bi bi-arrow-left-circle"></i> Cancelar
+        </a>
+    </div>
+
+    <!-- Formulario de eliminación oculto -->
+    <form id="formEliminar" method="post" asp-controller="Citas" asp-action="EliminarConfirmado">
+        <input type="hidden" name="id" value="@Model.IdCita" />
+    </form>
+</div>
+
+<!-- Agregar SweetAlert2 -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>
+    document.getElementById('btnEliminar').addEventListener('click', function () {
+        Swal.fire({
+            title: '¿Estás seguro?',
+            text: "No podrás revertir esta acción.",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#d33',
+            cancelButtonColor: '#3085d6',
+            confirmButtonText: 'Sí, eliminar'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                document.getElementById('formEliminar').submit();
+            }
+        });
+    });
+</script>

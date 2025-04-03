@@ -86,98 +86,62 @@
                             var userRole = HttpContextAccessor.HttpContext.Session.GetString("UserRole");
                         }
 
-                        <ul class="navbar-nav">
+                        <ul class="navbar-nav">                            
                             @if (userRole == "administrador")
                             {
                                 <li class="nav-item">
                                     <a class="nav-link" asp-controller="Admin" asp-action="Index">
-                                        <i class="bi bi-house"></i> Home
+                                        <i class="bi bi-clipboard"></i> Menu
                                     </a>
                                 </li>
-                            }
-                            else if (userRole == "doctor")
-                            {
                                 <li class="nav-item">
-                                    <a class="nav-link" asp-controller="Doctor" asp-action="Index">
-                                        <i class="bi bi-house"></i> Home
+                                    <a class="nav-link" asp-controller="Capacitaciones" asp-action="Index">
+                                        <i class="bi bi-journal"></i> Capacitaciones
                                     </a>
                                 </li>
-                            }
-                            else if (userRole == "asistente_limpieza")
-                            {
                                 <li class="nav-item">
-                                    <a class="nav-link" asp-controller="AsistenteLimpieza" asp-action="Index">
-                                        <i class="bi bi-house"></i> Home
+                                    <a class="nav-link" asp-controller="Evaluaciones" asp-action="Index">
+                                        <i class="bi bi-check2-circle"></i> Evaluaciones
                                     </a>
                                 </li>
-                            }
-                            else if (userRole == "asistente_medico")
-                            {
                                 <li class="nav-item">
-                                    <a class="nav-link" asp-controller="AsistenteMedico" asp-action="Index">
-                                        <i class="bi bi-house"></i> Home
+                                    <a class="nav-link" asp-controller="Citas" asp-action="Index">
+                                        <i class="bi bi-calendar-check"></i> Citas
                                     </a>
                                 </li>
-                            }
-                            else if (userRole == "paciente")
-                            {
+                                <!-- Dropdown Usuarios -->
+                                <li class="nav-item dropdown">
+                                    <a class="nav-link dropdown-toggle" href="#" id="usuariosDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                        <i class="bi bi-people"></i> Usuarios
+                                    </a>
+                                    <ul class="dropdown-menu" aria-labelledby="usuariosDropdown">
+                                        <li>
+                                            <a class="dropdown-item" asp-controller="Usuarios" asp-action="Index">
+                                                <i class="bi bi-person-badge"></i> Administrar Usuarios
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a class="dropdown-item" asp-controller="DoctorEspecialidades" asp-action="Index">
+                                                <i class="bi bi-clipboard-plus"></i> Especialidades de Doctores
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </li>
                                 <li class="nav-item">
-                                    <a class="nav-link" asp-controller="Paciente" asp-action="Index">
-                                        <i class="bi bi-house"></i> Home
+                                    <a class="nav-link" asp-controller="Contabilidad" asp-action="Historial">
+                                        <i class="bi bi-cash"></i> Contabilidad
                                     </a>
                                 </li>
-                            }
-
-                            @if (userRole == "administrador")
-                            {
-                                    <li class="nav-item">
-                                        <a class="nav-link" asp-controller="Capacitaciones" asp-action="Index">
-                                            <i class="bi bi-journal"></i> Capacitaciones
-                                        </a>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a class="nav-link" asp-controller="Evaluaciones" asp-action="Index">
-                                            <i class="bi bi-check2-circle"></i> Evaluaciones
-                                        </a>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a class="nav-link" asp-controller="Citas" asp-action="Index">
-                                            <i class="bi bi-calendar-check"></i> Citas
-                                        </a>
-                                    </li>
-                                    <!-- Dropdown Usuarios -->
-                                    <li class="nav-item dropdown">
-                                        <a class="nav-link dropdown-toggle" href="#" id="usuariosDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                            <i class="bi bi-people"></i> Usuarios
-                                        </a>
-                                        <ul class="dropdown-menu" aria-labelledby="usuariosDropdown">
-                                            <li>
-                                                <a class="dropdown-item" asp-controller="Usuarios" asp-action="Index">
-                                                    <i class="bi bi-person-badge"></i> Administrar Usuarios
-                                                </a>
-                                            </li>
-                                            <li>
-                                                <a class="dropdown-item" asp-controller="DoctorEspecialidades" asp-action="Index">
-                                                    <i class="bi bi-clipboard-plus"></i> Especialidades de Doctores
-                                                </a>
-                                            </li>
-                                        </ul>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a class="nav-link" asp-controller="Contabilidad" asp-action="Historial">
-                                            <i class="bi bi-cash"></i> Contabilidad
-                                        </a>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a class="nav-link" asp-controller="Expedientes" asp-action="Index">
-                                            <i class="bi bi-folder2-open"></i> Expedientes
-                                        </a>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a class="nav-link" asp-controller="Paciente" asp-action="ListadoPacientes">
-                                            <i class="bi bi-file-earmark-person"></i> Pacientes
-                                        </a>
-                                    </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" asp-controller="Expedientes" asp-action="Index">
+                                        <i class="bi bi-folder2-open"></i> Expedientes
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" asp-controller="Paciente" asp-action="ListadoPacientes">
+                                        <i class="bi bi-file-earmark-person"></i> Pacientes
+                                    </a>
+                                </li>
                             }
                             else if (userRole == "doctor")
                             {
@@ -200,6 +164,11 @@
                             else if (userRole == "asistente_limpieza")
                             {
                                 <li class="nav-item">
+                                    <a class="nav-link" asp-controller="AsistenteLimpieza" asp-action="Index">
+                                        <i class="bi bi-clipboard"></i> Menu
+                                    </a>
+                                </li>
+                                <li class="nav-item">
                                     <a class="nav-link" asp-controller="AsistenteLimpieza" asp-action="Evaluaciones">
                                         <i class="bi bi-check2-circle"></i> Evaluaciones
                                     </a>
@@ -213,6 +182,11 @@
                             else if (userRole == "asistente_medico")
                             {
                                 <li class="nav-item">
+                                    <a class="nav-link" asp-controller="AsistenteMedico" asp-action="Index">
+                                        <i class="bi bi-clipboard"></i> Menu
+                                    </a>
+                                </li>
+                                <li class="nav-item">
                                     <a class="nav-link" asp-controller="AsistenteMedico" asp-action="Evaluaciones">
                                         <i class="bi bi-check2-square"></i> Evaluaciones
                                     </a>
@@ -220,6 +194,14 @@
                                 <li class="nav-item">
                                     <a class="nav-link" asp-controller="AsistenteMedico" asp-action="Capacitaciones">
                                         <i class="bi bi-book"></i> Capacitaciones
+                                    </a>
+                                </li>
+                            }
+                            else if (userRole == "paciente")
+                            {
+                                <li class="nav-item">
+                                    <a class="nav-link" asp-controller="Paciente" asp-action="Index">
+                                        <i class="bi bi-clipboard"></i> Menu
                                     </a>
                                 </li>
                             }

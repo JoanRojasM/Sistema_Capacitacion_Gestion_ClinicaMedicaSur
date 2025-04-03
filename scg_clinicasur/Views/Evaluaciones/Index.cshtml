@@ -60,13 +60,9 @@
                                     <a href="@Url.Action("Editar", new { id = evaluacion.id_evaluacion })" class="btn btn-warning btn-sm text-white">
                                         <i class="bi bi-pencil-square"></i> Editar
                                     </a>
-                                    <form asp-action="Eliminar" asp-route-id="@evaluacion.id_evaluacion" method="post"
-                                          class="d-inline m-0 p-0 border-0"
-                                          style="margin: 0; padding: 0; border: none; background: transparent;">
-                                        <button type="submit" class="btn btn-danger btn-sm border-0 shadow-none">
-                                            <i class="bi bi-trash"></i> Eliminar
-                                        </button>
-                                    </form>
+                                    <a asp-action="Eliminar" asp-route-id="@evaluacion.id_evaluacion" class="btn btn-sm btn-danger">
+                                        <i class="bi bi-trash"></i> Eliminar
+                                    </a>
                                 </div>
                             </td>
                         </tr>

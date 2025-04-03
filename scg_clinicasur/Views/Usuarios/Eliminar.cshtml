@@ -1,23 +1,31 @@
 ﻿@model scg_clinicasur.Models.Usuario
 
 @{
-    ViewData["Title"] = "Confirmar Eliminación";
+    ViewData["Title"] = "Eliminar Usuario";
 }
 
 <div class="container mt-5">
     <!-- Encabezado -->
     <div class="text-center mb-4">
-        <h1 class="display-5 fw-bold text-danger">Confirmar Eliminación</h1>
-        <p class="lead text-muted">Estás a punto de eliminar el siguiente usuario. Esta acción no se puede deshacer.</p>
+        <h1 class="display-5 fw-bold text-danger">@ViewData["Title"]</h1>
+        <p class="lead text-muted">Esta acción no se puede deshacer. Por favor, confirme su decisión.</p>
     </div>
 
-    <!-- Tarjeta con Información del Usuario -->
-    <div class="card shadow-sm border-0">
-        <div class="card-body p-4">
-            <h3 class="text-center text-primary mb-4">Detalles del Usuario</h3>
-            <dl class="row">
+    <!-- Tarjeta con detalles de la capacitación -->
+    <div class="card border-danger shadow-sm">
+        <div class="card-body">
+            <div class="alert alert-danger text-center fw-bold" role="alert">
+                <i class="bi bi-exclamation-triangle-fill"></i> ¡Atención! Esta acción eliminará permanentemente este usuario.
+            </div>
+
+            <!-- Detalles de la capacitación -->
+            <h4 class="text-center text-primary mb-4">Detalles del Usuario</h4>
+            <dl class="row mb-0">
                 <dt class="col-sm-4 text-muted">Nombre Completo:</dt>
                 <dd class="col-sm-8 fw-bold">@Model.nombre @Model.apellido</dd>
+
+                <dt class="col-sm-4 text-muted">Fecha de Nacimiento:</dt>
+                <dd class="col-sm-8 fw-bold">@Model.fecha_nacimiento.ToString("dd/MM/yyyy")</dd>
 
                 <dt class="col-sm-4 text-muted">Correo Electrónico:</dt>
                 <dd class="col-sm-8">
@@ -26,7 +34,7 @@
 
                 <dt class="col-sm-4 text-muted">Teléfono:</dt>
                 <dd class="col-sm-8">
-                    @(string.IsNullOrEmpty(Model.telefono) ? "No disponible" : Model.telefono)
+                    <i class="bi bi-telephone"></i> @(string.IsNullOrEmpty(Model.telefono) ? "No disponible" : Model.telefono)
                 </dd>
 
                 <dt class="col-sm-4 text-muted">Rol:</dt>
@@ -50,21 +58,47 @@
                 <dd class="col-sm-8">
                     <i class="bi bi-calendar"></i> @Model.fecha_registro.ToString("dd/MM/yyyy")
                 </dd>
+
+                <dt class="col-sm-4 text-muted">Contraseña:</dt>
+                <dd class="col-sm-8 text-muted">
+                    ******** (No se muestra por seguridad)
+                </dd>
             </dl>
         </div>
     </div>
 
-    <!-- Confirmación de Eliminación -->
+    <!-- Botones de Acción -->
     <div class="text-center mt-4">
-        <h4 class="text-danger mb-3 fw-bold">¿Estás seguro de que deseas eliminar a este usuario?</h4>
-        <form method="post" asp-action="Eliminar" class="d-inline">
-            <input type="hidden" asp-for="id_usuario" />
-            <button type="submit" class="btn btn-danger me-2">
-                <i class="bi bi-trash"></i> Sí, Eliminar
-            </button>
-        </form>
-        <a href="@Url.Action("Index")" class="btn btn-secondary">
-            <i class="bi bi-x-circle"></i> Cancelar
+        <button id="btnEliminar" class="btn btn-danger me-2">
+            <i class="bi bi-trash-fill"></i> Confirmar Eliminación
+        </button>
+        <a asp-action="Index" class="btn btn-secondary">
+            <i class="bi bi-arrow-left-circle"></i> Cancelar
         </a>
     </div>
+
+    <!-- Formulario de eliminación oculto -->
+    <form id="formEliminar" method="post" asp-controller="Usuarios" asp-action="EliminarConfirmado">
+        <input type="hidden" name="id" value="@Model.id_usuario" />
+    </form>
 </div>
+
+<!-- Agregar SweetAlert2 -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>
+    document.getElementById('btnEliminar').addEventListener('click', function () {
+        Swal.fire({
+            title: '¿Estás seguro?',
+            text: "No podrás revertir esta acción.",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#d33',
+            cancelButtonColor: '#3085d6',
+            confirmButtonText: 'Sí, eliminar'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                document.getElementById('formEliminar').submit();
+            }
+        });
+    });
+</script>

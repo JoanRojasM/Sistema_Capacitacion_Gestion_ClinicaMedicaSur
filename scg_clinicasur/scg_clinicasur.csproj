@@ -21,4 +21,11 @@
     <Folder Include="wwwroot\recursos\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Content Update="Views\Capacitaciones\EliminarRecurso.cshtml">
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+  </ItemGroup>
+
 </Project>

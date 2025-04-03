@@ -201,8 +201,17 @@ namespace scg_clinicasur.Controllers
             {
                 return NotFound();
             }
+
+            // Verificar si el rol del usuario es administrador
+            var userRole = HttpContext.Session.GetString("UserRole");
+            if (userRole != "administrador")
+            {
+                return RedirectToAction("AccessDenied", "Home");
+            }
+
             var evaluacion = await _context.Evaluaciones
                                            .Include(e => e.Capacitacion)
+                                           .Include(e => e.Usuario)
                                            .FirstOrDefaultAsync(e => e.id_evaluacion == id);
 
             if (evaluacion == null)
@@ -213,7 +222,6 @@ namespace scg_clinicasur.Controllers
             return View(evaluacion);
         }
 
-        [HttpPost, ActionName("Eliminar")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> EliminarConfirmado(int id)
         {
@@ -221,7 +229,7 @@ namespace scg_clinicasur.Controllers
             var userRole = HttpContext.Session.GetString("UserRole");
             if (userRole != "administrador")
             {
-                return RedirectToAction("AccessDenied", "Home"); // Redirigir a una página de acceso denegado
+                return RedirectToAction("AccessDenied", "Home");
             }
 
             try
@@ -242,12 +250,12 @@ namespace scg_clinicasur.Controllers
                     await _context.SaveChangesAsync();
                 }
 
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction("Index");
             }
             catch (Exception ex)
             {
-                ModelState.AddModelError("", $"Error al eliminar la evaluacion: {ex.Message}");
-                return RedirectToAction(nameof(Index));
+                ModelState.AddModelError("", $"Error al eliminar la evaluación: {ex.Message}");
+                return RedirectToAction("Index");
             }
         }
 

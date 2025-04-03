@@ -1,7 +1,7 @@
-﻿@model scg_clinicasur.Models.ResultadosLaboratorio
+﻿@model scg_clinicasur.Models.RecursosAprendizaje
 
 @{
-    ViewData["Title"] = "Eliminar Expediente";
+    ViewData["Title"] = "Eliminar Recurso";
 }
 
 <div class="container mt-5">
@@ -15,22 +15,35 @@
     <div class="card border-danger shadow-sm">
         <div class="card-body">
             <div class="alert alert-danger text-center fw-bold" role="alert">
-                <i class="bi bi-exclamation-triangle-fill"></i> ¡Atención! Esta acción eliminará permanentemente el resultado de laboratorio.
+                <i class="bi bi-exclamation-triangle-fill"></i> ¡Atención! Esta acción eliminará permanentemente el recurso.
             </div>
 
             <!-- Detalles de la capacitación -->
-            <h4 class="text-center text-primary mb-4">Detalles del Resultado de Laboratorio</h4>
+            <h4 class="text-center text-primary mb-4">Detalles de la Capacitación</h4>
             <dl class="row mb-0">
-                <dt class="col-sm-4 text-muted">Fecha de la Prueba:</dt>
-                <dd class="col-sm-8">@Model.FechaPrueba.ToString("dd/MM/yyyy")</dd>
+                <dt class="col-sm-4 text-muted">Título:</dt>
+                <dd class="col-sm-8 fw-bold">@Model.titulo</dd>
 
                 <dt class="col-sm-4 text-muted">Archivo:</dt>
                 <dd class="col-sm-8">
-                    @if (Model.ArchivoPDF != null && Model.ArchivoPDF.Length > 0)
+                    @if (!string.IsNullOrEmpty(Model.archivo))
                     {
-                        <a href="@Url.Action("DescargarPDF", "Expedientes", new { id = Model.IdResultado })"
-                           class="btn btn-outline-primary btn-sm" target="_blank">
-                            <i class="bi bi-file-earmark-pdf"></i> Descargar PDF
+                        <a href="@Url.Content(Model.archivo)" target="_blank" class="btn btn-sm btn-outline-success">
+                            <i class="bi bi-file-earmark"></i> Ver Archivo
+                        </a>
+                    }
+                    else
+                    {
+                        <span class="text-muted">No disponible</span>
+                    }
+                </dd>
+
+                <dt class="col-sm-4 text-muted">Enlace:</dt>
+                <dd class="col-sm-8">
+                    @if (!string.IsNullOrEmpty(Model.enlace))
+                    {
+                        <a href="@Model.enlace" target="_blank" class="btn btn-sm btn-outline-info">
+                            <i class="bi bi-play-circle"></i> Ver Video
                         </a>
                     }
                     else
@@ -47,13 +60,14 @@
         <button id="btnEliminar" class="btn btn-danger me-2">
             <i class="bi bi-trash-fill"></i> Confirmar Eliminación
         </button>
-        <a href="@Url.Action("VerHistorialResultados", "Expedientes", new { idExpediente = Model.IdExpediente })" class="btn btn-secondary"><i class="bi bi-arrow-left-circle"></i> Cancelar</a>
+        <a asp-action="Recursos" asp-route-id="@Model.id_capacitacion" class="btn btn-secondary">
+            <i class="bi bi-arrow-left"></i> Cancelar
+        </a>
     </div>
 
     <!-- Formulario de eliminación oculto -->
-    <form id="formEliminar" method="post" asp-controller="Expedientes" asp-action="EliminarResultadoConfirmado">
-        <input type="hidden" name="id" value="@Model.IdResultado" />
-        @Html.AntiForgeryToken()
+    <form id="formEliminar" method="post" asp-controller="Capacitaciones" asp-action="EliminarRecurso">
+        <input type="hidden" name="id" value="@Model.id_recurso" />
     </form>
 </div>
 

@@ -71,28 +71,57 @@ namespace scg_clinicasur.Controllers
         }
 
         // Eliminar disponibilidad
-        [HttpPost]
+        [HttpGet]
         public async Task<IActionResult> Eliminar(int id)
         {
             int idDoctor = ObtenerIdDoctor();
-            if (idDoctor == -1) return RedirectToAction("AccessDenied", "Home");
+            if (idDoctor == -1)
+                return RedirectToAction("AccessDenied", "Home");
 
             var disponibilidad = await _context.DisponibilidadDoctor
                 .FirstOrDefaultAsync(d => d.IdDisponibilidad == id && d.IdDoctor == idDoctor);
 
-            if (disponibilidad != null)
+            if (disponibilidad == null)
             {
-                _context.DisponibilidadDoctor.Remove(disponibilidad);
-                await _context.SaveChangesAsync();
-                TempData["SuccessMessage"] = "Disponibilidad eliminada.";
-            }
-            else
-            {
-                TempData["ErrorMessage"] = "No se encontró el bloque de horario.";
+                return NotFound();
             }
 
-            return RedirectToAction(nameof(Gestionar));
+            return View(disponibilidad);
         }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> ConfirmarEliminar(int id)
+        {
+            int idDoctor = ObtenerIdDoctor();
+            if (idDoctor == -1)
+                return RedirectToAction("AccessDenied", "Home");
+
+            try
+            {
+                var disponibilidad = await _context.DisponibilidadDoctor
+                    .FirstOrDefaultAsync(d => d.IdDisponibilidad == id && d.IdDoctor == idDoctor);
+
+                if (disponibilidad != null)
+                {
+                    _context.DisponibilidadDoctor.Remove(disponibilidad);
+                    await _context.SaveChangesAsync();
+                    TempData["SuccessMessage"] = "Disponibilidad eliminada.";
+                }
+                else
+                {
+                    TempData["ErrorMessage"] = "No se encontró el bloque de horario.";
+                }
+
+                return RedirectToAction(nameof(Gestionar));
+            }
+            catch (Exception ex)
+            {
+                ModelState.AddModelError("", $"Error al eliminar la disponibilidad: {ex.Message}");
+                return RedirectToAction(nameof(Gestionar));
+            }
+        }
+
     }
 }
 
